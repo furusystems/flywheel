@@ -18,7 +18,7 @@ import com.furusystems.games.flywheel.media.sound.ofl.Cue;
  * @author Andreas Rønning
  */
 
-@:build( com.furusystems.games.flywheel.build.AssetProcessing.buildSoundPaths("./assets/snd/fx") ) class GameFX 
+@:build( com.furusystems.games.flywheel.build.AssetProcessing.buildSoundPaths("./assets/audio/fx") ) class GameFX 
 {
 	public var audio:GameAudio;
 	public var muted:Bool;

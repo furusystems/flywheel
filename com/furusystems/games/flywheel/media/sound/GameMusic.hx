@@ -22,7 +22,7 @@ enum MusicTransition
 	fade;
 	simplefade;	
 }
-@:build( com.furusystems.games.flywheel.build.AssetProcessing.buildMusicPaths("./assets/snd/music") ) class GameMusic 
+@:build( com.furusystems.games.flywheel.build.AssetProcessing.buildMusicPaths("./assets/audio/music") ) class GameMusic 
 {
 	public var currentMusic:String;
 	public var nextMusic:String;
