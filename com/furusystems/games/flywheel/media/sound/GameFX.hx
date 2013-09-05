@@ -1,5 +1,5 @@
 package com.furusystems.games.flywheel.media.sound;
-import com.furusystems.games.flywheel.build.AssetProcessing;
+import com.furusystems.games.flywheel.preprocessing.AssetProcessing;
 import com.furusystems.games.flywheel.Core;
 import com.furusystems.games.flywheel.media.sound.GameAudio;
 import com.furusystems.games.flywheel.media.sound.ISoundCue;
@@ -18,7 +18,7 @@ import com.furusystems.games.flywheel.media.sound.ofl.Cue;
  * @author Andreas Rønning
  */
 
-@:build( com.furusystems.games.flywheel.build.AssetProcessing.buildSoundPaths("./assets/audio/fx") ) class GameFX 
+@:build( com.furusystems.games.flywheel.preprocessing.AssetProcessing.buildSoundPaths("./assets/audio/fx") ) class GameFX 
 {
 	public var audio:GameAudio;
 	public var muted:Bool;
