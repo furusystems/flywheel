@@ -6,10 +6,5 @@ package com.furusystems.games.flywheel.media.sound;
  */
 @:build( com.furusystems.games.flywheel.build.AssetProcessing.buildSoundDurations("./assets/audio/fx") ) class CueDurations
 {
-
-	public function new() 
-	{
-		
-	}
 	
 }

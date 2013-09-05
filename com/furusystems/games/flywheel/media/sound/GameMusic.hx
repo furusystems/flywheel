@@ -14,14 +14,6 @@ import com.furusystems.games.flywheel.media.sound.ofl.Music;
  * @author Andreas Rønning
  */
 
-enum MusicTransition 
-{
-	cut;
-	cut_to_fade;
-	fade_to_cut;
-	fade;
-	simplefade;	
-}
 @:build( com.furusystems.games.flywheel.build.AssetProcessing.buildMusicPaths("./assets/audio/music") ) class GameMusic 
 {
 	public var currentMusic:String;
