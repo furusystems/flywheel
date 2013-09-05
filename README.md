@@ -1,6 +1,7 @@
 flywheel
 ========
 Haxe3/OpenFL input, time, state machine, audio. Game dev boilerplate native extension.
+Note: Developed on Haxe3 nightlies and OpenFL github repos. 
 
 Immediate goals:
 - Stabilize audio through formalization 
