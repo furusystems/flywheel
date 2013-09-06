@@ -24,6 +24,7 @@ class AssetProcessing
 				if (!Util.isWav(p)) continue;
 				var name:String = Util.cleanName(p.substring(0, p.lastIndexOf(".")));
 				var path:String = trimmed + "/" + p;
+				path = path.substring(1);
 				var e = macro $v{path};
 				fields.push( { name : "FX_"+name.toUpperCase(), doc : null, meta : [], access : [APublic, AStatic, AInline], kind : FVar(tstring, e), pos : pos } );
 			}	
@@ -42,8 +43,9 @@ class AssetProcessing
 				if (!Util.isMusic(p)) continue;
 				var name:String = Util.cleanName(p.substring(0, p.lastIndexOf(".")));
 				var path:String = trimmed + "/" + p;
+				path = path.substring(1);
 				var e = macro $v{path};
-				fields.push( { name : "FX_"+name.toUpperCase(), doc : null, meta : [], access : [APublic, AStatic, AInline], kind : FVar(tstring, e), pos : pos } );
+				fields.push( { name : "MUSIC_"+name.toUpperCase(), doc : null, meta : [], access : [APublic, AStatic, AInline], kind : FVar(tstring, e), pos : pos } );
 			}	
 		}
 		return fields;
