@@ -14,7 +14,11 @@ import com.furusystems.games.flywheel.media.sound.ofl.Music;
  * @author Andreas Rønning
  */
 
+#if (ios || mac)
+@:build( com.furusystems.games.flywheel.preprocessing.AssetProcessing.buildMusicPaths("assets/audio/music") ) class GameMusic 
+#else
 @:build( com.furusystems.games.flywheel.preprocessing.AssetProcessing.buildMusicPaths("./assets/audio/music") ) class GameMusic 
+#end
 {
 	public var currentMusic:String;
 	public var nextMusic:String;
