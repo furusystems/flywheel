@@ -45,10 +45,14 @@ class Music implements IMusic
 		}
 		_lastLoop = loop;
 		
+		#if debug
 		trace("play music: " + path);
+		#end
 		var s:Sound = Assets.getSound(path);
 		if (s == null) {
+			#if debug
 			trace("Couldnt load sound from path: " + path);
+			#end
 			return;
 		}
 		
@@ -62,11 +66,14 @@ class Music implements IMusic
 			stop();
 		}
 		_lastLoop = loop;
-		
+		#if debug
 		trace("play music: " + path);
+		#end
 		var s:Sound = Assets.getSound(path);
 		if (s == null) {
+			#if debug
 			trace("Couldnt load sound from path: " + path);
+			#end
 			return;
 		}
 		

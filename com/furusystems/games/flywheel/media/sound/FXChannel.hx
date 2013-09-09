@@ -53,7 +53,9 @@ class FXChannel
 		{
 			if (!sp.exists(path))
 			{
+				#if debug
 				trace("No cue loaded from path: " + path);
+				#end
 				return null;
 			} else {
 				if (consolidatePolyphony(priority)) {
@@ -66,7 +68,9 @@ class FXChannel
 					playingSounds.add(s);
 					return s;
 				}else {
+					#if debug
 					trace("Sound could not be played due to unavailable polyphony");
+					#end
 					return null;
 				}
 			}

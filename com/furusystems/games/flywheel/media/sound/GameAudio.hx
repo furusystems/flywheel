@@ -19,9 +19,13 @@ class GameAudio
 	{
 		#if android
 			if (AndroidAudio.initialize()) {
+				#if debug
 				trace("Android audio initialized");
+				#end
 			}else {
+				#if debug
 				trace("Android audio could not initialize");
+				#end
 			}
 		#end
 		

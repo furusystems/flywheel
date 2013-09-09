@@ -91,7 +91,9 @@ import com.furusystems.games.flywheel.media.sound.ofl.Music;
 		
 		currentTransition = null;
 		transitionStartVolume = musicVolume;
+		#if debug
 		trace("streampath: " + streamPath + ", Transition: " + transition);
+		#end
 		
 		if (streamPath == null) {
 			switch(transition) {
@@ -199,7 +201,9 @@ import com.furusystems.games.flywheel.media.sound.ofl.Music;
 
 	public function stop(sharp:Bool = false) 
 	{
+		#if debug
 		trace("Stop music");
+		#end
 		if (currentMusic == null) return;
 		if(sharp){
 			currentMusic = nextMusic = null;
@@ -211,7 +215,9 @@ import com.furusystems.games.flywheel.media.sound.ofl.Music;
 	
 	public function fadeCurrent(targetVolume:Float, duration:Float = 1):Void
 	{
+		#if debug
 		trace("Fade current to " + targetVolume);
+		#end
 		if (targetVolume == musicVolume) return;
 		playMusic(currentMusic, targetVolume, MusicTransition.simplefade, duration);
 	}

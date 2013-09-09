@@ -17,7 +17,9 @@ class AndroidMusic implements IMusic
 
 	public function new() 
 	{
+		#if debug
 		trace("setting up android music");
+		#end
 		jPlay = JNI.createStaticMethod("com.furusystems.flywheel.FlywheelSound", "playMusic", "(Ljava/lang/String;DDID)I");
 		jStop = JNI.createStaticMethod("com.furusystems.flywheel.FlywheelSound", "stopMusic", "()V");
 		jPause = JNI.createStaticMethod("com.furusystems.flywheel.FlywheelSound", "pauseMusic", "()V");

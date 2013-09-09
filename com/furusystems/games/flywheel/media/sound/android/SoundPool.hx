@@ -28,31 +28,18 @@ class SoundPool
 		setSource(source);
 	}
 	public function setSource(source:Dynamic):Void {
-		trace("Initializing local soundpool: " + source);
 		this.source = source;
-		trace("jPlaySound");
 		jPlay = JNI.createStaticMethod("com.furusystems.flywheel.FlywheelSound", "playSound", "(IDDIID)I");
-		trace("jLoad");
 		jLoad = JNI.createStaticMethod("com.furusystems.flywheel.FlywheelSound", "getSoundHandle", "(Ljava/lang/String;)I");
-		trace("jStop");
 		jStop = JNI.createStaticMethod("com.furusystems.flywheel.FlywheelSound", "stopSound", "(I)V");
-		trace("jUnload");
 		jUnload = JNI.createStaticMethod("com.furusystems.flywheel.FlywheelSound", "unloadSound", "(I)V");
-		trace("jPause");
 		jPause = JNI.createStaticMethod("com.furusystems.flywheel.FlywheelSound", "pauseSound", "(I)V");
-		trace("jResume");
 		jResume = JNI.createStaticMethod("com.furusystems.flywheel.FlywheelSound", "resumeSound", "(I)V");
-		trace("jAutoPause");
 		jAutoPause = JNI.createStaticMethod("com.furusystems.flywheel.FlywheelSound", "autoPause", "()V");
-		trace("jAutoresume");
 		jAutoresume = JNI.createStaticMethod("com.furusystems.flywheel.FlywheelSound", "autoResume", "()V");
-		trace("jRelease");
 		jRelease = JNI.createStaticMethod("com.furusystems.flywheel.FlywheelSound", "releasePool", "()V");
-		trace("jSetVolume");
 		jSetVolume = JNI.createStaticMethod("com.furusystems.flywheel.FlywheelSound", "setVolume", "(IDD)V");
-		trace("jSetLoop");
 		jSetLoop = JNI.createStaticMethod("com.furusystems.flywheel.FlywheelSound", "setLoop", "(II)V");
-		trace("jSetRate");
 		jSetRate = JNI.createStaticMethod("com.furusystems.flywheel.FlywheelSound", "setRate", "(ID)V");
 		
 	}
@@ -65,7 +52,9 @@ class SoundPool
 		//Resume all previously active streams.
 	}
 	public function load(path:String):Int {
+		#if debug
 		trace("Soundpool loading from path: " + path);
+		#end
 		return jLoad(path);
 		//Load the sound from the specified path.
 	}

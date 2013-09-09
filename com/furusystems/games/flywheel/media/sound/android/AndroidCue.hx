@@ -14,7 +14,9 @@ class AndroidCue implements ISoundCue
 	public var duration:Float;
 	public function new(path:String) 
 	{
+		#if debug
 		trace("New android cue");
+		#end
 		this.path = path;
 		index = AndroidAudio.currentPool.load(path);
 	}

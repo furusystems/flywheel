@@ -17,13 +17,17 @@ class AndroidAudio
 	
 	public static function clearPool():Void {
 		#if android
+		#if debug
 		trace("Android: Clear SoundPool");
+		#end
 		var method:Dynamic = JNI.createStaticMethod("com.furusystems.flywheel.FlywheelSound", "clearPool", "()V");
 		method();
 		#end
 	}
 	public static function initialize():Bool {
+		#if debug
 		trace("Android: Initializing");
+		#end
 		var method = JNI.createStaticMethod("com.furusystems.flywheel.FlywheelSound", "initialize", "()V");
 		method();
 		
