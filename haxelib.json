@@ -8,6 +8,6 @@
   "releasenote": "",
   "contributors": [""],
   "dependencies": {
-
+	  "hxcollision": ""
   }
 }

@@ -1,4 +1,4 @@
-package com.furusystems.utils;
+package com.furusystems.utils.data;
 import haxe.xml.Fast;
 
 /**
