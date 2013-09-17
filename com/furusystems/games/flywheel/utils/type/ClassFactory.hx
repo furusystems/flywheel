@@ -1,4 +1,4 @@
-package com.furusystems.utils;
+package com.furusystems.games.flywheel.utils.type;
 /**
  * ...
  * @author Andreas Rønning
@@ -7,7 +7,7 @@ package com.furusystems.utils;
 class ClassFactory 
 {
 
-	public static inline function create(classType:String, ?args:Array<Dynamic> = null):Dynamic
+	public static function create(classType:String, ?args:Array<Dynamic>):Dynamic
 	{
 		if (args == null)
 		{

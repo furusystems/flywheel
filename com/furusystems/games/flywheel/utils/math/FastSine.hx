@@ -1,5 +1,4 @@
-package com.furusystems.utils;
-import nme.geom.Point;
+package com.furusystems.games.flywheel.utils.math;
 
 /**
  * ...
@@ -12,7 +11,7 @@ class FastSine
 	public static inline var PI:Float = 3.14159265;
 	public static inline var PI2:Float = 6.28318531;
 	
-	private static var result:Point = new Point();
+	private static var result:SinCos = new SinCos();
 	
 	public static inline function wrapAngle(x:Float):Float {
 		while(x<-PI){
@@ -27,9 +26,9 @@ class FastSine
 		x = wrapAngle(x);
 		
 		//compute sine
-		result.y = sin(x);
+		result.sin = sin(x);
 		//compute cosine: sin(x + PI/2) = cos(x)
-		result.x = cos(x);
+		result.cos = cos(x);
 		return result;
 	}
 	public static inline function sin(x:Float):Float {
@@ -83,9 +82,9 @@ class FastSine
 		x = wrapAngle(x);
 		
 		//compute sine
-		result.y = low_sin(x);
+		result.sin = low_sin(x);
 		//compute cosine: sin(x + PI/2) = cos(x)
-		result.x = low_cos(x);
+		result.cos = low_cos(x);
 		return result;
 	}
 	public static inline function low_sin(x:Float):Float {
@@ -105,4 +104,11 @@ class FastSine
 			return 1.27323954 * x - 0.405284735 * x * x;
 	}
 	
+}
+class SinCos {
+	public var sin:Float = 0;
+	public var cos:Float = 0;
+	function new() {
+		
+	}
 }

@@ -1,5 +1,5 @@
 package com.furusystems.games.flywheel.utils.time;
-import flash.Lib;
+import haxe.Timer;
 
 /**
  * ...
@@ -7,23 +7,23 @@ import flash.Lib;
  */
 class StopWatch
 {
-	public var tickTime:Int;
+	public var tickTime:Float;
 	public function new() 
 	{
 		tickTime = 0;
 	}
 	public function tick():Void {
-		tickTime = Lib.getTimer();
+		tickTime = Timer.stamp();
 	}
 	public function tock():Int {
-		return Lib.getTimer() - tickTime;
+		return Timer.stamp() - tickTime;
 	}
 	
 	public static var staticTickTime:Int;
 	public static function staticTick():Void {
-		staticTickTime = Lib.getTimer();
+		staticTickTime = Timer.stamp();
 	}
 	public static function staticTock():Int {
-		return Lib.getTimer() - staticTickTime;
+		return  Timer.stamp() - staticTickTime;
 	}
 }

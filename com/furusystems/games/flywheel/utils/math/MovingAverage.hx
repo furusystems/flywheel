@@ -1,4 +1,4 @@
-package com.furusystems.utils;
+package com.furusystems.games.flywheel.utils.math;
 
 /**
  * ...

@@ -1,8 +1,5 @@
-package com.furusystems.utils;
-import com.furusystems.games.gameobject.GameTransform;
-import com.furusystems.utils.FastSine;
-import de.polygonal.core.math.Mathematics;
-import nme.geom.Point;
+package com.furusystems.games.flywheel.utils.math;
+import flash.geom.Point;
 
 /**
  * ...
@@ -47,47 +44,17 @@ class MathUtils
 		return diffX * diffX + diffY * diffY;
 	}
 	
-	public static inline function getVelocitiesTowardTarget(startX:Float, startY:Float, targetX:Float, targetY:Float, shotPower:Float):Point
-	{
-		var v:Point = new Point();
-		var dx:Float = targetX - startX;
-		var dy:Float = targetY - startY;
 		
-		#if (cpp || flash)
-		var angle:Float = Math.atan2(dy, dx);
-		#else
-		var angle:Float = Math.atan2(dx, dy);
-		#end
-		var angles:Point = FastSine.low(angle);
-		
-		v.x = angles.x * shotPower;
-		v.y = angles.y * shotPower;
-		return v;
-	}
-	
-	public static inline function getVelocitiesFromAngle(angle:Float, shotPower:Float):Point
-	{
-		var v:Point = new Point();
-		var angles:Point = FastSine.low(angle);
-		v.x = angles.x * shotPower;
-		v.y = angles.y * shotPower;
-		return v;
-	}
-	
 	public static inline function getDistanceBetweenPoints(startX:Float, startY:Float, endX:Float, endY:Float):Float
 	{
 		var dx:Float = endX - startX;
 		var dy:Float = endY - startY;
-		return Math.sqrt((dx * dx) + (dy * dy));
+		return Math.sqrt(dx * dx + dy * dy);
 	}
 	
 	static public inline function getAngleTowardsTarget(x1:Float,y1:Float,x2:Float,y2:Float):Float 
 	{
-		#if (cpp || flash)
 		return Math.atan2(y2-y1, x2-x1);
-		#else
-		return Math.atan2(y2-y1, x2-x1);
-		#end
 	}
 	public static inline function rotatePoint(pt:Point, center:Point, angle:Float):Void {
 		var oldx:Float = pt.x;

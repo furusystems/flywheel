@@ -1,5 +1,4 @@
-package com.furusystems.utils;
-import nme.errors.Error;
+package com.furusystems.games.flywheel.utils.math;
 class Rand 
 {
 	private static var _seed:Int = 123;
@@ -43,11 +42,7 @@ class Rand
 			return values[int(values.length * value)];
 		else
 		{
-			try {
-				return values[0][int(values[0].length * value)];
-			} catch (e:Error) {
-				throw new Error("Invalid choose type. Provide arguments to choose from or an array of values.");
-			}
+			return values[0][int(values[0].length * value)];
 		}
 	}
 	
