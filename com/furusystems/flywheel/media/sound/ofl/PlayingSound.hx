@@ -36,10 +36,8 @@ class PlayingSound implements IPlayingSound
 		this.volume = new Property<Float>(vol);
 		this.pan = new Property<Float>(pan);
 		length = loopcount == -1 ? Math.POSITIVE_INFINITY : cue.duration * (loopcount + 1);
-		//trace("Duration: " + length+" "+cue.duration);
 		position = 0;
-		var Cue:Cue = cast cue;
-		this.channel = Cue.sound.play(0, loopcount == -1 ? Math.ceil(Math.POSITIVE_INFINITY) : loopcount, new SoundTransform(vol, pan));
+		channel = cast(cue, Cue).sound.play(0, loopcount == -1 ? Math.ceil(Math.POSITIVE_INFINITY) : loopcount, new SoundTransform(vol, pan));
 	}
 	public function dispose():Void {
 		//trace("Dispose sound");

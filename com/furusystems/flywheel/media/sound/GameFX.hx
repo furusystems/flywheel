@@ -17,11 +17,7 @@ import com.furusystems.flywheel.media.sound.ofl.Cue;
  * ...
  * @author Andreas Rønning
  */
-#if (ios || mac)
-@:build( com.furusystems.flywheel.preprocessing.AssetProcessing.buildSoundPaths("/assets/audio/fx") ) class GameFX 
-#else
 @:build( com.furusystems.flywheel.preprocessing.AssetProcessing.buildSoundPaths("./assets/audio/fx") ) class GameFX 
-#end
 {
 	public var audio:GameAudio;
 	public var muted:Bool;
@@ -80,7 +76,7 @@ import com.furusystems.flywheel.media.sound.ofl.Cue;
 		var p:String = { var s = path.split("/"); s.pop().split(".").shift(); };
 		newCue.duration = Reflect.field(CueDurations, p.toUpperCase());
 		soundPool.set(path, newCue);
-		//trace("SFX ADDED: '" + path + "' - " + soundPool.exists(path) + " : " + newCue.duration);
+		trace("SFX ADDED: '" + path + "' - " + soundPool.exists(path) + " : " + newCue.duration);
 	}
 	
 	public function isEnabled():Bool

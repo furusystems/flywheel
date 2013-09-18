@@ -29,7 +29,7 @@ class Util
 		return s.indexOf("mp3") > -1 || s.indexOf("ogg") > -1;
 	}
 	
-	public static function readWaveLength(path:String):Float {
+	public static function readWavDuration(path:String):Float {
 		var c = 20;
 		var f:FileInput = File.read(path, true);
 		f.bigEndian = false;
