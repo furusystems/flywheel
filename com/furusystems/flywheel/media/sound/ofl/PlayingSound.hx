@@ -39,7 +39,7 @@ class PlayingSound implements IPlayingSound
 		position = 0;
 		channel = cast(cue, Cue).sound.play(0, loopcount == -1 ? Math.ceil(Math.POSITIVE_INFINITY) : loopcount, new SoundTransform(vol, pan));
 	}
-	public function dispose():Void {
+	public inline function dispose():Void {
 		//trace("Dispose sound");
 		channel.stop();
 		complete = true;

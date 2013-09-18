@@ -22,9 +22,11 @@ class AssetProcessing
 				if (!Util.isMusic(p)) continue;
 				var name:String = Util.cleanName(p.substring(0, p.lastIndexOf(".")));
 				var path:String = trimmed + "/" + p;
+				name = "MUSIC_" + name.toUpperCase();
+				trace("Adding music path: " + name + " : " + path);
 				var e = macro $v{path};
-				fields.push( { name : "MUSIC_"+name.toUpperCase(), doc : null, meta : [], access : [APublic, AStatic, AInline], kind : FVar(tstring, e), pos : pos } );
-			}	
+				fields.push( { name : name, doc : null, meta : [], access : [APublic, AStatic, AInline], kind : FVar(tstring, e), pos : pos } );
+			}
 		}else {
 			trace("No music files in base path: " + basePath);
 		}
@@ -41,9 +43,11 @@ class AssetProcessing
 			for (p in paths) {
 				if (!Util.isWav(p)) continue;
 				var name:String = Util.cleanName(p.substring(0, p.lastIndexOf(".")));
+				name = "FX_" + name.toUpperCase();
 				var path:String = trimmed + "/" + p;
+				trace("Adding FX path: " + name + " : " + path);
 				var e = macro $v{path};
-				fields.push( { name : "FX_"+name.toUpperCase(), doc : null, meta : [], access : [APublic, AStatic, AInline], kind : FVar(tstring, e), pos : pos } );
+				fields.push( { name : name, doc : null, meta : [], access : [APublic, AStatic, AInline], kind : FVar(tstring, e), pos : pos } );
 			}	
 		}else {
 			trace("No fx files in base path: " + basePath);
@@ -57,15 +61,16 @@ class AssetProcessing
 		if (FileSystem.exists(basePath)) {
 			var tfloat = TPath({ pack : [], name : "Float", params : [], sub : null });
 			var paths = FileSystem.readDirectory(basePath);
-			var trimmed:String = basePath.substring(basePath.indexOf("/"), basePath.length);
+			var trimmed:String = basePath.substring(basePath.indexOf("/")+1, basePath.length);
 			for (p in paths) {
 				if (!Util.isWav(p)) continue;
-				var path:String = basePath +"/"+ p;
+				var path:String = trimmed +"/"+ p;
 				var duration = Util.readWavDuration(path);
 				var name:String = Util.cleanName(p.substring(0, p.lastIndexOf(".")));
-				//name = name.substring(1);
+				name = name.toUpperCase();
+				trace("Adding FX duration: " + name + " : " + duration);
 				var e = macro $v{duration};
-				fields.push( { name : name.toUpperCase(), doc : null, meta : [], access : [APublic, AStatic], kind : FVar(tfloat, e), pos : pos } );
+				fields.push( { name : name, doc : null, meta : [], access : [APublic, AStatic], kind : FVar(tfloat, e), pos : pos } );
 			}
 		}else {
 			trace("No fx files in base path: " + basePath);
