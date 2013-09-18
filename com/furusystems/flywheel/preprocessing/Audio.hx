@@ -4,12 +4,13 @@ import haxe.macro.Context;
 import haxe.macro.Expr.Field;
 import haxe.macro.Expr;
 import sys.FileSystem;
+import sys.io.File;
 
 /**
  * ...
  * @author Andreas Rønning
  */
-class AssetProcessing
+class Audio
 {
 	macro public static function buildMusicPaths(basePath:String):Array<Field> {
 		var fields:Array<Field> = Context.getBuildFields();
@@ -59,12 +60,13 @@ class AssetProcessing
 		var fields = Context.getBuildFields();
 		var pos = Context.currentPos();
 		if (FileSystem.exists(basePath)) {
+			
 			var tfloat = TPath({ pack : [], name : "Float", params : [], sub : null });
 			var paths = FileSystem.readDirectory(basePath);
 			var trimmed:String = basePath.substring(basePath.indexOf("/")+1, basePath.length);
 			for (p in paths) {
 				if (!Util.isWav(p)) continue;
-				var path:String = trimmed +"/"+ p;
+				var path:String = trimmed +"/" + p;
 				var duration = Util.readWavDuration(path);
 				var name:String = Util.cleanName(p.substring(0, p.lastIndexOf(".")));
 				name = name.toUpperCase();
