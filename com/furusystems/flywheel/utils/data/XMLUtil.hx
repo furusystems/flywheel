@@ -8,7 +8,7 @@ import haxe.xml.Fast;
 
 class XMLUtil 
 {
-	public inline static function getStringValue(f:Fast, nodename:String, defaultValue:String):String {
+	public inline static function getStringValue(f:Fast, nodename:String, defaultValue:String = ""):String {
 		if (f.hasNode.f) {
 			return f.node.resolve(nodename).innerData;
 		}else {

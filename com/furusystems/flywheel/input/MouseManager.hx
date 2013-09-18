@@ -56,10 +56,12 @@ class MouseManager implements IInputManager
 		switch(e.type) {
 			case MouseEvent.MOUSE_UP:
 				leftMouse = false;
+			#if desktop
 			case MouseEvent.RIGHT_MOUSE_UP:
 				rightMouse = false;
 			case MouseEvent.MIDDLE_MOUSE_UP:
 				middleMouse = false;
+			#end
 		}
 		onMouseUp.dispatch(e);
 	}
@@ -70,10 +72,12 @@ class MouseManager implements IInputManager
 		switch(e.type) {
 			case MouseEvent.MOUSE_DOWN:
 				leftMouse = true;
+			#if desktop
 			case MouseEvent.RIGHT_MOUSE_DOWN:
 				rightMouse = true;
 			case MouseEvent.MIDDLE_MOUSE_DOWN:
 				middleMouse = true;
+			#end
 		}
 		onMouseDown.dispatch(e);
 	}
@@ -98,27 +102,31 @@ class MouseManager implements IInputManager
 		reset();
 		source.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 		source.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+		source.addEventListener(MouseEvent.CLICK, clickHandler);
+		source.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		#if desktop
 		source.addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, mouseDownHandler);
 		source.addEventListener(MouseEvent.RIGHT_MOUSE_UP, mouseUpHandler);
 		source.addEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, mouseDownHandler);
 		source.addEventListener(MouseEvent.MIDDLE_MOUSE_UP, mouseUpHandler);
-		source.addEventListener(MouseEvent.CLICK, clickHandler);
 		source.addEventListener(MouseEvent.RIGHT_CLICK, clickHandler);
 		source.addEventListener(MouseEvent.MIDDLE_CLICK, clickHandler);
-		source.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		#end
 	}
 	public function release(source:InteractiveObject):Void {
 		reset();
 		source.removeEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 		source.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+		source.removeEventListener(MouseEvent.CLICK, clickHandler);
+		source.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		#if desktop
 		source.removeEventListener(MouseEvent.RIGHT_MOUSE_DOWN, mouseDownHandler);
 		source.removeEventListener(MouseEvent.RIGHT_MOUSE_UP, mouseUpHandler);
 		source.removeEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, mouseDownHandler);
 		source.removeEventListener(MouseEvent.MIDDLE_MOUSE_UP, mouseUpHandler);
-		source.removeEventListener(MouseEvent.CLICK, clickHandler);
 		source.removeEventListener(MouseEvent.RIGHT_CLICK, clickHandler);
 		source.removeEventListener(MouseEvent.MIDDLE_CLICK, clickHandler);
-		source.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		#end
 	}
 	
 	public function reset():Void {
