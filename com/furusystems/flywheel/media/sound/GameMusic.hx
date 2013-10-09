@@ -62,21 +62,7 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 	
 	public function setPaused(p:Bool):Void
 	{
-		// doesn't actually pause the music, just stops the mp3 and stores its name to be restarted on 'resume'
-		#if android
-			m.setPaused(p);
-		#else
-		if (p)
-		{
-			prevMusic = currentMusic;
-			stop(true);
-		} else {
-			if (prevMusic != null)
-			{
-				playMusic(prevMusic, 1, MusicTransition.cut);
-			}
-		}
-		#end
+		m.setPaused(p);
 	}
 	
 	public function playMusic(streamPath:String, volume:Float = 1, ?transition:MusicTransition, duration:Float = 2, grace:Float = 0.5):Void
