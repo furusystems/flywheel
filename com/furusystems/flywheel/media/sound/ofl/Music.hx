@@ -61,11 +61,13 @@ class Music implements IMusic
 		_path = path;
 	}
 	
-	function play2(path:String, startTime:Float, volume:Float, loop:Bool = true):Void {
+	function play2(path:String, startTime:Float, volume:Float, loop:Bool = true):Void
+	{
 		if (isPlaying) {
 			stop();
 		}
 		_lastLoop = loop;
+		
 		#if debug
 		trace("play music: " + path);
 		#end
@@ -84,9 +86,10 @@ class Music implements IMusic
 	
 	public function stop():Void 
 	{
-		if (isPlaying) { 
+		if (isPlaying)
+		{ 
 			channel.stop();
-			channel   = null;
+			channel = null;
 			isPlaying = false;
 		}
 	}
@@ -102,12 +105,20 @@ class Music implements IMusic
 	
 	public function setPaused(b:Bool):Void 
 	{
-		if (channel == null) return;
+		trace("pause music: " + b);
+		if (channel == null)
+		{
+			trace("music channel is null");
+			return;
+		}
 		if (b) {
 			_lastPlayTime = channel.position;
 			_lastVolume = channel.soundTransform.volume;
-			stop();
+			channel.stop();
+			isPlaying = false;
 		}else {
+			_lastPlayTime /= 1000;
+			trace("resuming music at: " + _lastPlayTime);
 			play2(_path, _lastPlayTime, _lastVolume, _lastLoop);
 		}
 	}
