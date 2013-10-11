@@ -19,6 +19,7 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 	public var currentMusic:String;
 	public var nextMusic:String;
 	public var prevMusic:String;
+	public var loopNext:Bool;
 	
 	public var masterVolume:Float;
 	public var masterMasterVolume:Float;
@@ -51,6 +52,7 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 		targetMusicVolume = musicVolume = masterVolume = masterMasterVolume = 1;
 		currentMusic = null;
 		prevMusic = null;
+		loopNext = false;
 		muted = false;
 		paused = false;
 	}
@@ -65,11 +67,13 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 		m.setPaused(p);
 	}
 	
-	public function playMusic(streamPath:String, volume:Float = 1, ?transition:MusicTransition, duration:Float = 2, grace:Float = 0.5):Void
+	public function playMusic(streamPath:String, volume:Float = 1, looping:Bool = false, ?transition:MusicTransition, duration:Float = 2, grace:Float = 0.5):Void
 	{
 		if (!isEnabled()) return;
 		if (transition == null) transition = MusicTransition.cut;
 		if (streamPath == "") streamPath = null;
+		
+		loopNext = looping;
 		
 		currentTransition = null;
 		transitionStartVolume = musicVolume;
@@ -115,7 +119,7 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 		//trace("Cut to: " + streamPath+", "+volume);
 		currentTransition = null;
 		if(streamPath!=null){
-			m.play(streamPath, volume);
+			m.play(streamPath, volume, loopNext);
 			musicVolume = volume;
 			currentMusic = streamPath;
 		}else {
@@ -135,12 +139,12 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 				s = transitionTime / (transitionDuration * 0.5);
 				musicVolume = transitionStartVolume + s * (transitionTargetVolume-transitionStartVolume);
 				if (s > 1) {
-					playMusic(nextMusic, transitionResultVolume, MusicTransition.cut_to_fade, transitionDuration / 2, transitionGrace);
+					playMusic(nextMusic, transitionResultVolume, loopNext, MusicTransition.cut_to_fade, transitionDuration / 2, transitionGrace);
 				}
 			case MusicTransition.fade_to_cut:
 				musicVolume = transitionStartVolume + s * (transitionTargetVolume-transitionStartVolume);
 				if (s >= 1) {
-					playMusic(nextMusic, transitionResultVolume, MusicTransition.cut);
+					playMusic(nextMusic, transitionResultVolume, loopNext, MusicTransition.cut);
 				}
 			default:
 		}
@@ -191,7 +195,7 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 			currentMusic = nextMusic = null;
 			m.stop();
 		}else {
-			playMusic("", 0, MusicTransition.fade_to_cut);
+			playMusic("", 0, false, MusicTransition.fade_to_cut);
 		}
 	}
 	
@@ -201,7 +205,7 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 		trace("Fade current to " + targetVolume);
 		#end
 		if (targetVolume == musicVolume) return;
-		playMusic(currentMusic, targetVolume, MusicTransition.simplefade, duration);
+		playMusic(currentMusic, targetVolume, false, MusicTransition.simplefade, duration);
 	}
 	
 }
