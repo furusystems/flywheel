@@ -13,7 +13,6 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
  * ...
  * @author Andreas Rønning
  */
-
 @:build( com.furusystems.flywheel.preprocessing.Audio.buildMusicPaths("./assets/audio/music") ) class GameMusic 
 {
 	public var currentMusic:String;
@@ -37,9 +36,12 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 	var musicVolume:Float;
 	var paused:Bool;
 	
+	var nextPlayOffset:Float;
+	
 	var muted:Bool;
 	
 	var m:IMusic;
+	
 	
 	public function new(audio:GameAudio) 
 	{
@@ -50,8 +52,8 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 		#end
 		this.audio = audio;
 		targetMusicVolume = musicVolume = masterVolume = masterMasterVolume = 1;
-		currentMusic = null;
-		prevMusic = null;
+		currentMusic = "";
+		prevMusic = "";
 		loopNext = false;
 		muted = false;
 		paused = false;
@@ -67,16 +69,23 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 		m.setPaused(p);
 	}
 	
-	public function playMusic(streamPath:String, volume:Float = 1, looping:Bool = false, ?transition:MusicTransition, duration:Float = 2, grace:Float = 0.5):Void
+	public function playMusic(streamPath:String, volume:Float = -1, offset:Float = 0, looping:Bool = false, ?transition:MusicTransition, duration:Float = 2, grace:Float = 0.5):Void
 	{
+		#if !music return #end
 		if (!isEnabled()) return;
 		if (transition == null) transition = MusicTransition.cut;
 		if (streamPath == "") streamPath = null;
+		if (volume == -1) volume = musicVolume;
+		else musicVolume = volume;
+		
+		nextPlayOffset = offset;
+		trace("Next play offset: " + nextPlayOffset);
 		
 		loopNext = looping;
 		
 		currentTransition = null;
 		transitionStartVolume = musicVolume;
+		
 		#if debug
 		trace("streampath: " + streamPath + ", Transition: " + transition);
 		#end
@@ -116,12 +125,14 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 	
 	function cutTo(streamPath:String, volume:Float) 
 	{
+		#if !music return; #end
 		//trace("Cut to: " + streamPath+", "+volume);
 		currentTransition = null;
 		if(streamPath!=null){
-			m.play(streamPath, volume, loopNext);
 			musicVolume = volume;
 			currentMusic = streamPath;
+			trace("Cut to "+nextPlayOffset);
+			m.play(streamPath, volume, loopNext, nextPlayOffset);
 		}else {
 			m.stop();
 		}
@@ -131,7 +142,7 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 	{
 		transitionTime += deltaS;
 		var s:Float = transitionTime / transitionDuration;
-		//trace("Updating transition: " + currentTransition+", "+transitionTime+", "+transitionDuration);
+		trace("Updating transition: " + currentTransition+", "+transitionTime+", "+transitionDuration);
 		switch(currentTransition) {
 			case MusicTransition.cut_to_fade, MusicTransition.simplefade:
 				musicVolume = transitionStartVolume + s * (transitionTargetVolume-transitionStartVolume);
@@ -139,12 +150,12 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 				s = transitionTime / (transitionDuration * 0.5);
 				musicVolume = transitionStartVolume + s * (transitionTargetVolume-transitionStartVolume);
 				if (s > 1) {
-					playMusic(nextMusic, transitionResultVolume, loopNext, MusicTransition.cut_to_fade, transitionDuration / 2, transitionGrace);
+					playMusic(nextMusic, transitionResultVolume, nextPlayOffset, loopNext, MusicTransition.cut_to_fade, transitionDuration / 2, transitionGrace);
 				}
 			case MusicTransition.fade_to_cut:
 				musicVolume = transitionStartVolume + s * (transitionTargetVolume-transitionStartVolume);
 				if (s >= 1) {
-					playMusic(nextMusic, transitionResultVolume, loopNext, MusicTransition.cut);
+					playMusic(nextMusic, transitionResultVolume, nextPlayOffset, loopNext, MusicTransition.cut);
 				}
 			default:
 		}
@@ -169,11 +180,10 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 	
 	private var prevVolume:Float;
 	public function update(deltaS:Float):Void {
+		if (currentMusic == "" && nextMusic == "") return;
 		if (currentTransition != null) {
 			updateTransition(deltaS);
 		}
-		if (currentMusic == null && nextMusic == null) return;
-		
 		var v:Float = musicVolume * masterVolume * masterMasterVolume;
 		if(prevVolume!=v){
 			prevVolume = v;
@@ -195,7 +205,7 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 			currentMusic = nextMusic = null;
 			m.stop();
 		}else {
-			playMusic("", 0, false, MusicTransition.fade_to_cut);
+			playMusic("", 0, 0, false, MusicTransition.fade_to_cut);
 		}
 	}
 	
@@ -205,7 +215,7 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 		trace("Fade current to " + targetVolume);
 		#end
 		if (targetVolume == musicVolume) return;
-		playMusic(currentMusic, targetVolume, false, MusicTransition.simplefade, duration);
+		playMusic(currentMusic, targetVolume, 0, false, MusicTransition.simplefade, duration);
 	}
 	
 }

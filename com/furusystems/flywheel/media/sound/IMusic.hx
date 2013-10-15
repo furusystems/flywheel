@@ -6,7 +6,7 @@ package com.furusystems.flywheel.media.sound;
  */
 
 interface IMusic {
-	function play(path:String, volume:Float, loop:Bool = true):Void;
+	function play(path:String, volume:Float, loop:Bool = true, offset:Float = 0):Void;
 	function stop():Void;
 	function setVolume(musicVolume:Float):Void;
 	function setPaused(b:Bool):Void;

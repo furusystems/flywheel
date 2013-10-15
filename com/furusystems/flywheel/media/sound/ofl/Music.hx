@@ -38,31 +38,28 @@ class Music implements IMusic
 	
 	/* INTERFACE com.furusystems.flywheel.media.sound.IMusic */
 	
-	public function play(path:String, volume:Float, loop:Bool = true):Void 
+	public function play(path:String, volume:Float, loop:Bool = true, offset:Float = 0):Void 
 	{
+		#if !music return #end
 		if (isPlaying) {
 			stop();
 		}
 		_lastLoop = loop;
 		
-		#if debug
-		trace("play music: " + path);
-		#end
-		var s:Sound = Assets.getSound(path);
+		var s:Sound = Assets.getSound(path,false);
 		if (s == null) {
-			#if debug
 			trace("Couldnt load sound from path: " + path);
-			#end
 			return;
 		}
 		
-		channel = s.play(0, loop ? -1 : 0, new SoundTransform(volume));
+		channel = s.play(offset, loop ? -1 : 0, new SoundTransform(volume));
 		isPlaying = true;
 		_path = path;
 	}
 	
 	function play2(path:String, startTime:Float, volume:Float, loop:Bool = true):Void
 	{
+		#if !music return #end
 		if (isPlaying) {
 			stop();
 		}
@@ -71,7 +68,7 @@ class Music implements IMusic
 		#if debug
 		trace("play music: " + path);
 		#end
-		var s:Sound = Assets.getSound(path);
+		var s:Sound = Assets.getSound(path,false);
 		if (s == null) {
 			#if debug
 			trace("Couldnt load sound from path: " + path);
@@ -117,7 +114,7 @@ class Music implements IMusic
 			channel.stop();
 			isPlaying = false;
 		}else {
-			_lastPlayTime /= 1000;
+			//_lastPlayTime /= 1000;
 			trace("resuming music at: " + _lastPlayTime);
 			play2(_path, _lastPlayTime, _lastVolume, _lastLoop);
 		}

@@ -31,7 +31,7 @@ class AndroidMusic implements IMusic
 	
 	/* INTERFACE com.furusystems.flywheel.media.sound.IMusic */
 	
-	public function play(path:String, volume:Float, loop:Bool = true):Void 
+	public function play(path:String, volume:Float, loop:Bool = true, offset:Float = 0):Void 
 	{
 		jPlay(path, volume, volume, loop?9999:0, 0);
 	}
