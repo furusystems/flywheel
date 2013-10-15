@@ -61,7 +61,7 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 	public function setMuted(m:Bool):Void
 	{
 		muted = m;
-		if (muted) stop(true);
+		masterMasterVolume = (muted) ? 0.0 : 1.0;
 	}
 	
 	public function setPaused(p:Bool):Void
