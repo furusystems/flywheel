@@ -16,7 +16,11 @@ import com.furusystems.flywheel.media.sound.ofl.Cue;
  * ...
  * @author Andreas Rønning
  */
+#if ios
+@:build( com.furusystems.flywheel.preprocessing.Audio.buildSoundPaths("//Users/johndavies/Documents/PaperPals/branches/openfl/assets/audio/fx") ) class GameFX
+#else
 @:build( com.furusystems.flywheel.preprocessing.Audio.buildSoundPaths("./assets/audio/fx") ) class GameFX 
+#end
 {
 	public var audio:GameAudio;
 	public var muted:Bool;

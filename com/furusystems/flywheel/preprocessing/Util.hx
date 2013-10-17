@@ -32,7 +32,7 @@ class Util
 	public static function readWavDuration(path:String):Float {
 		var c = 20;
 		#if (ios || mac)
-		var f:FileInput = File.read("../../../../"+path, true);
+		var f:FileInput = File.read(path, true);
 		#else
 		var f:FileInput = File.read(path, true);
 		#end

@@ -13,7 +13,11 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
  * ...
  * @author Andreas Rønning
  */
+#if ios
+@:build( com.furusystems.flywheel.preprocessing.Audio.buildMusicPaths("//Users/johndavies/Documents/PaperPals/branches/openfl/assets/audio/music") ) class GameMusic 
+#else
 @:build( com.furusystems.flywheel.preprocessing.Audio.buildMusicPaths("./assets/audio/music") ) class GameMusic 
+#end
 {
 	public var currentMusic:String;
 	public var nextMusic:String;
