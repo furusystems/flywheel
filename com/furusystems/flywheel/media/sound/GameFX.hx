@@ -82,9 +82,12 @@ import com.furusystems.flywheel.media.sound.ofl.Cue;
 			newCue = new Cue(path);
 		#end
 		var p:String = { var s = path.split("/"); s.pop().split(".").shift(); };
+		trace("sfxname: " + p.toUpperCase());
 		newCue.duration = Reflect.field(CueDurations, p.toUpperCase());
 		soundPool.set(path, newCue);
+		#if debug
 		trace("SFX ADDED: '" + path + "' - " + soundPool.exists(path) + " : " + newCue.duration);
+		#end
 	}
 	
 	public function isEnabled():Bool

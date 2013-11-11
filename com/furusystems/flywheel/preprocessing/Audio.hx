@@ -24,7 +24,9 @@ class Audio
 				var name:String = Util.cleanName(p.substring(0, p.lastIndexOf(".")));
 				var path:String = trimmed + "/" + p;
 				name = "MUSIC_" + name.toUpperCase();
+				#if debug
 				trace("Adding music path: " + name + " : " + path);
+				#end
 				var e = macro $v{path};
 				fields.push( { name : name, doc : null, meta : [], access : [APublic, AStatic, AInline], kind : FVar(tstring, e), pos : pos } );
 			}
@@ -46,7 +48,9 @@ class Audio
 				var name:String = Util.cleanName(p.substring(0, p.lastIndexOf(".")));
 				name = "FX_" + name.toUpperCase();
 				var path:String = trimmed + "/" + p;
+				#if debug
 				trace("Adding FX path: " + name + " : " + path);
+				#end
 				var e = macro $v{path};
 				fields.push( { name : name, doc : null, meta : [], access : [APublic, AStatic, AInline], kind : FVar(tstring, e), pos : pos } );
 			}	
@@ -70,12 +74,16 @@ class Audio
 				var duration = Util.readWavDuration(path);
 				var name:String = Util.cleanName(p.substring(0, p.lastIndexOf(".")));
 				name = name.toUpperCase();
+				#if debug
 				trace("Adding FX duration: " + name + " : " + duration);
+				#end
 				var e = macro $v{duration};
 				fields.push( { name : name, doc : null, meta : [], access : [APublic, AStatic], kind : FVar(tfloat, e), pos : pos } );
 			}
+		#if debug
 		}else {
 			trace("No fx files in base path: " + basePath);
+			#end
 		}
 		return fields;
 	}

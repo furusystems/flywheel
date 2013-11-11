@@ -76,6 +76,7 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 	public function playMusic(streamPath:String, volume:Float = -1, offset:Float = 0, looping:Bool = false, ?transition:MusicTransition, duration:Float = 2, grace:Float = 0.5):Void
 	{
 		#if !music return #end
+		if (streamPath == currentMusic) return;
 		if (!isEnabled()) return;
 		if (transition == null) transition = MusicTransition.cut;
 		if (streamPath == "") streamPath = null;
@@ -83,7 +84,6 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 		else musicVolume = volume;
 		
 		nextPlayOffset = offset;
-		trace("Next play offset: " + nextPlayOffset);
 		
 		loopNext = looping;
 		
