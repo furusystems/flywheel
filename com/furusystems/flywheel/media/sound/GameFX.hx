@@ -29,6 +29,7 @@ import com.furusystems.flywheel.media.sound.ofl.Cue;
 
 	public var soundPool:Map<String, ISoundCue>;
 	
+	private var channelCount:Int = 0;
 	public var channels:Map<String, FXChannel>;
 	
 	public static inline var MAX_POLYPHONY:Int = 8;
@@ -51,12 +52,16 @@ import com.furusystems.flywheel.media.sound.ofl.Cue;
 		var chan:FXChannel = new FXChannel(this, polyphony, priority);
 		channels.set(name, chan);
 		availablePolyphony -= polyphony;
+		channelCount++;
+		trace("Created channel '"+name+"', current count: " + channelCount);
 		return chan;
 	}
 	
 	public function dispose():Void {
+		unloadAll();
 		stopAllSounds();
 		channels = null;
+		channelCount = 0;
 		soundPool = null;
 	}
 	
@@ -77,9 +82,12 @@ import com.furusystems.flywheel.media.sound.ofl.Cue;
 			newCue = new Cue(path);
 		#end
 		var p:String = { var s = path.split("/"); s.pop().split(".").shift(); };
+		trace("sfxname: " + p.toUpperCase());
 		newCue.duration = Reflect.field(CueDurations, p.toUpperCase());
 		soundPool.set(path, newCue);
+		#if debug
 		trace("SFX ADDED: '" + path + "' - " + soundPool.exists(path) + " : " + newCue.duration);
+		#end
 	}
 	
 	public function isEnabled():Bool
