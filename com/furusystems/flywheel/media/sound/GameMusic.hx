@@ -146,7 +146,7 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 	{
 		transitionTime += deltaS;
 		var s:Float = transitionTime / transitionDuration;
-		trace("Updating transition: " + currentTransition+", "+transitionTime+", "+transitionDuration);
+		//trace("Updating transition: " + currentTransition+", "+transitionTime+", "+transitionDuration);
 		switch(currentTransition) {
 			case MusicTransition.cut_to_fade, MusicTransition.simplefade:
 				musicVolume = transitionStartVolume + s * (transitionTargetVolume-transitionStartVolume);
