@@ -5,7 +5,7 @@ import com.furusystems.flywheel.media.sound.ISoundCue;
 import flash.errors.Error;
 import openfl.Assets;
 
-#if android
+#if (android && soundmanager)
 import com.furusystems.flywheel.media.sound.android.AndroidAudio;
 import com.furusystems.flywheel.media.sound.android.AndroidCue;
 #else
@@ -76,7 +76,7 @@ import com.furusystems.flywheel.media.sound.ofl.Cue;
 	public function load(path:String):Void {
 		if (soundPool.exists(path) || !isEnabled()) return;
 		var newCue:ISoundCue;
-		#if android
+		#if (android && soundmanager)
 			newCue = new AndroidCue(path);
 		#else
 			newCue = new Cue(path);
@@ -118,7 +118,7 @@ import com.furusystems.flywheel.media.sound.ofl.Cue;
 		}
 	}
 	public inline function isReady():Bool {
-		#if android
+		#if (android && soundmanager)
 			return AndroidAudio.isPoolReady();
 		#else
 			return true; //Dunno how sound loading on iphone works
@@ -144,7 +144,7 @@ import com.furusystems.flywheel.media.sound.ofl.Cue;
 	
 	public function setPaused(paused:Bool) 
 	{
-		#if android
+		#if (android && soundmanager)
 		if (paused) {
 			AndroidAudio.currentPool.autoPause();
 		}else {

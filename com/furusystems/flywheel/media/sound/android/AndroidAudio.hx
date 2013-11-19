@@ -16,7 +16,7 @@ class AndroidAudio
 	private static inline var POOL_ERROR:Int = -1;
 	
 	public static function clearPool():Void {
-		#if android
+		#if (android && soundmanager)
 		#if debug
 		trace("Android: Clear SoundPool");
 		#end

@@ -3,7 +3,7 @@ import com.furusystems.flywheel.Core;
 import com.furusystems.flywheel.media.sound.GameAudio;
 import com.furusystems.flywheel.media.sound.IMusic;
 
-#if android
+#if (android && soundmanager)
 import com.furusystems.flywheel.media.sound.android.AndroidMusic;
 #else
 import com.furusystems.flywheel.media.sound.ofl.Music;
@@ -49,7 +49,7 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 	
 	public function new(audio:GameAudio) 
 	{
-		#if android
+		#if (android && soundmanager)
 		m = new AndroidMusic();
 		#else
 		m = new Music();

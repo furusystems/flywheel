@@ -42,6 +42,7 @@ public class FlywheelSound implements SoundPool.OnLoadCompleteListener
     public FlywheelSound(Context context)
     {
     	if (instance == null) {
+            Log.i("Sound","Creating soundpool");
 			mSoundPool = new SoundPool(soundpoolPolyphony, AudioManager.STREAM_MUSIC, 0);
 			mSoundPool.setOnLoadCompleteListener(this);
 			if (mSoundPoolID > 1) {
@@ -61,10 +62,10 @@ public class FlywheelSound implements SoundPool.OnLoadCompleteListener
     }
 	
     public void onLoadComplete(SoundPool soundPool, int sampleId, int status){
-    	//Log.v("Sound", "Soundpool load complete for id "+sampleId);
+    	Log.v("Sound", "Soundpool load complete for id "+sampleId);
 		loadsCompleted++;
     	_poolReady = loadsRequested==loadsCompleted?1:0;
-    	//Log.v("Sound", loadsRequested+"/"+loadsCompleted);
+    	Log.v("Sound", loadsRequested+"/"+loadsCompleted);
     }
     
     public static void pauseMusic(){
@@ -110,18 +111,19 @@ public class FlywheelSound implements SoundPool.OnLoadCompleteListener
 
 	public static int getSoundHandle(String inFilename)
 	{
+        Log.v("Sound","Get sound handle ------" + inFilename);
 		int id = GameActivity.getResourceID(inFilename);
+        Log.v("Sound", "ID: "+ inFilename + " = " + id);
 		if(soundPoolIndices.containsKey(id)){
 			int index = soundPoolIndices.get(id);
-			//Log.v("Sound", "Returning existing index: "+index);
+			Log.v("Sound", "Returning existing index: "+index);
 			return index;
 		}
-		
-		//Log.v("Sound","Get sound handle ------" + inFilename + " = " + id);
+
 		
 		if (id > 0) {
 			int index = mSoundPool.load(mContext, id, 1);
-			//Log.v("Sound", "Loaded index: " + index);
+			Log.v("Sound", "Loaded index: " + index);
 			soundPoolIndices.put(id, index);
 			loadsRequested++;
 			return index;
@@ -141,7 +143,7 @@ public class FlywheelSound implements SoundPool.OnLoadCompleteListener
 
 	public static int playSound(int inResourceID, double inVolLeft, double inVolRight, int inLoop, int priority, double rate)
 	{
-		//Log.v("Sound", "PlaySound -----" + inResourceID);
+		Log.v("Sound", "PlaySound -----" + inResourceID);
 		
 		if (inLoop > 0) {
 			inLoop--;

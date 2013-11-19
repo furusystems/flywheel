@@ -1,5 +1,5 @@
 package com.furusystems.flywheel.media.sound;
-#if android
+#if (android && soundmanager)
 import com.furusystems.flywheel.Core;
 import com.furusystems.flywheel.media.sound.android.AndroidPlayingSound;
 #else
@@ -40,7 +40,7 @@ class FXChannel
 	public function reset():Void {
 		stopAllSounds();
 	}
-	#if android
+	#if (android && soundmanager)
 	public function play(path:String, vol:Float = 1, pan:Float = 0, loop:Int = 0, priority:Int = -1, rate:Float = 1):AndroidPlayingSound
 	#else
 	public function play(path:String, vol:Float = 1, pan:Float = 0, loop:Int = 0, priority:Int = -1, rate:Float = 1):IPlayingSound
@@ -60,7 +60,7 @@ class FXChannel
 			} else {
 				if (consolidatePolyphony(priority)) {
 					var cue:ISoundCue = sp.get(path);
-					#if android
+					#if (android && soundmanager)
 					var s = new AndroidPlayingSound(cue, vol * mgr.masterVolume * mgr.masterMasterVolume, pan, loop, priority, rate);
 					#else
 					var s = new PlayingSound(cue, vol * mgr.masterVolume * mgr.masterMasterVolume, pan, loop);

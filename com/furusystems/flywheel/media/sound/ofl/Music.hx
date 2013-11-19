@@ -51,8 +51,9 @@ class Music implements IMusic
 			trace("Couldnt load sound from path: " + path);
 			return;
 		}
+		trace("Play music of length: "+s.length);
 		
-		channel = s.play(offset, loop ? -1 : 0, new SoundTransform(volume));
+		channel = s.play(offset, loop ? 9999 : 0, new SoundTransform(volume));
 		isPlaying = true;
 		_path = path;
 	}
@@ -76,7 +77,7 @@ class Music implements IMusic
 			return;
 		}
 		
-		channel = s.play(startTime, loop ? -1 : 0, new SoundTransform(volume));
+		channel = s.play(startTime, loop ? 9999 : 0, new SoundTransform(volume));
 		isPlaying = true;
 		_path = path;
 	}
@@ -114,8 +115,7 @@ class Music implements IMusic
 			channel.stop();
 			isPlaying = false;
 		}else {
-			//_lastPlayTime /= 1000;
-			trace("resuming music at: " + _lastPlayTime);
+			trace("resuming music at: " + _lastPlayTime, _lastLoop);
 			play2(_path, _lastPlayTime, _lastVolume, _lastLoop);
 		}
 	}

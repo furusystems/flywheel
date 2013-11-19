@@ -52,9 +52,7 @@ class SoundPool
 		//Resume all previously active streams.
 	}
 	public function load(path:String):Int {
-		#if debug
 		trace("Soundpool loading from path: " + path);
-		#end
 		return jLoad(path);
 		//Load the sound from the specified path.
 	}

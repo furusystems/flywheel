@@ -1,6 +1,6 @@
 package com.furusystems.flywheel.media.sound;
 import com.furusystems.flywheel.Core;
-#if android
+#if (android && soundmanager)
 import com.furusystems.flywheel.media.sound.android.AndroidAudio;
 #end
 
@@ -17,7 +17,7 @@ class GameAudio
 	
 	public function new() 
 	{
-		#if android
+		#if (android && soundmanager)
 			if (AndroidAudio.initialize()) {
 				#if debug
 				trace("Android audio initialized");
