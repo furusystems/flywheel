@@ -47,6 +47,9 @@ class Timing
 		return 0;
 		#end
 	}
+	public static inline function set(name:String, value:Float):Void {
+		methodMap.set(name, value);
+	}
 	public static function reset():Void {
 		 peakUpdateTime  = 0;
 		 peakRenderTime  = 0;

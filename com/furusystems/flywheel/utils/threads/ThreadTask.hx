@@ -7,14 +7,14 @@ import haxe.ds.Vector.Vector;
  */
 class ThreadTask
 {
+	public var type:TaskType;
 	public var handler:Array<Dynamic> -> Void;
-	public var onComplete:Array<Dynamic> -> Void;
 	public var data:Array<Dynamic>;
-	public function new(handler:Array<Dynamic>->Void, data:Array<Dynamic>, ?onComplete:Array<Dynamic>->Void) 
+	public function new(type:TaskType, handler:Array<Dynamic>->Void, ?data:Array<Dynamic>) 
 	{
+		this.type = type;
 		this.data = data;
 		this.handler = handler;
-		this.onComplete = onComplete;
 	}
 	
 }
