@@ -12,7 +12,7 @@ import haxe.Timer;
  */
 class ThreadPool
 {
-	static var numThreads:Int;
+	static var _numThreads:Int;
 	static var pool:Vector<Thread>;
 	static var tasks:Deque<ThreadTask> = new Deque<ThreadTask>();
 	static var lock:Mutex = new Mutex();
@@ -26,7 +26,7 @@ class ThreadPool
 	public static function setup(numThreads:Int):Void {
 		if (pool != null) shutDown();
 		trace("Setup "+numThreads);
-		ThreadPool.numThreads = numThreads;
+		_numThreads = numThreads;
 		pool = new Vector<Thread>(numThreads);
 		numJobs.reset();
 		for (i in 0...numThreads) {
@@ -39,9 +39,9 @@ class ThreadPool
 	 * Block until all jobs are complete
 	 */
 	public static function finish():Void {
-		trace("Finishing...");
+		//trace("Finishing...");
 		while (numJobs.value > 0) {}
-		trace("Finished");
+		//trace("Finished");
 	}
 	
 	public static function shutDown():Void {
@@ -67,7 +67,7 @@ class ThreadPool
 			}else{
 				var startTime = Timer.stamp();
 				task.handler(task.data);
-				trace(id, "Finished a job in " + (Timer.stamp() - startTime));
+				//trace(id, "Finished a job in " + (Timer.stamp() - startTime));
 				numJobs.decrement();
 			}
 		}
@@ -81,7 +81,21 @@ class ThreadPool
 	
 	
 	
+	/**
+	 * UTIL
+	 */
 	
+	public static inline function decompose<T>(func:Array<Dynamic>->Void, list:Array<T>):Void {
+		var idx:Int = 0;
+		var chunkLength:Int = Math.floor(list.length / _numThreads);
+		for (i in 0..._numThreads) 
+		{
+			var t:ThreadTask = new ThreadTask(TaskType.RUN, func, [list, idx, idx+chunkLength]);
+			ThreadPool.submitTask(t);
+			//trace(idx + " : " + (idx + chunkLength) +"/"+ list.length);
+			idx += chunkLength;
+		}
+	}
 	
 	/**
 	 * TESTS
@@ -98,6 +112,7 @@ class ThreadPool
 			idx += chunkLength;
 		}
 	}
+	
 	static function fudgeValue(td:Array<Dynamic>):Void {
 		var collection:Vector<Float> = td[0];
 		var start:Int = td[1];
@@ -106,4 +121,11 @@ class ThreadPool
 			collection[i] = Math.cos(Math.sin(Math.pow(Math.random(), Math.random())));
 		}
 	}
+	
+	static public var numThreads(get_numThreads, null):Int;
+	static function get_numThreads():Int 
+	{
+		return _numThreads;
+	}
+	
 }

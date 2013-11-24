@@ -1,5 +1,4 @@
 package com.furusystems.flywheel.utils.profiling;
-import com.furusystems.FPSCounter;
 import flash.display.Graphics;
 import flash.display.Sprite;
 import flash.Lib;

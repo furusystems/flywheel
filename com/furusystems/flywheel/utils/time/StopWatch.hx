@@ -20,10 +20,10 @@ class StopWatch
 	}
 	
 	public static var staticTickTime:Float;
-	public static function staticTick():Void {
+	public static inline function staticTick():Void {
 		staticTickTime = Timer.stamp();
 	}
-	public static function staticTock():Float {
+	public static inline function staticTock():Float {
 		return Timer.stamp() - staticTickTime;
 	}
 }

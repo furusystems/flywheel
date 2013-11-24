@@ -8,9 +8,9 @@ import haxe.ds.Vector.Vector;
 class ThreadTask
 {
 	public var type:TaskType;
-	public var handler:Array<Dynamic> -> Void;
+	public var handler:Dynamic;
 	public var data:Array<Dynamic>;
-	public function new(type:TaskType, handler:Array<Dynamic>->Void, ?data:Array<Dynamic>) 
+	public function new(type:TaskType, handler:Dynamic, ?data:Array<Dynamic>) 
 	{
 		this.type = type;
 		this.data = data;
