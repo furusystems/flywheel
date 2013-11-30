@@ -40,7 +40,7 @@ abstract FWPoint(Point) from Point to Point
 		return a;	
 	}
 	
-	@:noCompletion @:op(A + B) public static inline function addFloat(a:FWPoint, scalar:Float):FWPoint {
+	@:commutative @:noCompletion @:op(A + B) public static inline function addFloat(a:FWPoint, scalar:Float):FWPoint {
 		var pt:FWPoint = a.clone();
 		a.x += scalar;
 		a.y += scalar;
@@ -66,7 +66,7 @@ abstract FWPoint(Point) from Point to Point
 		return a;	
 	}
 	
-	@:noCompletion @:op(A - B) public static inline function subFloat(a:FWPoint, scalar:Float):FWPoint {
+	@:commutative @:noCompletion @:op(A - B) public static inline function subFloat(a:FWPoint, scalar:Float):FWPoint {
 		var pt:FWPoint = a.clone();
 		a.x -= scalar;
 		a.y -= scalar;
@@ -90,7 +90,7 @@ abstract FWPoint(Point) from Point to Point
 		a.y *= scalar;
 		return a;
 	}
-	@:noCompletion @:op(A * B) public static inline function multFloat(a:FWPoint, scalar:Float):FWPoint {
+	@:commutative @:noCompletion @:op(A * B) public static inline function multFloat(a:FWPoint, scalar:Float):FWPoint {
 		var pt:FWPoint = a.clone();
 		pt.x *= scalar;
 		pt.y *= scalar;
@@ -114,7 +114,7 @@ abstract FWPoint(Point) from Point to Point
 		a.y /= scalar;
 		return a;
 	}
-	@:noCompletion @:op(A / B) public static inline function divFloat(a:FWPoint, scalar:Float):FWPoint {
+	@:commutative @:noCompletion @:op(A / B) public static inline function divFloat(a:FWPoint, scalar:Float):FWPoint {
 		var pt:FWPoint = a.clone();
 		pt.x /= scalar;
 		pt.y /= scalar;
@@ -131,6 +131,37 @@ abstract FWPoint(Point) from Point to Point
 		a.x /= b.x;
 		a.y /= b.y;
 		return a;
+	}
+	
+	public inline function rotateAroundPt(pt:FWPoint, angle:Float):FWPoint {
+		var ox:Float = x;
+		var oy:Float = y;
+		compoundSub(this, pt);
+		rotate(angle);
+		x += ox;
+		y += oy;
+		return this;
+	}
+	
+	public inline function reflect(normal:FWPoint):FWPoint {
+		return self() - (((self() * 2.0).dot(normal)) / Math.pow(normal.mag(), 2)) * normal;
+	}
+	public inline function reflectEq(normal:FWPoint):FWPoint {
+		this.copyFrom(self() - (((self() * 2.0).dot(normal)) / Math.pow(normal.mag(), 2)) * normal);
+		return this;
+	}
+	
+	//Idiotic utility
+	inline function self():FWPoint {
+		return this;
+	}
+	
+	public inline function rotate(angleRad:Float):FWPoint {
+		var sin:Float = Math.sin(angleRad);
+		var cos:Float = Math.cos(angleRad);
+		var px:Float = x * cos - y * sin; 
+		var py:Float = x * sin + y * cos;
+		return set(px, py);
 	}
 	
 	public inline function mag():Float {
@@ -217,6 +248,5 @@ abstract FWPoint(Point) from Point to Point
 	inline function set_y(value:Float):Float {
 		return this.y = value;
 	}
-	
 	
 }
