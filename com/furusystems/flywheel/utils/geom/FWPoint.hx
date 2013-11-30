@@ -143,6 +143,11 @@ abstract FWPoint(Point) from Point to Point
 		return this;
 	}
 	
+	public inline function copyFrom(other:FWPoint):FWPoint {
+		this.copyFrom(other);
+		return this;
+	}
+	
 	public inline function reflect(normal:FWPoint):FWPoint {
 		return self() - (((self() * 2.0).dot(normal)) / Math.pow(normal.mag(), 2)) * normal;
 	}
