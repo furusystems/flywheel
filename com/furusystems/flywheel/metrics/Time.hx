@@ -20,12 +20,15 @@ class Time
 	
 	public var timeStep:Int = -1;
 	
+	public var stateCurrentTimeMS:Int;
+	
 	var lastUpdateTimeMS:Int;
 	public function new() 
 	{
 		reset();
 	}
 	public function reset() {
+		stateCurrentTimeMS = 0;
 		clockMS = lastUpdateTimeMS = 0;
 		timeScale = 1;
 		deltaS = scaledDeltaS = 0;
@@ -43,6 +46,7 @@ class Time
 	inline function updateRunning():Void {
 		deltaMS = Lib.getTimer() - lastUpdateTimeMS;
 		clockMS += deltaMS;
+		stateCurrentTimeMS += deltaMS;
 		clockS = clockMS * 0.001;
 		deltaS = deltaMS * 0.001;
 		scaledDeltaMS = Std.int(deltaMS * timeScale);
@@ -52,6 +56,7 @@ class Time
 	inline function updateFixed(stepMS:Int = 33):Void {
 		deltaMS = stepMS;
 		clockMS += deltaMS;
+		stateCurrentTimeMS += deltaMS;
 		clockS = clockMS * 0.001;
 		deltaS = deltaMS * 0.001;
 		scaledDeltaMS = Std.int(deltaMS * timeScale);

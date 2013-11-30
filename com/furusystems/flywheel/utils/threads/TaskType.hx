@@ -7,5 +7,6 @@ package com.furusystems.flywheel.utils.threads;
 enum TaskType
 {
 	RUN;
+	FOREACH;
 	SHUTDOWN;
 }

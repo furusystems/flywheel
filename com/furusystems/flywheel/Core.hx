@@ -6,6 +6,7 @@ import com.furusystems.flywheel.media.video.android.AndroidVideo;
 import com.furusystems.flywheel.metrics.Time;
 import flash.display.Stage;
 import flash.events.Event;
+import flash.Lib;
 
 /**
  * A flywheel 
@@ -83,11 +84,11 @@ class Core
 		_currentState.render();
 	}
 	
-	function get_state():IState {
+	private function get_state():IState {
 		return _currentState;
 	}
 	
-	function set_state(value:IState):IState {
+	private function set_state(value:IState):IState {
 		if (value == _currentState) return _currentState;
 		if (_currentState != null) {
 			_currentState.exit();
@@ -95,6 +96,7 @@ class Core
 		}
 		_currentState = value;
 		if (_currentState != null) {
+			time.stateCurrentTimeMS = 0;
 			_currentState.game = this;
 			_currentState.enter();
 		}

@@ -18,15 +18,22 @@ class ThreadPool
 	static var lock:Mutex = new Mutex();
 	static var main:Thread;
 	static var numJobs:SharedCounter = new SharedCounter();
-	
+	static var enabled:Bool = false;
+	static var includeMain:Bool;
 	public static inline function submitTask(threadTask:ThreadTask):Void {
 		numJobs.increment();
 		tasks.push(threadTask);
 	}
-	public static function setup(numThreads:Int):Void {
+	public static function setup(numThreads:Int, includeMain:Bool = false):Void {
 		if (pool != null) shutDown();
 		trace("Setup "+numThreads);
 		_numThreads = numThreads;
+		if (numThreads <= 0) {
+			enabled = false;
+			return;
+		}
+		ThreadPool.includeMain = true;
+		enabled = true;
 		pool = new Vector<Thread>(numThreads);
 		numJobs.reset();
 		for (i in 0...numThreads) {
@@ -39,6 +46,7 @@ class ThreadPool
 	 * Block until all jobs are complete
 	 */
 	public static function finish():Void {
+		if (_numThreads <= 0) return;
 		//trace("Finishing...");
 		while (numJobs.value > 0) {}
 		//trace("Finished");
@@ -46,7 +54,7 @@ class ThreadPool
 	
 	public static function shutDown():Void {
 		trace("Shutdown");
-		var t:ThreadTask = new ThreadTask(TaskType.SHUTDOWN, null);
+		var t:ThreadTask = new ThreadTask(TaskType.SHUTDOWN);
 		for (i in 0...pool.length) 
 		{
 			submitTask(t);
@@ -66,7 +74,7 @@ class ThreadPool
 				return;
 			}else{
 				var startTime = Timer.stamp();
-				task.handler(task.data);
+				task.execute();
 				//trace(id, "Finished a job in " + (Timer.stamp() - startTime));
 				numJobs.decrement();
 			}
@@ -85,40 +93,14 @@ class ThreadPool
 	 * UTIL
 	 */
 	
-	public static inline function decompose<T>(func:Array<Dynamic>->Void, list:Array<T>):Void {
+	public static function decompose<T>(list:Array<T>, handler:T->Void):Void {
 		var idx:Int = 0;
 		var chunkLength:Int = Math.floor(list.length / _numThreads);
 		for (i in 0..._numThreads) 
 		{
-			var t:ThreadTask = new ThreadTask(TaskType.RUN, func, [list, idx, idx+chunkLength]);
-			ThreadPool.submitTask(t);
-			//trace(idx + " : " + (idx + chunkLength) +"/"+ list.length);
-			idx += chunkLength;
-		}
-	}
-	
-	/**
-	 * TESTS
-	 */
-	public static function test():Void {
-		var c:Vector<Float> = new Vector<Float>(8000000);
-		var numTasks:Int = numThreads;
-		var idx:Int = 0;
-		var chunkLength:Int = Math.floor(c.length / numTasks);
-		for (i in 0...numTasks) 
-		{
-			var t:ThreadTask = new ThreadTask(TaskType.RUN, fudgeValue, [c, idx, idx+chunkLength]);
+			var t:ThreadTask = new ForeachTask<T>(list, idx, idx+chunkLength, handler);
 			ThreadPool.submitTask(t);
 			idx += chunkLength;
-		}
-	}
-	
-	static function fudgeValue(td:Array<Dynamic>):Void {
-		var collection:Vector<Float> = td[0];
-		var start:Int = td[1];
-		var end:Int = td[2];
-		for (i in start...end) {
-			collection[i] = Math.cos(Math.sin(Math.pow(Math.random(), Math.random())));
 		}
 	}
 	
