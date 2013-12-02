@@ -1,6 +1,7 @@
 package com.furusystems.flywheel.input;
 import com.furusystems.flywheel.Core;
 import com.furusystems.flywheel.events.Signal;
+import com.furusystems.flywheel.utils.geom.Vector2D;
 import flash.display.InteractiveObject;
 import flash.events.MouseEvent;
 import flash.geom.Point;
@@ -11,9 +12,9 @@ import flash.geom.Point;
  */
 class MouseManager implements IInputManager
 {
-	var tempPosition:Point;
-	public var position:Point;
-	public var positionDelta:Point;
+	var tempPosition:Vector2D;
+	public var position:Vector2D;
+	public var positionDelta:Vector2D;
 	public var leftMouse:Bool;
 	public var rightMouse:Bool;
 	public var middleMouse:Bool;
@@ -89,7 +90,7 @@ class MouseManager implements IInputManager
 	{
 		if (firstUpdate) {
 			firstUpdate = false;
-			positionDelta.setTo(0, 0);
+			positionDelta.set(0, 0);
 		}else{
 			positionDelta.x = tempPosition.x - position.x;
 			positionDelta.y = tempPosition.y - position.y;
@@ -131,7 +132,7 @@ class MouseManager implements IInputManager
 	
 	public function reset():Void {
 		firstUpdate = true;
-		positionDelta.setTo(0, 0);
+		positionDelta.set(0, 0);
 		onMouseDown.removeAll();
 		onMouseUp.removeAll();
 		onClick.removeAll();

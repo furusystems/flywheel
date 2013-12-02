@@ -139,6 +139,13 @@ class MathUtils
 		return a.x*b.x + a.y*b.y;
 	}
 	
+	public static inline function unipolarSin(t:Float):Float {
+		return Math.sin(t) * 0.5 + 0.5;
+	}
+	public static inline function unipolarCos(t:Float):Float {
+		return Math.cos(t) * 0.5 + 0.5;
+	}
+	
 	
 	public static inline function degToRad(deg:Float):Float {
 		return deg * (Math.PI / 180);

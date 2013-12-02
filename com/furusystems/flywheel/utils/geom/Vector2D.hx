@@ -42,9 +42,9 @@ abstract Vector2D(Point) from Point to Point
 	
 	@:commutative @:noCompletion @:op(A + B) public static inline function addFloat(a:Vector2D, scalar:Float):Vector2D {
 		var pt:Vector2D = a.clone();
-		a.x += scalar;
-		a.y += scalar;
-		return a;	
+		pt.x += scalar;
+		pt.y += scalar;
+		return pt;	
 	}
 	
 	@:noCompletion @:op(A += B) public static inline function compoundAdd(a:Vector2D, b:Vector2D):Vector2D {
