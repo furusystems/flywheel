@@ -35,9 +35,9 @@ abstract Vector2D(Point) from Point to Point
 	//MATH
 	@:noCompletion @:op(A + B) public static inline function add(a:Vector2D, b:Vector2D):Vector2D {
 		var pt:Vector2D = a.clone();
-		a.x += b.x;
-		a.y += b.y;
-		return a;	
+		pt.x += b.x;
+		pt.y += b.y;
+		return pt;	
 	}
 	
 	@:commutative @:noCompletion @:op(A + B) public static inline function addFloat(a:Vector2D, scalar:Float):Vector2D {
@@ -61,16 +61,16 @@ abstract Vector2D(Point) from Point to Point
 	
 	@:noCompletion @:op(A - B) public static inline function sub(a:Vector2D, b:Vector2D):Vector2D {
 		var pt:Vector2D = a.clone();
-		a.x -= b.x;
-		a.y -= b.y;
-		return a;	
+		pt.x -= b.x;
+		pt.y -= b.y;
+		return pt;	
 	}
 	
 	@:commutative @:noCompletion @:op(A - B) public static inline function subFloat(a:Vector2D, scalar:Float):Vector2D {
 		var pt:Vector2D = a.clone();
-		a.x -= scalar;
-		a.y -= scalar;
-		return a;	
+		pt.x -= scalar;
+		pt.y -= scalar;
+		return pt;	
 	}
 	
 	@:noCompletion @:op(A -= B) public static inline function compoundSub(a:Vector2D, b:Vector2D):Vector2D {
