@@ -133,6 +133,16 @@ abstract Vector2D(Point) from Point to Point
 		return a;
 	}
 	
+	public static inline function distance(a:Vector2D, b:Vector2D):Float {
+		return Math.sqrt(distanceSqr(a, b));
+	}
+	
+	public static inline function distanceSqr(a:Vector2D, b:Vector2D):Float {
+		var dx:Float = b.x - a.x;
+		var dy:Float = b.y - a.y;
+		return dx * dx + dy * dy;
+	}
+	
 	public inline function rotateAroundPt(pt:Vector2D, angle:Float):Vector2D {
 		var ox:Float = x;
 		var oy:Float = y;
@@ -233,6 +243,12 @@ abstract Vector2D(Point) from Point to Point
 	
 	public inline function angleRad():Float {
 		return Math.atan2(this.x, this.y);
+	}
+	
+	public inline function angleTo(other:Vector2D):Float {
+		var dx:Float = other.x - this.x;
+		var dy:Float = other.y - this.y;
+		return Math.atan2(dy, dx);
 	}
 	
 	public var x(get, set):Float;
