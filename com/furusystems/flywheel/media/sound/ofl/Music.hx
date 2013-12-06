@@ -86,6 +86,7 @@ class Music implements IMusic
 	{
 		if (isPlaying)
 		{ 
+			trace("Stop");
 			channel.stop();
 			channel = null;
 			isPlaying = false;
@@ -95,7 +96,8 @@ class Music implements IMusic
 	public function setVolume(musicVolume:Float):Void 
 	{
 		if (isPlaying) {
-			var st:SoundTransform = new SoundTransform(musicVolume);
+			var st:SoundTransform = channel.soundTransform;
+			st.volume = musicVolume;
 			channel.soundTransform = st;
 		}
 	}

@@ -159,15 +159,12 @@ abstract Vector2D(Point) from Point to Point
 	}
 	
 	public inline function reflect(normal:Vector2D):Vector2D {
-		return self() - (((self() * 2.0).dot(normal)) / Math.pow(normal.mag(), 2)) * normal;
+		var f:Vector2D = this;
+		return f - (((f * 2.0).dot(normal)) / Math.pow(normal.mag(), 2)) * normal;
 	}
 	public inline function reflectEq(normal:Vector2D):Vector2D {
-		this.copyFrom(self() - (((self() * 2.0).dot(normal)) / Math.pow(normal.mag(), 2)) * normal);
-		return this;
-	}
-	
-	//Idiotic utility
-	inline function self():Vector2D {
+		var f:Vector2D = this;
+		this.copyFrom(f - (((f * 2.0).dot(normal)) / Math.pow(normal.mag(), 2)) * normal);
 		return this;
 	}
 	

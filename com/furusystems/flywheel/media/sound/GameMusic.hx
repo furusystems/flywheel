@@ -1,5 +1,6 @@
 package com.furusystems.flywheel.media.sound;
 import com.furusystems.flywheel.Core;
+import com.furusystems.flywheel.events.Signal.Signal;
 import com.furusystems.flywheel.media.sound.GameAudio;
 import com.furusystems.flywheel.media.sound.IMusic;
 
@@ -26,6 +27,8 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 	
 	public var masterVolume:Float;
 	public var masterMasterVolume:Float;
+	
+	public var onTransitionComplete:Signal<GameMusic>;
 	
 	var currentTransition:MusicTransition;
 	var transitionDuration:Float;
@@ -55,6 +58,7 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 		m = new Music();
 		#end
 		this.audio = audio;
+		onTransitionComplete = new Signal<GameMusic>();
 		targetMusicVolume = musicVolume = masterVolume = masterMasterVolume = 1;
 		currentMusic = "";
 		prevMusic = "";
@@ -65,6 +69,7 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 	public function setMuted(m:Bool):Void
 	{
 		muted = m;
+		trace("Muted: " + muted);
 		masterMasterVolume = (muted) ? 0.0 : 1.0;
 	}
 	
@@ -76,19 +81,15 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 	public function playMusic(streamPath:String, volume:Float = -1, offset:Float = 0, looping:Bool = false, ?transition:MusicTransition, duration:Float = 2, grace:Float = 0.5):Void
 	{
 		#if !music return #end
-		if (streamPath == currentMusic) return;
+		if (streamPath == currentMusic || streamPath == nextMusic) return;
 		if (!isEnabled()) return;
 		if (transition == null) transition = MusicTransition.cut;
 		if (streamPath == "") streamPath = null;
 		if (volume == -1) volume = musicVolume;
-		else musicVolume = volume;
 		
 		nextPlayOffset = offset;
 		
 		loopNext = looping;
-		
-		currentTransition = null;
-		transitionStartVolume = musicVolume;
 		
 		#if debug
 		trace("streampath: " + streamPath + ", Transition: " + transition);
@@ -135,7 +136,7 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 		if(streamPath!=null){
 			musicVolume = volume;
 			currentMusic = streamPath;
-			trace("Cut to "+nextPlayOffset);
+			//trace("Cut to "+nextPlayOffset);
 			m.play(streamPath, volume, loopNext, nextPlayOffset);
 		}else {
 			m.stop();
@@ -146,7 +147,6 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 	{
 		transitionTime += deltaS;
 		var s:Float = transitionTime / transitionDuration;
-		//trace("Updating transition: " + currentTransition+", "+transitionTime+", "+transitionDuration);
 		switch(currentTransition) {
 			case MusicTransition.cut_to_fade, MusicTransition.simplefade:
 				musicVolume = transitionStartVolume + s * (transitionTargetVolume-transitionStartVolume);
@@ -163,20 +163,23 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 				}
 			default:
 		}
+		trace("Updating transition: " + currentTransition + ", " + transitionTime + ", " + transitionDuration + ", " + s+", "+musicVolume);
 		
-		if (transitionTime>=transitionDuration) {
+		if (transitionTime >= transitionDuration) {
 			endTransition();
 		}
 	}
 	
 	function endTransition() 
 	{
+		trace("End transition");
 		musicVolume = transitionResultVolume;
 		currentTransition = null;
 		if (nextMusic==null) {
 			m.stop();
 		}
 		currentMusic = nextMusic;
+		onTransitionComplete.dispatch(this);
 	}
 	public function isEnabled():Bool {
 		return masterVolume > 0 && masterMasterVolume > 0 && !muted;
@@ -201,15 +204,18 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 
 	public function stop(sharp:Bool = false) 
 	{
+		if (currentMusic == null) return;
 		#if debug
 		trace("Stop music");
 		#end
-		if (currentMusic == null) return;
 		if(sharp){
 			currentMusic = nextMusic = null;
+			currentTransition = null;
+			trace("Sharp stop");
 			m.stop();
 		}else {
-			playMusic("", 0, 0, false, MusicTransition.fade_to_cut);
+			trace("Fade stop");
+			playMusic("", 0, 0, false, MusicTransition.fade_to_cut, 0.4, 0);
 		}
 	}
 	
