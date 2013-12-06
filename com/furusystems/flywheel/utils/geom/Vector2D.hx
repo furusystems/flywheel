@@ -219,13 +219,13 @@ abstract Vector2D(Point) from Point to Point
 	public inline function dot(b:Vector2D):Float {
 		return this.x * b.x + this.y * b.y;
 	}
-	
+	/*
 	public inline function dotNormalized(b:Vector2D):Float {
 		var a:Vector2D = clone().normalize();
 		var b:Vector2D = b.clone().normalize();
 		return a.dot(b);
 	}
-	
+	*/
 	public inline function normalize(length:Float = 1):Vector2D {
 		this.normalize(length);
 		return this;
