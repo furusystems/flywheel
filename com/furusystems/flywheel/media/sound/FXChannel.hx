@@ -15,13 +15,15 @@ import com.furusystems.flywheel.media.sound.ISoundCue;
 
 class FXChannel 
 {
+	public var name:String;
 	public var defaultPriority:Int;
 	public var playingSounds:List<IPlayingSound>;
 	public var muted:Bool;
 	public var mgr:GameFX;
 	public var polyphony:Int;
-	public function new(mgr:GameFX, polyphony:Int = 1, defaultPriority:Int = 0) 
+	public function new(name:String, mgr:GameFX, polyphony:Int = 1, defaultPriority:Int = 0) 
 	{
+		this.name = name;
 		this.polyphony = polyphony;
 		this.mgr = mgr;
 		this.defaultPriority = defaultPriority;

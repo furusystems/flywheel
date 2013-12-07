@@ -1,5 +1,6 @@
 package com.furusystems.flywheel.media.sound;
 import com.furusystems.flywheel.Core;
+import com.furusystems.flywheel.media.sound.FXChannel;
 import com.furusystems.flywheel.media.sound.GameAudio;
 import com.furusystems.flywheel.media.sound.ISoundCue;
 import flash.errors.Error;
@@ -49,12 +50,23 @@ import com.furusystems.flywheel.media.sound.ofl.Cue;
 		if (polyphony < 1) {
 			throw new Error("Ran out of available polyphony");
 		}
-		var chan:FXChannel = new FXChannel(this, polyphony, priority);
+		var chan:FXChannel = new FXChannel(name, this, polyphony, priority);
 		channels.set(name, chan);
 		availablePolyphony -= polyphony;
 		channelCount++;
 		trace("Created channel '"+name+"', current count: " + channelCount);
 		return chan;
+	}
+	
+	public function removeChannel(channel:FXChannel):FXChannel 
+	{
+		if (channels.exists(channel.name)) {
+			channel.stopAllSounds();
+			channels.remove(channel.name);
+			channelCount--;
+			availablePolyphony += channel.polyphony;
+		}
+		return channel;
 	}
 	
 	public function dispose():Void {
