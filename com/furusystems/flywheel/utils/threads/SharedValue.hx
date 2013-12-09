@@ -1,6 +1,9 @@
 package com.furusystems.flywheel.utils.threads;
 import cpp.vm.Mutex;
 
+/**
+ * Thread safe genric value wrapper
+ */
 class SharedValue<T> {
 	var mValue:T;
 	var mMutex:Mutex;

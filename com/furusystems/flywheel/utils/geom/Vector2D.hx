@@ -158,15 +158,15 @@ abstract Vector2D(Point) from Point to Point
 		return this;
 	}
 	
-	//public inline function reflect(normal:Vector2D):Vector2D {
-		//var f:Vector2D = this;
-		//return f - (((f * 2.0).dot(normal)) / Math.pow(normal.mag(), 2)) * normal;
-	//}
-	//public inline function reflectEq(normal:Vector2D):Vector2D {
-		//var f:Vector2D = this;
-		//this.copyFrom(f - (((f * 2.0).dot(normal)) / Math.pow(normal.mag(), 2)) * normal);
-		//return this;
-	//}
+	public inline function reflect(normal:Vector2D):Vector2D {
+		var f:Vector2D = this;
+		return f - (((f * 2.0).dot(normal)) / Math.pow(normal.mag(), 2)) * normal;
+	}
+	public inline function reflectEq(normal:Vector2D):Vector2D {
+		var f:Vector2D = this;
+		this.copyFrom(f - (((f * 2.0).dot(normal)) / Math.pow(normal.mag(), 2)) * normal);
+		return this;
+	}
 	
 	public inline function rotate(angleRad:Float):Vector2D {
 		var sin:Float = Math.sin(angleRad);
@@ -219,13 +219,13 @@ abstract Vector2D(Point) from Point to Point
 	public inline function dot(b:Vector2D):Float {
 		return this.x * b.x + this.y * b.y;
 	}
-	/*
+	
 	public inline function dotNormalized(b:Vector2D):Float {
 		var a:Vector2D = clone().normalize();
 		var b:Vector2D = b.clone().normalize();
 		return a.dot(b);
 	}
-	*/
+	
 	public inline function normalize(length:Float = 1):Vector2D {
 		this.normalize(length);
 		return this;

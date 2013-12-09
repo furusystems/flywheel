@@ -1,12 +1,11 @@
 package com.furusystems.flywheel.utils.threads;
 import com.furusystems.flywheel.utils.threads.TaskType;
-import com.furusystems.flywheel.utils.threads.ThreadTask;
 
 /**
- * ...
+ * IThreadTask implementation that iterates over a list of items and calls a function on each
  * @author Andreas Rønning
  */
-class ForeachTask<T> extends ThreadTask
+class ForeachTask<T> implements IThreadTask
 {
 	var list:Array<T>;
 	var start:Int;
@@ -15,19 +14,27 @@ class ForeachTask<T> extends ThreadTask
 
 	public function new(list:Array<T>, start:Int, end:Int, handler:T -> Void) 
 	{
-		super(TaskType.FOREACH);
 		this.handler = handler;
 		this.end = end;
 		this.start = start;
 		this.list = list;
 		
 	}
-	override public function execute():Void 
+	
+	/* INTERFACE com.furusystems.flywheel.utils.threads.IThreadTask */
+	
+	inline public function execute():Void 
 	{
 		for (i in start...end) 
 		{
 			handler(list[i]);
 		}
+	}
+	
+	
+	public inline function getType():TaskType 
+	{
+		return TaskType.EXECUTE;
 	}
 	
 }

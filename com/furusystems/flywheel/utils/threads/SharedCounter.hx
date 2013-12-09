@@ -1,6 +1,10 @@
 package com.furusystems.flywheel.utils.threads;
 import cpp.vm.Mutex;
 
+/**
+ * Thread safe incrementing/decrementing Int counter
+ */
+
 class SharedCounter {
 	var mValue:Int;
 	var mMutex:Mutex;

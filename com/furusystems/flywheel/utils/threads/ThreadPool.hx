@@ -7,107 +7,121 @@ import haxe.ds.Vector;
 import haxe.Timer;
 
 /**
- * ...
+ * Simple worker thread pool implementation
  * @author Andreas Rønning
  */
 class ThreadPool
 {
-	static var _numThreads:Int;
-	static var pool:Vector<Thread>;
-	static var tasks:Deque<ThreadTask> = new Deque<ThreadTask>();
-	static var lock:Mutex = new Mutex();
-	static var main:Thread;
-	static var numJobs:SharedCounter = new SharedCounter();
-	static var enabled:Bool = false;
-	static var includeMain:Bool;
-	public static inline function submitTask(threadTask:ThreadTask):Void {
-		numJobs.increment();
-		tasks.push(threadTask);
-	}
-	public static function setup(numThreads:Int, includeMain:Bool = false):Void {
-		if (pool != null) shutDown();
-		trace("Setup "+numThreads);
+	var _numThreads:Int;
+	var _pool:Vector<Thread>;
+	var _tasks:Deque<IThreadTask>;
+	var _numJobs:SharedCounter;
+	var _main:Thread;
+	
+	/**
+	 * Create a new worker pool
+	 * @param	numThreads
+	 */
+	public function new(numThreads:Int):Void {
+		if (_pool != null) shutDown();
 		_numThreads = numThreads;
 		if (numThreads <= 0) {
-			enabled = false;
 			return;
 		}
-		ThreadPool.includeMain = true;
-		enabled = true;
-		pool = new Vector<Thread>(numThreads);
-		numJobs.reset();
+		_tasks = new Deque<IThreadTask>();
+		_pool = new Vector<Thread>(numThreads);
+		_numJobs = new SharedCounter();
 		for (i in 0...numThreads) {
-			pool[i] = Thread.create(work);
-			pool[i].sendMessage(i);
-			pool[i].sendMessage(numJobs);
+			_pool[i] = Thread.create(work);
+			_pool[i].sendMessage(i);
+			_pool[i].sendMessage(_numJobs);
+			_pool[i].sendMessage(_tasks);
 		}
+	}
+	
+	/**
+	 * Add a task to the list of jobs to be carried out
+	 * @param	threadTask
+	 */
+	public inline function submitTask(threadTask:IThreadTask):Void {
+		_numJobs.increment();
+		_tasks.push(threadTask);
 	}
 	/**
 	 * Block until all jobs are complete
 	 */
-	public static function finish():Void {
+	public function finish():Void {
 		if (_numThreads <= 0) return;
-		//trace("Finishing...");
-		while (numJobs.value > 0) {}
-		//trace("Finished");
+		while (_numJobs.value > 0) {}
 	}
-	
-	public static function shutDown():Void {
+	/**
+	 * Tell threads to shut down and block until they do
+	 */
+	public function shutDown():Void {
 		trace("Shutdown");
-		var t:ThreadTask = new ThreadTask(TaskType.SHUTDOWN);
-		for (i in 0...pool.length) 
+		var t:IThreadTask = new ShutdownTask();
+		for (i in 0..._pool.length) 
 		{
 			submitTask(t);
 		}
 		finish(); //ensure all threads finish shutting down
-		pool = null;
+		_numThreads = 0;
+		_pool = null;
 	}
 	
+	/**
+	 * Worker entry point
+	 */
 	static function work():Void {
 		var id:Int = Thread.readMessage(true);
 		var numJobs:SharedCounter = Thread.readMessage(true);
+		var tasks:Deque<IThreadTask> = Thread.readMessage(true);
 		while (true) {
-			var task:ThreadTask = tasks.pop(true);
-			if (task.type == TaskType.SHUTDOWN) {
-				trace(id+": Thread closed");
+			var task:IThreadTask = tasks.pop(true);
+			if (task.getType() == TaskType.SHUTDOWN) {
 				numJobs.decrement();
 				return;
 			}else{
-				var startTime = Timer.stamp();
 				task.execute();
-				//trace(id, "Finished a job in " + (Timer.stamp() - startTime));
 				numJobs.decrement();
 			}
 		}
 	}
 	
+	/**
+	 * Get the number of jobs left on the queue
+	 * @return
+	 */
 	public function getNumJobsInQueue():Int 
 	{
-		return numJobs.value;
+		return _numJobs.value;
 	}
+	
+	/**
+	 * Get the number of threads in the pool
+	 */
+	public var numThreads(get_numThreads, null):Int;
+	function get_numThreads():Int 
+	{
+		return _numThreads;
+	}
+	
 	
 	
 	
 	
 	/**
-	 * UTIL
+	 * Divide the processing of a list of items across the worker pool.
 	 */
-	
-	public static function decompose<T>(list:Array<T>, handler:T->Void):Void {
+	public function decompose<T>(list:Array<T>, itemHandler:T->Void):Void {
 		var idx:Int = 0;
 		var chunkLength:Int = Math.floor(list.length / _numThreads);
 		for (i in 0..._numThreads) 
 		{
-			var t:ThreadTask = new ForeachTask<T>(list, idx, idx+chunkLength, handler);
-			ThreadPool.submitTask(t);
+			var t:IThreadTask = new ForeachTask<T>(list, idx, idx+chunkLength, itemHandler);
+			submitTask(t);
 			idx += chunkLength;
 		}
-	}
-	
-	static public var numThreads(get_numThreads, null):Int;
-	static function get_numThreads():Int 
-	{
-		return _numThreads;
 	}
 	
 }
