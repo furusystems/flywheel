@@ -8,23 +8,23 @@ enum ListenerTypes {
 	ONCE;
 	NORMAL;
 }
-class Signal<T>
+class Signal
 {
-	var _listeners:Array<Listener<T>> ;
+	var _listeners:Array<Listener0>;
 	var _listenerCount:Int = 0;
 	public var listenerCount(get_listenerCount, null):Int;
 	public var oneshot:Bool;
 	public function new(oneshot:Bool = false) 
 	{
 		this.oneshot = oneshot;
-		_listeners = new Array<Listener<T>>();
+		_listeners = new Array<Listener0>();
 	}
-	public inline function add(func:T->Void):Void {
+	public inline function add(func:Void->Void):Void {
 		remove(func);
-		_listeners.push( new Listener<T>(ListenerTypes.NORMAL, func) );
+		_listeners.push( new Listener0(ListenerTypes.NORMAL, func) );
 		_listenerCount++;
 	}
-	public inline function remove(func:T->Void):Void {
+	public inline function remove(func:Void->Void):Void {
 		for (l in _listeners) 
 		{
 			if (l.func == func) {
@@ -38,24 +38,24 @@ class Signal<T>
 	{
 		return _listenerCount;
 	}
-	public inline function addOnce(func:T->Void):Void {
+	public inline function addOnce(func:Void->Void):Void {
 		remove(func);
-		_listeners.push( new Listener<T>(ListenerTypes.ONCE, func) );
+		_listeners.push( new Listener0(ListenerTypes.ONCE, func) );
 		_listenerCount++;
 	}
 	public inline function removeAll():Void {
-		_listeners = new Array<Listener<T>>();
+		_listeners = new Array<Listener0>();
 		_listenerCount = 0;
 	}
 	public inline function dispose():Void {
 		_listeners = null;
 		_listenerCount = 0;
 	}
-	public inline function dispatch(value:T):Void {
+	public inline function dispatch():Void {
 		if (_listenerCount != 0){
 			for (i in _listeners) 
 			{
-				i.execute(value);
+				i.execute();
 				if (i.type == ListenerTypes.ONCE) {
 					_listeners.remove(i);
 				}
@@ -64,13 +64,13 @@ class Signal<T>
 		if (oneshot) removeAll();
 	}
 }
-private class Listener<T> {
-	public var func:T->Void;
+private class Listener0 {
+	public var func:Void->Void;
 	public var type:ListenerTypes;
-	public inline function execute(arg:T):Void {
-		func(arg);
+	public inline function execute():Void {
+		func();
 	}
-	public function new(type:ListenerTypes, func:T->Void) {
+	public function new(type:ListenerTypes, func:Void->Void) {
 		this.type = type;
 		this.func = func;
 	}
