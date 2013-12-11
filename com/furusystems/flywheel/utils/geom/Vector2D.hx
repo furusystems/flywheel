@@ -212,6 +212,10 @@ abstract Vector2D(Point) from Point to Point
 		}
 	}
 	
+	public inline function cross(other:Vector2D):Float {
+		return x * other.y - y * other.x;
+	}
+	
 	public inline function clone():Vector2D {
 		return new Vector2D(this.x, this.y);
 	}
@@ -266,5 +270,6 @@ abstract Vector2D(Point) from Point to Point
 	inline function set_y(value:Float):Float {
 		return this.y = value;
 	}
+	
 	
 }

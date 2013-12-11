@@ -1,0 +1,41 @@
+package com.furusystems.flywheel.utils.geom;
+import com.furusystems.flywheel.utils.geom.Vector2D;
+import flash.display.Graphics;
+
+/**
+ * ...
+ * @author Andreas Rønning
+ */
+class Ray2D
+{
+	public var start:Null<Vector2D>;
+	public var vec:Null<Vector2D>;
+	public function new(start:Vector2D, vec:Vector2D) 
+	{
+		this.start = start;
+		this.vec = vec;
+	}
+	public inline function getPt(t:Float):Vector2D {
+		return start + vec * t;
+	}
+	public inline function draw(graphics:Graphics, color:Int):Void {
+		graphics.moveTo(start.x, start.y);
+		graphics.lineStyle(0, color);
+		graphics.lineTo(start.x + vec.x, start.y + vec.y);
+		graphics.lineStyle();
+	}
+	
+	static public function intersection(a:Ray2D, b:Ray2D):Vector2D {
+			var qp:Vector2D = b.start - a.start;
+			var rxs:Float = a.vec.cross(b.vec);
+			var t = qp.cross(b.vec) / rxs;
+			var u = qp.cross(a.vec) / rxs;
+			var isParallel = rxs == 0;
+			var intersects = t >= 0 && t <= 1 && u >= 0 && u <= 1;
+			if (intersects) {
+				return a.getPt(t);
+			}
+			return null;
+		}
+	
+}
