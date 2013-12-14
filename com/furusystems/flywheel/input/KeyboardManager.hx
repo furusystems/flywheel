@@ -1,6 +1,6 @@
 package com.furusystems.flywheel.input;
-import com.furusystems.flywheel.events.Signal;
 import com.furusystems.flywheel.Core;
+import com.furusystems.flywheel.events.Signal1;
 import flash.display.InteractiveObject;
 import flash.events.KeyboardEvent;
 
@@ -11,12 +11,12 @@ import flash.events.KeyboardEvent;
 class KeyboardManager implements IInputManager
 {
 	public var keyDict:Map<Int,Bool>;
-	public var onKeyPress:Signal<Int>;
-	public var onKeyRelease:Signal<Int>;
+	public var onKeyPress:Signal1<Int>;
+	public var onKeyRelease:Signal1<Int>;
 	public function new() 
 	{
-		onKeyPress = new Signal<Int>();
-		onKeyRelease = new Signal<Int>();
+		onKeyPress = new Signal1<Int>();
+		onKeyRelease = new Signal1<Int>();
 	}
 	
 	private function onKeyUp(e:KeyboardEvent):Void 

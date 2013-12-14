@@ -5,6 +5,7 @@ import com.furusystems.flywheel.media.sound.GameAudio;
 import com.furusystems.flywheel.media.video.android.AndroidVideo;
 import com.furusystems.flywheel.metrics.Time;
 import flash.display.Stage;
+import flash.errors.Error;
 import flash.events.Event;
 import flash.Lib;
 
@@ -66,6 +67,7 @@ class Core
 	
 	public function start():Void {
 		_paused = false;
+		if (_currentState == null) throw new Error("Cannot start without valid state");
 		stage.addEventListener(Event.ENTER_FRAME, update);
 	}
 	public function stop():Void {
@@ -84,11 +86,11 @@ class Core
 		_currentState.render();
 	}
 	
-	private function get_state():IState {
+	@:noCompletionprivate function get_state():IState {
 		return _currentState;
 	}
 	
-	private function set_state(value:IState):IState {
+	@:noCompletion private function set_state(value:IState):IState {
 		if (value == _currentState) return _currentState;
 		if (_currentState != null) {
 			_currentState.exit();

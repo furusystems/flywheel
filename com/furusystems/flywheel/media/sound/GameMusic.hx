@@ -1,6 +1,6 @@
 package com.furusystems.flywheel.media.sound;
 import com.furusystems.flywheel.Core;
-import com.furusystems.flywheel.events.Signal.Signal;
+import com.furusystems.flywheel.events.Signal1;
 import com.furusystems.flywheel.media.sound.GameAudio;
 import com.furusystems.flywheel.media.sound.IMusic;
 
@@ -16,8 +16,10 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
  */
 #if ios
 @:build( com.furusystems.flywheel.preprocessing.Audio.buildMusicPaths("//Users/johndavies/Documents/PaperPals/branches/openfl/assets/audio/music") ) class GameMusic 
-#else
+#elseif openfl
 @:build( com.furusystems.flywheel.preprocessing.Audio.buildMusicPaths("./assets/audio/music") ) class GameMusic 
+#else
+class GameMusic 
 #end
 {
 	public var currentMusic:String;
@@ -28,7 +30,7 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 	public var masterVolume:Float;
 	public var masterMasterVolume:Float;
 	
-	public var onTransitionComplete:Signal<GameMusic>;
+	public var onTransitionComplete:Signal1<GameMusic>;
 	
 	var currentTransition:MusicTransition;
 	var transitionDuration:Float;
@@ -58,7 +60,7 @@ import com.furusystems.flywheel.media.sound.ofl.Music;
 		m = new Music();
 		#end
 		this.audio = audio;
-		onTransitionComplete = new Signal<GameMusic>();
+		onTransitionComplete = new Signal1<GameMusic>();
 		targetMusicVolume = musicVolume = masterVolume = masterMasterVolume = 1;
 		currentMusic = "";
 		prevMusic = "";

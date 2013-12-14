@@ -1,6 +1,9 @@
 package com.furusystems.flywheel.media.sound.ofl;
 import com.furusystems.flywheel.media.sound.ISoundCue;
+import flash.net.URLRequest;
+#if openfl
 import openfl.Assets;
+#end
 import flash.media.Sound;
 
 /**
@@ -18,7 +21,11 @@ class Cue implements ISoundCue
 	public function new(path:String) 
 	{
 		this.path = path;
+		#if openfl
 		sound = Assets.getSound(path);
+		#else
+		sound = new Sound(new URLRequest(path));
+		#end
 	}
 	
 	/* INTERFACE com.furusystems.flywheel.media.sound.ISoundCue */

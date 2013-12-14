@@ -1,6 +1,6 @@
 package com.furusystems.flywheel.input;
 import com.furusystems.flywheel.Core;
-import com.furusystems.flywheel.events.Signal;
+import com.furusystems.flywheel.events.Signal1;
 import com.furusystems.flywheel.input.touch.TouchPoint;
 import flash.display.InteractiveObject;
 import flash.events.TouchEvent;
@@ -16,15 +16,15 @@ class TouchManager implements IInputManager
 	var points:Map<Int, TouchPoint>;
 	public var activePoints:List<TouchPoint>;
 	
-	public var onTouchBegin:Signal<TouchPoint>;
-	public var onTouchMove:Signal<TouchPoint>;
-	public var onTouchEnd:Signal<TouchPoint>;
+	public var onTouchBegin:Signal1<TouchPoint>;
+	public var onTouchMove:Signal1<TouchPoint>;
+	public var onTouchEnd:Signal1<TouchPoint>;
 	
 	public function new() 
 	{
-		onTouchBegin = new Signal<TouchPoint>();
-		onTouchMove = new Signal<TouchPoint>();
-		onTouchEnd = new Signal<TouchPoint>();
+		onTouchBegin = new Signal1<TouchPoint>();
+		onTouchMove = new Signal1<TouchPoint>();
+		onTouchEnd = new Signal1<TouchPoint>();
 	}
 	
 	private function touchMoveHandler(e:TouchEvent):Void 

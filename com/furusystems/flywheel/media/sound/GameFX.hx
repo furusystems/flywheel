@@ -4,7 +4,9 @@ import com.furusystems.flywheel.media.sound.FXChannel;
 import com.furusystems.flywheel.media.sound.GameAudio;
 import com.furusystems.flywheel.media.sound.ISoundCue;
 import flash.errors.Error;
+#if openfl
 import openfl.Assets;
+#end
 
 #if (android && soundmanager)
 import com.furusystems.flywheel.media.sound.android.AndroidAudio;
@@ -19,8 +21,10 @@ import com.furusystems.flywheel.media.sound.ofl.Cue;
  */
 #if ios
 @:build( com.furusystems.flywheel.preprocessing.Audio.buildSoundPaths("//Users/johndavies/Documents/PaperPals/branches/openfl/assets/audio/fx") ) class GameFX
-#else
+#elseif openfl
 @:build( com.furusystems.flywheel.preprocessing.Audio.buildSoundPaths("./assets/audio/fx") ) class GameFX 
+#else
+class GameFX
 #end
 {
 	public var audio:GameAudio;

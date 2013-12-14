@@ -1,6 +1,9 @@
 package com.furusystems.flywheel.media.sound.ofl;
 import com.furusystems.flywheel.media.sound.IMusic;
+import flash.net.URLRequest;
+#if openfl
 import openfl.Assets;
+#end
 import flash.media.Sound;
 import flash.media.SoundChannel;
 import flash.media.SoundTransform;
@@ -45,8 +48,11 @@ class Music implements IMusic
 			stop();
 		}
 		_lastLoop = loop;
-		
-		var s:Sound = Assets.getSound(path,false);
+		#if openfl
+		var s:Sound = Assets.getSound(path, false);
+		#else
+		var s:Sound = new Sound(new URLRequest(path));
+		#end
 		if (s == null) {
 			trace("Couldnt load sound from path: " + path);
 			return;
@@ -69,7 +75,11 @@ class Music implements IMusic
 		#if debug
 		trace("play music: " + path);
 		#end
-		var s:Sound = Assets.getSound(path,false);
+		#if openfl
+		var s:Sound = Assets.getSound(path, false);
+		#else
+		var s:Sound = new Sound(new URLRequest(path));
+		#end
 		if (s == null) {
 			#if debug
 			trace("Couldnt load sound from path: " + path);

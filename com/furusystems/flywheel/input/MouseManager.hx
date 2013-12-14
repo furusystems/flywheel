@@ -1,6 +1,6 @@
 package com.furusystems.flywheel.input;
 import com.furusystems.flywheel.Core;
-import com.furusystems.flywheel.events.Signal;
+import com.furusystems.flywheel.events.Signal1;
 import com.furusystems.flywheel.utils.geom.Vector2D;
 import flash.display.InteractiveObject;
 import flash.events.MouseEvent;
@@ -19,9 +19,9 @@ class MouseManager implements IInputManager
 	public var rightMouse:Bool;
 	public var middleMouse:Bool;
 	
-	public var onMouseDown:Signal<MouseEvent>;
-	public var onMouseUp:Signal<MouseEvent>;
-	public var onClick:Signal<MouseEvent>;
+	public var onMouseDown:Signal1<MouseEvent>;
+	public var onMouseUp:Signal1<MouseEvent>;
+	public var onClick:Signal1<MouseEvent>;
 	
 	var firstUpdate:Bool;
 	
@@ -30,9 +30,9 @@ class MouseManager implements IInputManager
 		position = new Point();
 		tempPosition = new Point();
 		positionDelta = new Point();
-		onMouseDown = new Signal<MouseEvent>();
-		onMouseUp = new Signal<MouseEvent>();
-		onClick = new Signal<MouseEvent>();
+		onMouseDown = new Signal1<MouseEvent>();
+		onMouseUp = new Signal1<MouseEvent>();
+		onClick = new Signal1<MouseEvent>();
 	}
 	
 	function mouseMoveHandler(e:MouseEvent):Void 

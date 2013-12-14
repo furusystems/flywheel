@@ -3,7 +3,9 @@ import com.furusystems.flywheel.Core;
 import com.furusystems.flywheel.media.sound.IPlayingSound;
 import com.furusystems.flywheel.media.sound.ISoundCue;
 import com.furusystems.flywheel.utils.data.Property;
+#if openfl
 import openfl.Assets;
+#end
 import flash.media.SoundChannel;
 import flash.media.SoundTransform;
 
