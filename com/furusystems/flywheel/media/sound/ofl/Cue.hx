@@ -1,5 +1,6 @@
 package com.furusystems.flywheel.media.sound.ofl;
 import com.furusystems.flywheel.media.sound.ISoundCue;
+import flash.events.Event;
 import flash.net.URLRequest;
 #if openfl
 import openfl.Assets;
@@ -18,6 +19,9 @@ class Cue implements ISoundCue
 	public var sound:Sound;
 	public var index:Int;
 	public var duration:Float;
+	#if !openfl
+	public var loaded:Bool = false;
+	#end
 	public function new(path:String) 
 	{
 		this.path = path;
@@ -25,13 +29,22 @@ class Cue implements ISoundCue
 		sound = Assets.getSound(path);
 		#else
 		sound = new Sound(new URLRequest(path));
+		sound.addEventListener(Event.COMPLETE, onSoundLoaded);
 		#end
 	}
 	
-	/* INTERFACE com.furusystems.flywheel.media.sound.ISoundCue */
+	#if !openfl
+	private function onSoundLoaded(e:Event):Void 
+	{
+		sound.removeEventListener(Event.COMPLETE, onSoundLoaded);
+		duration = sound.length;
+		loaded = true;
+	}
+	#end
 	
 	public function release():Void 
 	{
+		sound.removeEventListener(Event.COMPLETE, onSoundLoaded);
 		sound = null;
 	}
 	

@@ -235,10 +235,10 @@ abstract Vector2D(Point) from Point to Point
 		return this;
 	}
 	
-	public inline function normalLeft():Vector2D {
+	public inline function normalRight():Vector2D {
 		return new Vector2D(this.y, -this.x);
 	}
-	public inline function normalRight():Vector2D {
+	public inline function normalLeft():Vector2D {
 		return new Vector2D(-this.y, this.x);
 	}
 	

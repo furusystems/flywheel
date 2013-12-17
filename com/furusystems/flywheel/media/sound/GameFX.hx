@@ -99,7 +99,11 @@ class GameFX
 		#end
 		var p:String = { var s = path.split("/"); s.pop().split(".").shift(); };
 		trace("sfxname: " + p.toUpperCase());
+		#if openfl
 		newCue.duration = Reflect.field(CueDurations, p.toUpperCase());
+		#else
+		newCue.duration = 0;
+		#end
 		soundPool.set(path, newCue);
 		#if debug
 		trace("SFX ADDED: '" + path + "' - " + soundPool.exists(path) + " : " + newCue.duration);
@@ -136,10 +140,23 @@ class GameFX
 	public inline function isReady():Bool {
 		#if (android && soundmanager)
 			return AndroidAudio.isPoolReady();
-		#else
+		#elseif openfl
 			return true; //Dunno how sound loading on iphone works
+		#else
+			return allCuesLoaded();
 		#end
 	}
+	
+	#if !openfl
+	function allCuesLoaded():Bool 
+	{
+		for (k in soundPool.keys()) {
+			if (!cast(soundPool.get(k), Cue).loaded) return false;
+		}
+		return true;
+	}
+	#end
+	
 	public function setVolumeForAll(target:Float):Void {
 		for (c in channels) {
 			c.setVolumeForAll(target);
