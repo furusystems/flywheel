@@ -10,26 +10,27 @@ class StateTransitionMgr<TRIGGER:EnumValue, STATE:EnumValue>{
 
 	private var map:Map<STATE,Map<TRIGGER,STATE>>;
 	private var currentState:Null<STATE>;
-	public var onStateEnter:Signal1<STATE>;
-	public var onStateExit:Signal1<STATE>;
+	public var onStateEnter:STATE-> TRIGGER -> Void;
+	public var onStateExit:STATE-> TRIGGER -> Void;
 	public function new() {
 		map = new Map < STATE, Map < TRIGGER, STATE >> ();
-		onStateEnter = new Signal1<STATE>();
-		onStateExit = new Signal1<STATE>();
 	}
 	
 	public function setState(state:STATE):STATE {
-		if (currentState != null) exit(currentState);
-		currentState = state;
-		enter(currentState);
+		switchState(state);
 		return currentState;
 	}
-	
-	inline function enter(state:STATE):Void {
-		onStateEnter.dispatch(state);
+	inline function switchState(newState:STATE, ?trigger:TRIGGER):Void {
+		if (currentState != null) exit(currentState, trigger);
+		currentState = newState;
+		enter(currentState, trigger);
 	}
-	inline function exit(state:STATE):Void {
-		onStateExit.dispatch(state);
+	
+	inline function enter(state:STATE, trigger:TRIGGER):Void {
+		if (onStateEnter != null) onStateEnter(state, trigger);
+	}
+	inline function exit(state:STATE, trigger:TRIGGER):Void {
+		if (onStateExit != null) onStateExit(state, trigger);
 	}
 	public function mapTransition(from:STATE, to:STATE, trigger:TRIGGER, commutative:Bool = false):Void {
 		if (!map.exists(from)) map.set(from, new Map<TRIGGER,STATE>());
@@ -42,12 +43,12 @@ class StateTransitionMgr<TRIGGER:EnumValue, STATE:EnumValue>{
 		}
 	}
 	
-	public function trigger(id:TRIGGER):Void {
+	public function trigger(trigger:TRIGGER):Void {
 		var triggerMap:Map<TRIGGER,STATE> = map.get(currentState);
 		if (triggerMap == null) return;
-		var trans:STATE = triggerMap.get(id);
-		if (trans == null) return;
-		setState(trans);
+		var newState:STATE = triggerMap.get(trigger);
+		if (newState == null) return;
+		switchState(newState, trigger);
 	}
 	
 }
