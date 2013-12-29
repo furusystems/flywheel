@@ -1,6 +1,8 @@
 package com.furusystems.flywheel.utils.geom;
 import com.furusystems.flywheel.utils.geom.Vector2D;
+#if flash
 import flash.display.Graphics;
+#end
 
 /**
  * ...
@@ -18,12 +20,14 @@ class Ray2D
 	public inline function getPt(t:Float):Vector2D {
 		return start + vec * t;
 	}
+	#if flash
 	public inline function draw(graphics:Graphics, color:Int, scale:Float = 1):Void {
 		graphics.moveTo(start.x * scale, start.y * scale);
 		graphics.lineStyle(0, color);
 		graphics.lineTo(start.x * scale + vec.x * scale, start.y * scale + vec.y * scale);
 		graphics.lineStyle();
 	}
+	#end
 	
 	static public function intersection(a:Ray2D, b:Ray2D):Vector2D {
 			var qp:Vector2D = b.start - a.start;
