@@ -1,15 +1,21 @@
 package com.furusystems.flywheel.utils.geom;
+import haxe.ds.Vector;
 
 /**
  * ...
  * @author Andreas Rønning
  */
-abstract Rectangle(Array<Float>) from Array<Float> to Array<Float>
+abstract Rectangle(Vector<Float>) from Vector<Float> to Vector<Float>
 {
 
 	public inline function new(x:Float = 0,y:Float = 0,w:Float = 0,h:Float = 0) 
 	{
-		this = [x, y, w, h];
+		var v = new Vector<Float>(4);
+		v[0] = x;
+		v[1] = y;
+		v[2] = w;
+		v[3] = h;
+		this = v;
 	}
 	public var x(get, set):Float;
 	inline function get_x():Float {
@@ -56,7 +62,7 @@ abstract Rectangle(Array<Float>) from Array<Float> to Array<Float>
 	}
 	
 	public inline function intersection(other:Rectangle):Rectangle {
-		return [0.0, 0.0, 0.0, 0.0];
+		return new Rectangle();
 	}
 	
 	public inline function containsPoint(pt:Vector2D):Bool {

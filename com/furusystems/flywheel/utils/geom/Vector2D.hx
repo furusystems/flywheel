@@ -1,15 +1,19 @@
 package com.furusystems.flywheel.utils.geom;
+import haxe.ds.Vector;
 
 /**
  * ...
  * @author Andreas Rønning
  */
-abstract Vector2D(Array<Float>) from Array<Float> to Array<Float>
+abstract Vector2D(Vector<Float>) from Vector<Float> to Vector<Float>
 {
 
 	public inline function new(x:Float = 0, y:Float = 0) 
 	{
-		this = [x, y];
+		var v = new Vector<Float>(2);
+		v[0] = x;
+		v[1] = y;
+		this = v;
 	}
 	
 	public var x(get, set):Float;
