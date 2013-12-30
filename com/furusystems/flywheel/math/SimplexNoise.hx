@@ -1,4 +1,4 @@
-package com.furusystems.flywheel.utils.math;
+package com.furusystems.flywheel.math;
 class SimplexNoise {
 	
 	private static var grad3:Array<Array<Int>> = new Array<Array<Int>>[

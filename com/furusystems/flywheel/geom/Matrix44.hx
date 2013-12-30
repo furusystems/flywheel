@@ -1,4 +1,4 @@
-package com.furusystems.flywheel.utils.geom;
+package com.furusystems.flywheel.geom;
 import haxe.ds.Vector;
 /**
  * Affine 3D transform

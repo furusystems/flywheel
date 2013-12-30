@@ -1,4 +1,4 @@
-package com.furusystems.flywheel.utils.math;
+package com.furusystems.flywheel.math;
 class WaveShaper {
 	public static inline function shape(input:Float, drive:Float):Float{
 		var k:Float = 2.0 * drive / (1.0 - drive);
