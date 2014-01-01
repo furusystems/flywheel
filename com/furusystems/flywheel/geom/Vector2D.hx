@@ -1,4 +1,4 @@
-package com.furusystems.flywheel.utils.geom;
+package com.furusystems.flywheel.geom;
 import haxe.ds.Vector;
 
 /**
@@ -17,10 +17,10 @@ abstract Vector2D(Vector<Float>) from Vector<Float> to Vector<Float>
 	}
 	
 	public var x(get, set):Float;
-	inline function get_x():Float {
+	@:noCompletion inline function get_x():Float {
 		return this[0];
 	}
-	inline function set_x(f:Float):Float {
+	@:noCompletion inline function set_x(f:Float):Float {
 		return this[0] = f;
 	}
 	

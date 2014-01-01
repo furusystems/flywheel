@@ -1,5 +1,5 @@
-package com.furusystems.flywheel.utils.geom;
-import com.furusystems.flywheel.utils.geom.Vector2D;
+package com.furusystems.flywheel.geom;
+import com.furusystems.flywheel.geom.Vector2D;
 #if flash
 import flash.display.Graphics;
 #end

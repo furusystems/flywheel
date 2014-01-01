@@ -1,4 +1,5 @@
-package com.furusystems.flywheel.utils.math;
+package com.furusystems.flywheel.math;
+import com.furusystems.flywheel.geom.Vector2D;
 import flash.geom.Point;
 
 /**
@@ -56,7 +57,7 @@ class MathUtils
 	{
 		return Math.atan2(y2-y1, x2-x1);
 	}
-	public static inline function rotatePoint(pt:Point, center:Point, angle:Float):Void {
+	public static inline function rotatePoint(pt:Vector2D, center:Vector2D, angle:Float):Void {
 		var oldx:Float = pt.x;
 		var oldy:Float = pt.y;
 		var sin:Float = Math.sin(angle);
@@ -64,11 +65,11 @@ class MathUtils
 		pt.y = cos * (oldy - center.y) + sin * (oldx - center.x) + center.y;
 		pt.x = cos * (oldx - center.x) - sin * (oldy - center.y) + center.x;
 	}
-	public static inline function projectVector(a:Point, b:Point, normalized:Bool = false, inPlace:Bool = false):Point {
-		var proj:Point;
+	public static inline function projectVector(a:Vector2D, b:Vector2D, normalized:Bool = false, inPlace:Bool = false):Vector2D {
+		var proj:Vector2D;
 		
 		if (inPlace) proj = a;
-		else proj = new Point();
+		else proj = new Vector2D();
 		
 		var dp:Float = dotProduct(a, b);
 		if(!normalized){
@@ -81,19 +82,19 @@ class MathUtils
 		return proj;
 	}
 	
-	public static inline function vectorSubtractInPlace(a:Point, b:Point):Point {
+	public static inline function vectorSubtractInPlace(a:Vector2D, b:Vector2D):Vector2D {
 		a.x -= b.x;
 		a.y -= b.y;
 		return a;
 	}
-	public static inline function vectorAddInPlace(a:Point, b:Point):Point {
+	public static inline function vectorAddInPlace(a:Vector2D, b:Vector2D):Vector2D {
 		a.x += b.x;
 		a.y += b.y;
 		return a;
 	}
 	
-	public static inline function vectorSubtract(a:Point, b:Point):Point {
-		return new Point(b.x - a.x, b.y - a.y);
+	public static inline function vectorSubtract(a:Vector2D, b:Vector2D):Vector2D {
+		return new Vector2D(b.x - a.x, b.y - a.y);
 	}
 	public static inline function vectorAdd(a:Point, b:Point):Point {
 		return new Point(a.x + b.x, a.y + b.y);
@@ -103,10 +104,10 @@ class MathUtils
 		return !(amin > bmax || bmin > amax);
 	}
 	
-	public static inline function mag(a:Point):Float {
+	public static inline function mag(a:Vector2D):Float {
 		return Math.sqrt(a.x * a.x + a.y * a.y);
 	}
-	public static inline function normalize(a:Point, inPlace:Bool = false):Point {
+	public static inline function normalize(a:Vector2D, inPlace:Bool = false):Point {
 		var len:Float = mag(a);
 		if (inPlace) {
 			a.x /= len;
@@ -116,26 +117,26 @@ class MathUtils
 			return new Point(a.x / len, a.y / len);
 		}
 	}
-	public static inline function toLeftNormal(a:Point):Point {
+	public static inline function toLeftNormal(a:Vector2D):Vector2D {
 		var temp:Float = a.x;
 		a.x = a.y;
 		a.y = -temp;
 		return a;
 	}
-	public static inline function toRightNormal(a:Point):Point {
+	public static inline function toRightNormal(a:Vector2D):Vector2D {
 		
 		var temp:Float = a.x;
 		a.x = -a.y;
 		a.y = temp;
 		return a;
 	}
-	public static inline function leftNormal(a:Point):Point {
-		return new Point( a.y, -a.x);
+	public static inline function leftNormal(a:Vector2D):Vector2D {
+		return new Vector2D( a.y, -a.x);
 	}
-	public static inline function rightNormal(a:Point):Point {
-		return new Point( -a.y, a.x);
+	public static inline function rightNormal(a:Vector2D):Vector2D {
+		return new Vector2D( -a.y, a.x);
 	}
-	public static inline function dotProduct(a:Point, b:Point):Float {
+	public static inline function dotProduct(a:Vector2D, b:Vector2D):Vector2D {
 		return a.x*b.x + a.y*b.y;
 	}
 	

@@ -1,4 +1,4 @@
-package com.furusystems.flywheel.utils.math;
+package com.furusystems.flywheel.math;
 class Rand 
 {
 	private static var _seed:Int = 123;

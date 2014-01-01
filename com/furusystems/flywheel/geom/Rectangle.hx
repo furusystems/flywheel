@@ -1,4 +1,4 @@
-package com.furusystems.flywheel.utils.geom;
+package com.furusystems.flywheel.geom;
 import haxe.ds.Vector;
 
 /**
@@ -18,34 +18,34 @@ abstract Rectangle(Vector<Float>) from Vector<Float> to Vector<Float>
 		this = v;
 	}
 	public var x(get, set):Float;
-	inline function get_x():Float {
+	@:noCompletion inline function get_x():Float {
 		return this[0];
 	}
-	inline function set_x(f:Float):Float {
+	@:noCompletion inline function set_x(f:Float):Float {
 		return this[0] = f;
 	}
 	
 	public var y(get, set):Float;
-	inline function get_y():Float {
+	@:noCompletion inline function get_y():Float {
 		return this[1];
 	}
-	inline function set_y(f:Float):Float {
+	@:noCompletion inline function set_y(f:Float):Float {
 		return this[1] = f;
 	}
 	
 	public var width(get, set):Float;
-	inline function get_width():Float {
+	@:noCompletion inline function get_width():Float {
 		return this[2];
 	}
-	inline function set_width(f:Float):Float {
+	@:noCompletion inline function set_width(f:Float):Float {
 		return this[2] = f;
 	}
 	
 	public var height(get, set):Float;
-	inline function get_height():Float {
+	@:noCompletion inline function get_height():Float {
 		return this[3];
 	}
-	inline function set_height(f:Float):Float {
+	@:noCompletion inline function set_height(f:Float):Float {
 		return this[3] = f;
 	}
 	

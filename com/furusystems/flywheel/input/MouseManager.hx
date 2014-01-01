@@ -27,9 +27,9 @@ class MouseManager implements IInputManager
 	
 	public function new() 
 	{
-		position = new Point();
-		tempPosition = new Point();
-		positionDelta = new Point();
+		position = new Vector2D();
+		tempPosition = new Vector2D();
+		positionDelta = new Vector2D();
 		onMouseDown = new Signal1<MouseEvent>();
 		onMouseUp = new Signal1<MouseEvent>();
 		onClick = new Signal1<MouseEvent>();
