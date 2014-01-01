@@ -44,7 +44,9 @@ class Cue implements ISoundCue
 	
 	public function release():Void 
 	{
+		#if !openfl
 		sound.removeEventListener(Event.COMPLETE, onSoundLoaded);
+		#end
 		sound = null;
 	}
 	
