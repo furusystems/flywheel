@@ -1,9 +1,11 @@
-package com.furusystems.flywheel.media.sound.ofl;
+package com.furusystems.flywheel.media.sound.lime;
 import com.furusystems.flywheel.media.sound.ISoundCue;
 import flash.events.Event;
 import flash.net.URLRequest;
 #if openfl
 import openfl.Assets;
+#elseif lime
+import lime.utils.Assets;
 #end
 import flash.media.Sound;
 
@@ -12,7 +14,7 @@ import flash.media.Sound;
  * @author Andreas Rønning
  */
 
-class Cue implements ISoundCue
+class LimeCue implements ISoundCue
 {
 
 	public var path:String;
@@ -44,9 +46,7 @@ class Cue implements ISoundCue
 	
 	public function release():Void 
 	{
-		#if !openfl
 		sound.removeEventListener(Event.COMPLETE, onSoundLoaded);
-		#end
 		sound = null;
 	}
 	

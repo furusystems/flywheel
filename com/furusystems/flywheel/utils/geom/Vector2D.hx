@@ -1,18 +1,37 @@
 package com.furusystems.flywheel.utils.geom;
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import haxe.ds.Vector;
 
 /**
  * ...
  * @author Andreas Rønning
  */
-abstract Vector2D(Point) from Point to Point
+abstract Vector2D(Vector<Float>) from Vector<Float> to Vector<Float>
 {
 
 	public inline function new(x:Float = 0, y:Float = 0) 
 	{
-		this = new Point(x, y);
+		var v = new Vector<Float>(2);
+		v[0] = x;
+		v[1] = y;
+		this = v;
 	}
+	
+	public var x(get, set):Float;
+	inline function get_x():Float {
+		return this[0];
+	}
+	inline function set_x(f:Float):Float {
+		return this[0] = f;
+	}
+	
+	public var y(get, set):Float;
+	inline function get_y():Float {
+		return this[1];
+	}
+	inline function set_y(f:Float):Float {
+		return this[1] = f;
+	}
+	 
 	
 	//COMPARISONS
 	
@@ -154,7 +173,8 @@ abstract Vector2D(Point) from Point to Point
 	}
 	
 	public inline function copyFrom(other:Vector2D):Vector2D {
-		this.copyFrom(other);
+		x = other.x;
+		y = other.y;
 		return this;
 	}
 	
@@ -164,7 +184,7 @@ abstract Vector2D(Point) from Point to Point
 	}
 	public inline function reflectEq(normal:Vector2D):Vector2D {
 		var f:Vector2D = this;
-		this.copyFrom(f - (((f * 2.0).dot(normal)) / Math.pow(normal.mag(), 2)) * normal);
+		copyFrom(f - (((f * 2.0).dot(normal)) / Math.pow(normal.mag(), 2)) * normal);
 		return this;
 	}
 	
@@ -177,18 +197,18 @@ abstract Vector2D(Point) from Point to Point
 	}
 	
 	public inline function mag():Float {
-		return this.length;
+		return Math.sqrt(x * x + y * y);
 	}
 	
 	public inline function set(x:Float, y:Float):Vector2D {
-		this.x = x;
-		this.y = y;
+		this[0] = x;
+		this[1] = y;
 		return this;
 	}
 	
 	public inline function rectConstraint(rect:Rectangle):Vector2D {
-		this.x = Math.max(rect.x, Math.min(rect.x + rect.width, this.x));
-		this.y = Math.max(rect.y, Math.min(rect.y + rect.height, this.y));
+		x = Math.max(rect.x, Math.min(rect.x + rect.width, x));
+		y = Math.max(rect.y, Math.min(rect.y + rect.height, y));
 		return this;
 	}
 	
@@ -197,7 +217,7 @@ abstract Vector2D(Point) from Point to Point
 	}
 	
 	public inline function equals(other:Vector2D):Bool {
-		return other.x == this.x && other.y == this.y;
+		return other.x == x && other.y == y;
 	}
 	
 	public inline function closeTo(other:Vector2D, epsilon:Float = 0.0001):Bool {
@@ -205,7 +225,7 @@ abstract Vector2D(Point) from Point to Point
 	}
 	
 	public inline function truncate(length:Float):Vector2D {
-		if (this.length > length) {
+		if (mag() > length) {
 			return normalize(length);
 		}else{
 			return this;
@@ -217,11 +237,11 @@ abstract Vector2D(Point) from Point to Point
 	}
 	
 	public inline function clone():Vector2D {
-		return new Vector2D(this.x, this.y);
+		return new Vector2D(x, y);
 	}
 	
 	public inline function dot(b:Vector2D):Float {
-		return this.x * b.x + this.y * b.y;
+		return x * b.x + y * b.y;
 	}
 	
 	public inline function dotNormalized(b:Vector2D):Float {
@@ -230,46 +250,38 @@ abstract Vector2D(Point) from Point to Point
 		return a.dot(b);
 	}
 	
+	public inline function unit():Vector2D {
+		return clone().unitize();
+	}
+	public inline function unitize():Vector2D {
+		return normalize();
+	}
+	
 	public inline function normalize(length:Float = 1):Vector2D {
-		this.normalize(length);
+		var m = 1/mag();
+		x *= m * length; 
+		y *= m * length;
 		return this;
 	}
 	
 	public inline function normalRight():Vector2D {
-		return new Vector2D(this.y, -this.x);
+		return new Vector2D(y, -x);
 	}
 	public inline function normalLeft():Vector2D {
-		return new Vector2D(-this.y, this.x);
+		return new Vector2D(-y, x);
 	}
 	
 	public inline function angleRad():Float {
-		return Math.atan2(this.x, this.y);
+		return Math.atan2(x, y);
 	}
 	
 	public inline function angleTo(other:Vector2D):Float {
-		var dx:Float = other.x - this.x;
-		var dy:Float = other.y - this.y;
+		var dx:Float = other.x - x;
+		var dy:Float = other.y - y;
 		return Math.atan2(dy, dx);
 	}
 	
-	public var x(get, set):Float;
-	public var y(get, set):Float;
-	
-	inline function get_x():Float {
-		return this.x;
+	public inline function toString():String {
+		return 'Vector2D($x,$y)';
 	}
-	
-	inline function set_x(value:Float):Float {
-		return this.x = value;
-	}
-	
-	inline function get_y():Float {
-		return this.y;
-	}
-	
-	inline function set_y(value:Float):Float {
-		return this.y = value;
-	}
-	
-	
 }
