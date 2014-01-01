@@ -52,13 +52,11 @@ class Signal
 		_listenerCount = 0;
 	}
 	public inline function dispatch():Void {
-		if (_listenerCount != 0){
-			for (i in _listeners) 
-			{
-				i.execute();
-				if (i.type == ListenerTypes.ONCE) {
-					_listeners.remove(i);
-				}
+		for (i in _listeners) 
+		{
+			i.execute();
+			if (i.type == ListenerTypes.ONCE) {
+				_listeners.remove(i);
 			}
 		}
 		if (oneshot) removeAll();

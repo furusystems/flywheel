@@ -1,4 +1,4 @@
-package com.furusystems.flywheel.geom;
+package com.furusystems.flywheel.utils.mixins;
 import flash.geom.Matrix;
 import flash.geom.Point;
 
