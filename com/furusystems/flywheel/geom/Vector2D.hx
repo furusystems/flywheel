@@ -1,4 +1,5 @@
 package com.furusystems.flywheel.geom;
+import flash.geom.Point;
 import haxe.ds.Vector;
 
 /**
@@ -204,14 +205,24 @@ abstract Vector2D(Vector2DFields) from Vector2DFields to Vector2DFields
 		var cos:Float = Math.cos(angleRad);
 		var px:Float = x * cos - y * sin; 
 		var py:Float = x * sin + y * cos;
-		return set(px, py);
+		return setTo(px, py);
 	}
+	
+	#if openfl
+	public inline function toPoint():Point {
+		return new Point(x, y);
+	}
+	public inline function copyFromPoint(p:Point):Vector2D {
+		setTo(p.x, p.y);
+		return this;
+	}
+	#end
 	
 	public inline function mag():Float {
 		return Math.sqrt(x * x + y * y);
 	}
 	
-	public inline function set(x:Float, y:Float):Vector2D {
+	public inline function setTo(x:Float, y:Float):Vector2D {
 		this.x = x;
 		this.y = y;
 		return this;

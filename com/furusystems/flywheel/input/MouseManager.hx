@@ -90,7 +90,7 @@ class MouseManager implements IInputManager
 	{
 		if (firstUpdate) {
 			firstUpdate = false;
-			positionDelta.set(0, 0);
+			positionDelta.setTo(0, 0);
 		}else{
 			positionDelta.x = tempPosition.x - position.x;
 			positionDelta.y = tempPosition.y - position.y;
@@ -132,7 +132,7 @@ class MouseManager implements IInputManager
 	
 	public function reset():Void {
 		firstUpdate = true;
-		positionDelta.set(0, 0);
+		positionDelta.setTo(0, 0);
 		onMouseDown.removeAll();
 		onMouseUp.removeAll();
 		onClick.removeAll();
