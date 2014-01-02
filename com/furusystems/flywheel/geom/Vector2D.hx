@@ -5,35 +5,53 @@ import haxe.ds.Vector;
  * ...
  * @author Andreas Rønning
  */
-abstract Vector2D(Vector<Float>) from Vector<Float> to Vector<Float>
+
+private class Vector2DFields {
+	public var x:Float;
+	public var y:Float;
+	public function new() {
+		
+	}
+}
+ 
+ 
+abstract Vector2D(Vector2DFields) from Vector2DFields to Vector2DFields
 {
 
 	public inline function new(x:Float = 0, y:Float = 0) 
 	{
-		var v = new Vector<Float>(2);
-		v[0] = x;
-		v[1] = y;
+		var v = new Vector2DFields();
+		v.x = x;
+		v.y = y;
 		this = v;
 	}
 	
 	public var x(get, set):Float;
 	@:noCompletion inline function get_x():Float {
-		return this[0];
+		return this.x;
 	}
 	@:noCompletion inline function set_x(f:Float):Float {
-		return this[0] = f;
+		return this.x = f;
 	}
 	
 	public var y(get, set):Float;
 	inline function get_y():Float {
-		return this[1];
+		return this.y;
 	}
 	inline function set_y(f:Float):Float {
-		return this[1] = f;
+		return this.y = f;
 	}
 	 
 	
 	//COMPARISONS
+	
+	@:noCompletion @:op(A >= B) public static inline function moreThanEq(a:Vector2D, b:Vector2D):Bool {
+		return a.x >= b.x && a.y >= b.y;
+	}
+	
+	@:noCompletion @:op(A <= B) public static inline function lessThanEq(a:Vector2D, b:Vector2D):Bool {
+		return a.x <= b.x && a.y <= b.y;
+	}
 	
 	@:noCompletion @:op(A > B) public static inline function moreThan(a:Vector2D, b:Vector2D):Bool {
 		return a.x > b.x && a.y > b.y;
@@ -43,12 +61,17 @@ abstract Vector2D(Vector<Float>) from Vector<Float> to Vector<Float>
 		return a.x < b.x && a.y < b.y;
 	}
 	
-	@:noCompletion @:op(A >= B) public static inline function moreThanEq(a:Vector2D, b:Vector2D):Bool {
-		return a.x >= b.x && a.y >= b.y;
+	
+	@:noCompletion @:op(A += B) public static inline function compoundAdd(a:Vector2D, b:Vector2D):Vector2D {
+		a.x += b.x;
+		a.y += b.y;
+		return a;	
 	}
 	
-	@:noCompletion @:op(A <= B) public static inline function lessThanEq(a:Vector2D, b:Vector2D):Bool {
-		return a.x <= b.x && a.y <= b.y;
+	@:noCompletion @:op(A += B) public static inline function compoundAddFloat(a:Vector2D, scalar:Float):Vector2D {
+		a.x += scalar;
+		a.y += scalar;
+		return a;	
 	}
 	
 	//MATH
@@ -66,16 +89,16 @@ abstract Vector2D(Vector<Float>) from Vector<Float> to Vector<Float>
 		return pt;	
 	}
 	
-	@:noCompletion @:op(A += B) public static inline function compoundAdd(a:Vector2D, b:Vector2D):Vector2D {
-		a.x += b.x;
-		a.y += b.y;
-		return a;	
+	@:noCompletion @:op(A -= B) public static inline function compoundSub(a:Vector2D, b:Vector2D):Vector2D {
+		a.x -= b.x;
+		a.y -= b.y;
+		return a;
 	}
 	
-	@:noCompletion @:op(A += B) public static inline function compoundAddFloat(a:Vector2D, scalar:Float):Vector2D {
-		a.x += scalar;
-		a.y += scalar;
-		return a;	
+	@:noCompletion @:op(A -= B) public static inline function compoundSubFloat(a:Vector2D, scalar:Float):Vector2D {
+		a.x -= scalar;
+		a.y -= scalar;
+		return a;
 	}
 	
 	@:noCompletion @:op(A - B) public static inline function sub(a:Vector2D, b:Vector2D):Vector2D {
@@ -92,21 +115,14 @@ abstract Vector2D(Vector<Float>) from Vector<Float> to Vector<Float>
 		return pt;	
 	}
 	
-	@:noCompletion @:op(A -= B) public static inline function compoundSub(a:Vector2D, b:Vector2D):Vector2D {
-		a.x -= b.x;
-		a.y -= b.y;
-		return a;
-	}
-	
-	@:noCompletion @:op(A -= B) public static inline function compoundSubFloat(a:Vector2D, scalar:Float):Vector2D {
-		a.x -= scalar;
-		a.y -= scalar;
-		return a;
-	}
-	
 	@:noCompletion @:op(A *= B) public static inline function compoundMultFloat(a:Vector2D, scalar:Float):Vector2D {
 		a.x *= scalar;
 		a.y *= scalar;
+		return a;
+	}
+	@:noCompletion @:op(A *= B) public static inline function compoundMultPt(a:Vector2D, b:Vector2D):Vector2D {
+		a.x *= b.x;
+		a.y *= b.y;
 		return a;
 	}
 	@:commutative @:noCompletion @:op(A * B) public static inline function multFloat(a:Vector2D, scalar:Float):Vector2D {
@@ -122,9 +138,10 @@ abstract Vector2D(Vector<Float>) from Vector<Float> to Vector<Float>
 		pt.y *= b.y;
 		return pt;
 	}
-	@:noCompletion @:op(A *= B) public static inline function compoundMultPt(a:Vector2D, b:Vector2D):Vector2D {
-		a.x *= b.x;
-		a.y *= b.y;
+	
+	@:noCompletion @:op(A /= B) public static inline function compoundDivPt(a:Vector2D, b:Vector2D):Vector2D {
+		a.x /= b.x;
+		a.y /= b.y;
 		return a;
 	}
 	
@@ -139,17 +156,11 @@ abstract Vector2D(Vector<Float>) from Vector<Float> to Vector<Float>
 		pt.y /= scalar;
 		return pt;
 	}
-	
 	@:noCompletion @:op(A / B) public static inline function divPt(a:Vector2D, b:Vector2D):Vector2D {
 		var pt:Vector2D = a.clone();
 		pt.x /= b.x;
 		pt.y /= b.y;
 		return pt;
-	}
-	@:noCompletion @:op(A /= B) public static inline function compoundDivPt(a:Vector2D, b:Vector2D):Vector2D {
-		a.x /= b.x;
-		a.y /= b.y;
-		return a;
 	}
 	
 	public static inline function distance(a:Vector2D, b:Vector2D):Float {
@@ -201,8 +212,8 @@ abstract Vector2D(Vector<Float>) from Vector<Float> to Vector<Float>
 	}
 	
 	public inline function set(x:Float, y:Float):Vector2D {
-		this[0] = x;
-		this[1] = y;
+		this.x = x;
+		this.y = y;
 		return this;
 	}
 	

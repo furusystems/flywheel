@@ -5,48 +5,59 @@ import haxe.ds.Vector;
  * ...
  * @author Andreas Rønning
  */
-abstract Rectangle(Vector<Float>) from Vector<Float> to Vector<Float>
+
+private class RectangleFields {
+	public var x:Float;
+	public var y:Float;
+	public var w:Float;
+	public var h:Float;
+	public inline function new() {
+		
+	}
+}
+ 
+abstract Rectangle(RectangleFields) from RectangleFields to RectangleFields
 {
 
 	public inline function new(x:Float = 0,y:Float = 0,w:Float = 0,h:Float = 0) 
 	{
-		var v = new Vector<Float>(4);
-		v[0] = x;
-		v[1] = y;
-		v[2] = w;
-		v[3] = h;
+		var v = new RectangleFields();
+		v.x = x;
+		v.y = y;
+		v.w = w;
+		v.h = h;
 		this = v;
 	}
 	public var x(get, set):Float;
 	@:noCompletion inline function get_x():Float {
-		return this[0];
+		return this.x;
 	}
 	@:noCompletion inline function set_x(f:Float):Float {
-		return this[0] = f;
+		return this.x = f;
 	}
 	
 	public var y(get, set):Float;
 	@:noCompletion inline function get_y():Float {
-		return this[1];
+		return this.y;
 	}
 	@:noCompletion inline function set_y(f:Float):Float {
-		return this[1] = f;
+		return this.y = f;
 	}
 	
 	public var width(get, set):Float;
 	@:noCompletion inline function get_width():Float {
-		return this[2];
+		return this.w;
 	}
 	@:noCompletion inline function set_width(f:Float):Float {
-		return this[2] = f;
+		return this.w = f;
 	}
 	
 	public var height(get, set):Float;
 	@:noCompletion inline function get_height():Float {
-		return this[3];
+		return this.h;
 	}
 	@:noCompletion inline function set_height(f:Float):Float {
-		return this[3] = f;
+		return this.h = f;
 	}
 	
 	public inline function contains(other:Rectangle):Bool {
