@@ -1,6 +1,6 @@
 package com.furusystems.flywheel.utils.data;
 
-class DField<T>
+@:generic class DField<T>
 {
 	private var values:Array<T>;
 	public function new(defaultValue:T) 

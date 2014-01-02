@@ -4,7 +4,7 @@ import com.furusystems.flywheel.events.Signal.ListenerTypes;
  * ...
  * @author Andreas Rønning
  */
-class Signal3<T,T2,T3>
+@:generic class Signal3<T,T2,T3>
 {
 	var _listeners:Array<Listener3<T,T2,T3>> ;
 	var _listenerCount:Int = 0;
@@ -58,7 +58,7 @@ class Signal3<T,T2,T3>
 		if (oneshot) removeAll();
 	}
 }
-private class Listener3<T,T2,T3> {
+@:generic private class Listener3<T,T2,T3> {
 	public var func:T->T2->T3->Void;
 	public var type:ListenerTypes;
 	public inline function execute(arg1:T, arg2:T2, arg3:T3):Void {
