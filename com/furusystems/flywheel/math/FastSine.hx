@@ -22,7 +22,7 @@ class FastSine
 		}
 		return x;
 	}
-	public static inline function high(x:Float):Point {
+	public static inline function high(x:Float):SinCos {
 		x = wrapAngle(x);
 		
 		//compute sine
@@ -78,7 +78,7 @@ class FastSine
 	}
 	
 	
-	public static inline function low(x:Float):Point {
+	public static inline function low(x:Float):SinCos {
 		x = wrapAngle(x);
 		
 		//compute sine
@@ -108,7 +108,7 @@ class FastSine
 class SinCos {
 	public var sin:Float = 0;
 	public var cos:Float = 0;
-	function new() {
+	public function new() {
 		
 	}
 }
