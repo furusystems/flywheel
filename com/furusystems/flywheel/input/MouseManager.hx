@@ -1,7 +1,7 @@
 package com.furusystems.flywheel.input;
 import com.furusystems.flywheel.Core;
 import com.furusystems.flywheel.events.Signal1;
-import com.furusystems.flywheel.utils.geom.Vector2D;
+import com.furusystems.flywheel.geom.Vector2D;
 import flash.display.InteractiveObject;
 import flash.events.MouseEvent;
 import flash.geom.Point;
