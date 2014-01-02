@@ -1,6 +1,7 @@
 package com.furusystems.flywheel.geom;
+#if openfl
 import flash.geom.Point;
-import haxe.ds.Vector;
+#end
 
 /**
  * ...
@@ -21,11 +22,21 @@ abstract Vector2D(Vector2DFields) from Vector2DFields to Vector2DFields
 
 	public inline function new(x:Float = 0, y:Float = 0) 
 	{
-		var v = new Vector2DFields();
+		var v:Vector2DFields = new Vector2DFields();
 		v.x = x;
 		v.y = y;
 		this = v;
 	}
+	
+	#if openfl
+	@:noCompletion @:from static public inline function castFromPoint(p:Point):Vector2D {
+        return new Vector2D(p.x, p.y);
+    }
+	
+	@:noCompletion @:to static public inline function castToPoint(v:Vector2DFields):Point {
+        return new Point(v.x, v.y);
+    }
+	#end
 	
 	public var x(get, set):Float;
 	@:noCompletion inline function get_x():Float {
@@ -209,8 +220,9 @@ abstract Vector2D(Vector2DFields) from Vector2DFields to Vector2DFields
 	}
 	
 	#if openfl
-	public inline function toPoint():Point {
-		return new Point(x, y);
+	public inline function copyToPoint(pt:Point):Point {
+		pt.setTo(x, y);
+		return pt;
 	}
 	public inline function copyFromPoint(p:Point):Vector2D {
 		setTo(p.x, p.y);
