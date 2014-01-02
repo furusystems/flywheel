@@ -5,7 +5,7 @@ package com.furusystems.flywheel.utils.data;
  * @author Andreas Rønning
  */
 
-@:generic class Property<T> 
+@:generic @:remove class Property<T> 
 {
 	public var dirty:Bool;
 	private var _value:T;

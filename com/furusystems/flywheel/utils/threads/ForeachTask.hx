@@ -5,7 +5,7 @@ import com.furusystems.flywheel.utils.threads.TaskType;
  * IThreadTask implementation that iterates over a list of items and calls a function on each
  * @author Andreas Rønning
  */
-@:generic class ForeachTask<T> implements IThreadTask
+@:generic @:remove class ForeachTask<T> implements IThreadTask
 {
 	var list:Array<T>;
 	var start:Int;
