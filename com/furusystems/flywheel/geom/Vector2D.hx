@@ -28,16 +28,6 @@ abstract Vector2D(Vector2DFields) from Vector2DFields to Vector2DFields
 		this = v;
 	}
 	
-	#if openfl
-	@:noCompletion @:from static public inline function castFromPoint(p:Point):Vector2D {
-        return new Vector2D(p.x, p.y);
-    }
-	
-	@:noCompletion @:to static public inline function castToPoint(v:Vector2DFields):Point {
-        return new Point(v.x, v.y);
-    }
-	#end
-	
 	public var x(get, set):Float;
 	@:noCompletion inline function get_x():Float {
 		return this.x;
@@ -220,14 +210,24 @@ abstract Vector2D(Vector2DFields) from Vector2DFields to Vector2DFields
 	}
 	
 	#if openfl
+	
 	public inline function copyToPoint(pt:Point):Point {
 		pt.setTo(x, y);
 		return pt;
 	}
+	
 	public inline function copyFromPoint(p:Point):Vector2D {
 		setTo(p.x, p.y);
 		return this;
 	}
+	
+	@:noCompletion @:from static public inline function castFromPoint(p:Point):Vector2D {
+        return new Vector2D(p.x, p.y);
+    }
+	
+	@:noCompletion @:to static public inline function castToPoint(v:Vector2DFields):Point {
+        return new Point(v.x, v.y);
+    }
 	#end
 	
 	public inline function mag():Float {
