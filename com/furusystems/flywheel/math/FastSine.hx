@@ -1,4 +1,5 @@
 package com.furusystems.flywheel.math;
+import com.furusystems.flywheel.geom.Vector2D;
 
 /**
  * ...
@@ -105,10 +106,23 @@ class FastSine
 	}
 	
 }
-class SinCos {
-	public var sin:Float = 0;
-	public var cos:Float = 0;
-	public function new() {
-		
+abstract SinCos(Vector2D) to Vector2D from Vector2D {
+	public var sin(get, set):Float;
+	public var cos(get, set):Float;
+	public function new(?vec:Vector2D) {
+		if (vec == null) vec = new Vector2D();
+		this = vec;
+	}
+	@:noCompletion inline function get_cos():Float {
+		return this.x;
+	}
+	@:noCompletion inline function set_cos(f:Float):Float {
+		return this.x = f;
+	}
+	@:noCompletion inline function get_sin():Float {
+		return this.y;
+	}
+	@:noCompletion inline function set_sin(f:Float):Float {
+		return this.y = f;
 	}
 }
