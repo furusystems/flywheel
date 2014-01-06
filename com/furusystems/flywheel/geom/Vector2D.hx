@@ -221,12 +221,10 @@ abstract Vector2D(Vector2DFields) from Vector2DFields to Vector2DFields
 	}
 	
 	@:noCompletion @:to public inline function castToPoint():Point {
-		trace("cast to point");
         return new Point(this.x, this.y);
     }
 	
 	@:noCompletion @:from static public inline function castFromPoint(p:Point):Vector2D {
-		trace("cast from point");
         return new Vector2D(p.x, p.y);
     }
 	
