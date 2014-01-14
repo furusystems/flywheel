@@ -107,14 +107,14 @@ class MathUtils
 	public static inline function mag(a:Vector2D):Float {
 		return Math.sqrt(a.x * a.x + a.y * a.y);
 	}
-	public static inline function normalize(a:Vector2D, inPlace:Bool = false):Point {
+	public static inline function normalize(a:Vector2D, inPlace:Bool = false):Vector2D {
 		var len:Float = mag(a);
 		if (inPlace) {
 			a.x /= len;
 			a.y /= len;
 			return a;
 		}else {
-			return new Point(a.x / len, a.y / len);
+			return new Vector2D(a.x / len, a.y / len);
 		}
 	}
 	public static inline function toLeftNormal(a:Vector2D):Vector2D {
@@ -136,8 +136,8 @@ class MathUtils
 	public static inline function rightNormal(a:Vector2D):Vector2D {
 		return new Vector2D( -a.y, a.x);
 	}
-	public static inline function dotProduct(a:Vector2D, b:Vector2D):Vector2D {
-		return a.x*b.x + a.y*b.y;
+	public static inline function dotProduct(a:Vector2D, b:Vector2D):Float {
+		return a.x * b.x + a.y * b.y;
 	}
 	
 	public static inline function unipolarSin(t:Float):Float {

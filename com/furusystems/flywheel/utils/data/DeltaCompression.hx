@@ -8,9 +8,9 @@ import haxe.ds.Vector;
 class DeltaCompression
 {
 	static public function compressInt(a:Array<Int>):Array<Int> {
-		var out:Array<Int> = new Array<Int>();
-		var d:Int = 0;
-		var prev:Int = 0;
+		var out = new Array<Int>();
+		var d = 0;
+		var prev = 0;
 		for (i in 0...a.length) {
 			if (i != 0) {
 				d = a[i] - prev;
@@ -23,9 +23,9 @@ class DeltaCompression
 		return out;
 	}
 	static public function compressFloat(a:Array<Float>):Array<Float> {
-		var out:Array<Float> = new Array<Float>();
-		var d:Float = 0;
-		var prev:Float = 0;
+		var out = new Array<Float>();
+		var d = 0.0;
+		var prev = 0.0;
 		for (i in 0...a.length) {
 			if (i != 0) {
 				d = a[i] - prev;
