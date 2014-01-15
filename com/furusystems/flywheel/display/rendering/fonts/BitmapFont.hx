@@ -1,10 +1,9 @@
 package com.furusystems.flywheel.display.rendering.fonts;
-import com.furusystems.system.BitmapManager;
 import haxe.ds.Vector;
 import openfl.Assets;
+import openfl.display.Tilesheet;
 import flash.display.BitmapData;
 import flash.geom.Rectangle;
-import openfl.display.Tilesheet;
 
 
 /**
@@ -53,25 +52,19 @@ class BitmapFont
 	
 	public function new(texturePath:String, descriptorPath:String) 
 	{
-		
-		//trace("Processing descriptor");
-		cache = new Map<String, Array<Float>>();
-		
+		cache = new Map<String, Array<Float>>();	
 		var descriptor:String = Assets.getText(descriptorPath);
-		
 		var lines:Array<String> = descriptor.split("\n");
 		charMap = new Vector<Character>(255);
-		
 		while (lines.length > 0) {
 			processLine(lines.shift());
-			//lines.shift();
 		}
 		configure(texturePath);
 	}
 	
 	private function configure(texturePath:String) 
 	{
-		var bmd:BitmapData = BitmapManager.getBitmapData(texturePath);
+		var bmd:BitmapData = Assets.getBitmapData(texturePath);
 		tilesheet = new Tilesheet(bmd);
 		var idx:Int = 0;
 		for (c in charMap) {
