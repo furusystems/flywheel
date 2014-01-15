@@ -76,6 +76,14 @@ abstract Vector2D(Vector2DFields) from Vector2DFields to Vector2DFields
 		return a;	
 	}
 	
+	@:noCompletion @:op(A *= B) public static inline function compoundMatrixMul(a:Vector2D, mat:Matrix33):Vector2D {
+		mat.transformVectorInPlace(a);
+		return a;	
+	}
+	@:noCompletion @:commutative @:op(A * B) public static inline function matrixMul(a:Vector2D, mat:Matrix33):Vector2D {
+		return mat.transformVector(a);
+	}
+	
 	//MATH
 	@:noCompletion @:op(A + B) public static inline function add(a:Vector2D, b:Vector2D):Vector2D {
 		var pt:Vector2D = a.clone();

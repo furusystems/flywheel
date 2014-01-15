@@ -63,7 +63,7 @@ class TouchManager implements IInputManager
 	
 	/* INTERFACE com.furusystems.flywheel.input.IInputManager */
 	
-	public function update(game:Core):Void 
+	public function update(?game:Core):Void 
 	{
 		for (p in activePoints) 
 		{

@@ -20,7 +20,9 @@ class MouseManager implements IInputManager
 	public var middleMouse:Bool;
 	
 	public var onMouseDown:Signal1<MouseEvent>;
+	public var onMouseMove:Signal1<MouseEvent>;
 	public var onMouseUp:Signal1<MouseEvent>;
+	public var onMouseWheel:Signal1<MouseEvent>;
 	public var onClick:Signal1<MouseEvent>;
 	
 	var firstUpdate:Bool;
@@ -31,13 +33,16 @@ class MouseManager implements IInputManager
 		tempPosition = new Vector2D();
 		positionDelta = new Vector2D();
 		onMouseDown = new Signal1<MouseEvent>();
+		onMouseMove = new Signal1<MouseEvent>();
 		onMouseUp = new Signal1<MouseEvent>();
+		onMouseWheel = new Signal1<MouseEvent>();
 		onClick = new Signal1<MouseEvent>();
 	}
 	
 	function mouseMoveHandler(e:MouseEvent):Void 
 	{
 		updateTempMousePos(e);
+		onMouseMove.dispatch(e);
 	}
 	
 	inline function updateTempMousePos(e:MouseEvent):Void {
@@ -57,7 +62,7 @@ class MouseManager implements IInputManager
 		switch(e.type) {
 			case MouseEvent.MOUSE_UP:
 				leftMouse = false;
-			#if desktop
+			#if (desktop || air3)
 			case MouseEvent.RIGHT_MOUSE_UP:
 				rightMouse = false;
 			case MouseEvent.MIDDLE_MOUSE_UP:
@@ -73,7 +78,7 @@ class MouseManager implements IInputManager
 		switch(e.type) {
 			case MouseEvent.MOUSE_DOWN:
 				leftMouse = true;
-			#if desktop
+			#if (desktop || air3)
 			case MouseEvent.RIGHT_MOUSE_DOWN:
 				rightMouse = true;
 			case MouseEvent.MIDDLE_MOUSE_DOWN:
@@ -86,7 +91,7 @@ class MouseManager implements IInputManager
 	
 	/* INTERFACE com.furusystems.flywheel.input.IInputManager */
 	
-	public function update(game:Core):Void 
+	public function update(?game:Core):Void 
 	{
 		if (firstUpdate) {
 			firstUpdate = false;
@@ -105,7 +110,8 @@ class MouseManager implements IInputManager
 		source.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
 		source.addEventListener(MouseEvent.CLICK, clickHandler);
 		source.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-		#if desktop
+		source.addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
+		#if (desktop || air3)
 		source.addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, mouseDownHandler);
 		source.addEventListener(MouseEvent.RIGHT_MOUSE_UP, mouseUpHandler);
 		source.addEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, mouseDownHandler);
@@ -120,7 +126,8 @@ class MouseManager implements IInputManager
 		source.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
 		source.removeEventListener(MouseEvent.CLICK, clickHandler);
 		source.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-		#if desktop
+		source.removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
+		#if (desktop || air3)
 		source.removeEventListener(MouseEvent.RIGHT_MOUSE_DOWN, mouseDownHandler);
 		source.removeEventListener(MouseEvent.RIGHT_MOUSE_UP, mouseUpHandler);
 		source.removeEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, mouseDownHandler);
@@ -128,6 +135,11 @@ class MouseManager implements IInputManager
 		source.removeEventListener(MouseEvent.RIGHT_CLICK, clickHandler);
 		source.removeEventListener(MouseEvent.MIDDLE_CLICK, clickHandler);
 		#end
+	}
+	
+	private function mouseWheelHandler(e:MouseEvent):Void 
+	{
+		onMouseWheel.dispatch(e);
 	}
 	
 	public function reset():Void {
