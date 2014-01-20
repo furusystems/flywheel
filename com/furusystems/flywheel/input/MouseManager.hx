@@ -13,6 +13,7 @@ import flash.geom.Point;
 class MouseManager implements IInputManager
 {
 	var tempPosition:Vector2D;
+	public var clickStartPosition:Vector2D;
 	public var position:Vector2D;
 	public var positionDelta:Vector2D;
 	public var leftMouse:Bool;
@@ -29,6 +30,7 @@ class MouseManager implements IInputManager
 	
 	public function new() 
 	{
+		clickStartPosition = new Vector2D();
 		position = new Vector2D();
 		tempPosition = new Vector2D();
 		positionDelta = new Vector2D();
@@ -46,8 +48,8 @@ class MouseManager implements IInputManager
 	}
 	
 	inline function updateTempMousePos(e:MouseEvent):Void {
-		tempPosition.x = e.stageX;
-		tempPosition.y = e.stageY;
+		tempPosition.x = e.localX;
+		tempPosition.y = e.localY;
 	}
 	
 	function clickHandler(e:MouseEvent):Void 
@@ -75,6 +77,7 @@ class MouseManager implements IInputManager
 	function mouseDownHandler(e:MouseEvent):Void 
 	{
 		updateTempMousePos(e);
+		clickStartPosition.copyFrom(tempPosition);
 		switch(e.type) {
 			case MouseEvent.MOUSE_DOWN:
 				leftMouse = true;

@@ -1,5 +1,5 @@
 package com.furusystems.flywheel.geom;
-#if openfl
+#if (openfl||flash)
 import flash.geom.Point;
 #end
 
@@ -48,19 +48,19 @@ abstract Vector2D(Vector2DFields) from Vector2DFields to Vector2DFields
 	//COMPARISONS
 	
 	@:noCompletion @:op(A >= B) public static inline function moreThanEq(a:Vector2D, b:Vector2D):Bool {
-		return a.x >= b.x && a.y >= b.y;
+		return a.x >= b.x || a.y >= b.y;
 	}
 	
 	@:noCompletion @:op(A <= B) public static inline function lessThanEq(a:Vector2D, b:Vector2D):Bool {
-		return a.x <= b.x && a.y <= b.y;
+		return a.x <= b.x || a.y <= b.y;
 	}
 	
 	@:noCompletion @:op(A > B) public static inline function moreThan(a:Vector2D, b:Vector2D):Bool {
-		return a.x > b.x && a.y > b.y;
+		return a.x > b.x || a.y > b.y;
 	}
 	
 	@:noCompletion @:op(A < B) public static inline function lessThan(a:Vector2D, b:Vector2D):Bool {
-		return a.x < b.x && a.y < b.y;
+		return a.x < b.x || a.y < b.y;
 	}
 	
 	
@@ -217,7 +217,7 @@ abstract Vector2D(Vector2DFields) from Vector2DFields to Vector2DFields
 		return setTo(px, py);
 	}
 	
-	#if openfl
+	#if (openfl || flash)
 	public inline function copyToPoint(pt:Point):Point {
 		pt.setTo(x, y);
 		return pt;
