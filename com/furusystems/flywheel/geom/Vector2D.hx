@@ -209,6 +209,10 @@ abstract Vector2D(Vector2DFields) from Vector2DFields to Vector2DFields
 		return this;
 	}
 	
+	public inline function sameAs(other:Vector2D):Bool {
+		return !(x != other.x || y != other.y);
+	}
+	
 	public inline function rotate(angleRad:Float):Vector2D {
 		var sin:Float = Math.sin(angleRad);
 		var cos:Float = Math.cos(angleRad);

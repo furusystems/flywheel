@@ -21,12 +21,16 @@ class MouseManager implements IInputManager
 	public var middleMouse:Bool;
 	
 	public var onMouseDown:Signal1<MouseEvent>;
+	public var onRightMouseDown:Signal1<MouseEvent>;
+	public var onMiddleMouseDown:Signal1<MouseEvent>;
 	public var onMouseMove:Signal1<MouseEvent>;
 	public var onMouseUp:Signal1<MouseEvent>;
+	public var onRightMouseUp:Signal1<MouseEvent>;
+	public var onMiddleMouseUp:Signal1<MouseEvent>;
 	public var onMouseWheel:Signal1<MouseEvent>;
 	public var onClick:Signal1<MouseEvent>;
-	
-	var firstUpdate:Bool;
+	public var onRightClick:Signal1<MouseEvent>;
+	public var onMiddleClick:Signal1<MouseEvent>;
 	
 	public function new() 
 	{
@@ -35,76 +39,89 @@ class MouseManager implements IInputManager
 		tempPosition = new Vector2D();
 		positionDelta = new Vector2D();
 		onMouseDown = new Signal1<MouseEvent>();
+		onRightMouseDown = new Signal1<MouseEvent>();
+		onMiddleMouseDown = new Signal1<MouseEvent>();
 		onMouseMove = new Signal1<MouseEvent>();
 		onMouseUp = new Signal1<MouseEvent>();
+		onRightMouseUp = new Signal1<MouseEvent>();
+		onMiddleMouseUp = new Signal1<MouseEvent>();
 		onMouseWheel = new Signal1<MouseEvent>();
 		onClick = new Signal1<MouseEvent>();
+		onRightClick = new Signal1<MouseEvent>();
+		onMiddleClick = new Signal1<MouseEvent>();
 	}
 	
 	function mouseMoveHandler(e:MouseEvent):Void 
 	{
-		updateTempMousePos(e);
+		updateMousePos(e);
 		onMouseMove.dispatch(e);
 	}
 	
-	inline function updateTempMousePos(e:MouseEvent):Void {
-		tempPosition.x = e.localX;
-		tempPosition.y = e.localY;
+	inline function updateMousePos(e:MouseEvent):Void {
+		positionDelta.x = e.localX - position.x;
+		positionDelta.y = e.localY - position.y;
+		position.x = e.localX;
+		position.y = e.localY;
 	}
 	
 	function clickHandler(e:MouseEvent):Void 
 	{
-		updateTempMousePos(e);
-		onClick.dispatch(e);
+		updateMousePos(e);
+		switch(e.type) {
+			case MouseEvent.CLICK:
+				leftMouse = false;
+				onClick.dispatch(e);
+			#if (desktop || air3)
+			case MouseEvent.RIGHT_CLICK:
+				rightMouse = false;
+				onRightClick.dispatch(e);
+			case MouseEvent.MIDDLE_CLICK:
+				middleMouse = false;
+				onMiddleClick.dispatch(e);
+			#end
+		}
 	}
 	
 	function mouseUpHandler(e:MouseEvent):Void 
 	{
-		updateTempMousePos(e);
+		updateMousePos(e);
 		switch(e.type) {
 			case MouseEvent.MOUSE_UP:
 				leftMouse = false;
+				onMouseUp.dispatch(e);
 			#if (desktop || air3)
 			case MouseEvent.RIGHT_MOUSE_UP:
 				rightMouse = false;
+				onRightMouseUp.dispatch(e);
 			case MouseEvent.MIDDLE_MOUSE_UP:
 				middleMouse = false;
+				onMiddleMouseUp.dispatch(e);
 			#end
 		}
-		onMouseUp.dispatch(e);
 	}
 	
 	function mouseDownHandler(e:MouseEvent):Void 
 	{
-		updateTempMousePos(e);
-		clickStartPosition.copyFrom(tempPosition);
+		updateMousePos(e);
+		clickStartPosition.copyFrom(position);
 		switch(e.type) {
 			case MouseEvent.MOUSE_DOWN:
 				leftMouse = true;
+				onMouseDown.dispatch(e);
 			#if (desktop || air3)
 			case MouseEvent.RIGHT_MOUSE_DOWN:
 				rightMouse = true;
+				onRightMouseDown.dispatch(e);
 			case MouseEvent.MIDDLE_MOUSE_DOWN:
 				middleMouse = true;
+				onMiddleMouseDown.dispatch(e);
 			#end
 		}
-		onMouseDown.dispatch(e);
 	}
 	
-	
 	/* INTERFACE com.furusystems.flywheel.input.IInputManager */
-	
 	public function update(?game:Core):Void 
 	{
-		if (firstUpdate) {
-			firstUpdate = false;
-			positionDelta.setTo(0, 0);
-		}else{
-			positionDelta.x = tempPosition.x - position.x;
-			positionDelta.y = tempPosition.y - position.y;
-		}
-		position.x = tempPosition.x;
-		position.y = tempPosition.y;
 	}
 	
 	public function bind(source:InteractiveObject):Void {
@@ -146,11 +163,18 @@ class MouseManager implements IInputManager
 	}
 	
 	public function reset():Void {
-		firstUpdate = true;
 		positionDelta.setTo(0, 0);
-		onMouseDown.removeAll();
-		onMouseUp.removeAll();
-		onClick.removeAll();
+	    onMouseDown.removeAll();
+	    onRightMouseDown.removeAll();
+	    onMiddleMouseDown.removeAll();
+	    onMouseMove.removeAll();
+	    onMouseUp.removeAll();
+	    onRightMouseUp.removeAll();
+	    onMiddleMouseUp.removeAll();
+	    onMouseWheel.removeAll();
+	    onClick.removeAll();
+	    onRightClick.removeAll();
+	    onMiddleClick.removeAll();
 	}
 	
 }

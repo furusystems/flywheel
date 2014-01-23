@@ -79,7 +79,9 @@ class TouchManager implements IInputManager
 			source.addEventListener(TouchEvent.TOUCH_END, touchEndHandler);
 			source.addEventListener(TouchEvent.TOUCH_MOVE, touchMoveHandler);
 		}else {
+			#if debug
 			trace("Multitouch not supported, TODO: map to mouse manager");
+			#end
 		}
 	}
 	
