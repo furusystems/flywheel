@@ -31,6 +31,7 @@ class MouseManager implements IInputManager
 	public var onClick:Signal1<MouseEvent>;
 	public var onRightClick:Signal1<MouseEvent>;
 	public var onMiddleClick:Signal1<MouseEvent>;
+	public var onDoubleClick:Signal1<MouseEvent>;
 	
 	public function new() 
 	{
@@ -49,6 +50,7 @@ class MouseManager implements IInputManager
 		onClick = new Signal1<MouseEvent>();
 		onRightClick = new Signal1<MouseEvent>();
 		onMiddleClick = new Signal1<MouseEvent>();
+		onDoubleClick = new Signal1<MouseEvent>();
 	}
 	
 	function mouseMoveHandler(e:MouseEvent):Void 
@@ -58,10 +60,10 @@ class MouseManager implements IInputManager
 	}
 	
 	inline function updateMousePos(e:MouseEvent):Void {
-		positionDelta.x = e.localX - position.x;
-		positionDelta.y = e.localY - position.y;
-		position.x = e.localX;
-		position.y = e.localY;
+		positionDelta.x = e.stageX - position.x;
+		positionDelta.y = e.stageY - position.y;
+		position.x = e.stageX;
+		position.y = e.stageY;
 	}
 	
 	function clickHandler(e:MouseEvent):Void 
@@ -131,6 +133,7 @@ class MouseManager implements IInputManager
 		source.addEventListener(MouseEvent.CLICK, clickHandler);
 		source.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		source.addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
+		source.addEventListener(MouseEvent.DOUBLE_CLICK, doubleClickHandler);
 		#if (desktop || air3)
 		source.addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, mouseDownHandler);
 		source.addEventListener(MouseEvent.RIGHT_MOUSE_UP, mouseUpHandler);
@@ -140,6 +143,12 @@ class MouseManager implements IInputManager
 		source.addEventListener(MouseEvent.MIDDLE_CLICK, clickHandler);
 		#end
 	}
+	
+	private function doubleClickHandler(e:MouseEvent):Void 
+	{
+		updateMousePos(e);
+		onDoubleClick.dispatch(e);
+	}
 	public function release(source:InteractiveObject):Void {
 		reset();
 		source.removeEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
@@ -147,6 +156,8 @@ class MouseManager implements IInputManager
 		source.removeEventListener(MouseEvent.CLICK, clickHandler);
 		source.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		source.removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
+		source.removeEventListener(MouseEvent.DOUBLE_CLICK, doubleClickHandler);
+
 		#if (desktop || air3)
 		source.removeEventListener(MouseEvent.RIGHT_MOUSE_DOWN, mouseDownHandler);
 		source.removeEventListener(MouseEvent.RIGHT_MOUSE_UP, mouseUpHandler);
@@ -175,6 +186,7 @@ class MouseManager implements IInputManager
 	    onClick.removeAll();
 	    onRightClick.removeAll();
 	    onMiddleClick.removeAll();
+	    onDoubleClick.removeAll();
 	}
 	
 }
