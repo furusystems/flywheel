@@ -13,7 +13,7 @@ class UID
 	
 	static public function bracketPool(i:Int) 
 	{
-		pool = cast Math.max(i, pool);
+		pool = Std.int(Math.max(i, pool));
 	}
 	
 }
