@@ -1,5 +1,7 @@
 package com.furusystems.flywheel.geom;
-import haxe.ds.Vector;
+#if (openfl||flash)
+import flash.geom.Point;
+#end
 
 /**
  * ...
@@ -20,7 +22,7 @@ abstract Vector2D(Vector2DFields) from Vector2DFields to Vector2DFields
 
 	public inline function new(x:Float = 0, y:Float = 0) 
 	{
-		var v = new Vector2DFields();
+		var v:Vector2DFields = new Vector2DFields();
 		v.x = x;
 		v.y = y;
 		this = v;
@@ -46,19 +48,19 @@ abstract Vector2D(Vector2DFields) from Vector2DFields to Vector2DFields
 	//COMPARISONS
 	
 	@:noCompletion @:op(A >= B) public static inline function moreThanEq(a:Vector2D, b:Vector2D):Bool {
-		return a.x >= b.x && a.y >= b.y;
+		return a.x >= b.x || a.y >= b.y;
 	}
 	
 	@:noCompletion @:op(A <= B) public static inline function lessThanEq(a:Vector2D, b:Vector2D):Bool {
-		return a.x <= b.x && a.y <= b.y;
+		return a.x <= b.x || a.y <= b.y;
 	}
 	
 	@:noCompletion @:op(A > B) public static inline function moreThan(a:Vector2D, b:Vector2D):Bool {
-		return a.x > b.x && a.y > b.y;
+		return a.x > b.x || a.y > b.y;
 	}
 	
 	@:noCompletion @:op(A < B) public static inline function lessThan(a:Vector2D, b:Vector2D):Bool {
-		return a.x < b.x && a.y < b.y;
+		return a.x < b.x || a.y < b.y;
 	}
 	
 	
@@ -72,6 +74,14 @@ abstract Vector2D(Vector2DFields) from Vector2DFields to Vector2DFields
 		a.x += scalar;
 		a.y += scalar;
 		return a;	
+	}
+	
+	@:noCompletion @:op(A *= B) public static inline function compoundMatrixMul(a:Vector2D, mat:Matrix33):Vector2D {
+		mat.transformVectorInPlace(a);
+		return a;	
+	}
+	@:noCompletion @:commutative @:op(A * B) public static inline function matrixMul(a:Vector2D, mat:Matrix33):Vector2D {
+		return mat.transformVector(a);
 	}
 	
 	//MATH
@@ -199,19 +209,44 @@ abstract Vector2D(Vector2DFields) from Vector2DFields to Vector2DFields
 		return this;
 	}
 	
+	public inline function sameAs(other:Vector2D):Bool {
+		return !(x != other.x || y != other.y);
+	}
+	
 	public inline function rotate(angleRad:Float):Vector2D {
 		var sin:Float = Math.sin(angleRad);
 		var cos:Float = Math.cos(angleRad);
 		var px:Float = x * cos - y * sin; 
 		var py:Float = x * sin + y * cos;
-		return set(px, py);
+		return setTo(px, py);
 	}
+	
+	#if (openfl || flash)
+	public inline function copyToPoint(pt:Point):Point {
+		pt.setTo(x, y);
+		return pt;
+	}
+	
+	public inline function copyFromPoint(p:Point):Vector2D {
+		setTo(p.x, p.y);
+		return this;
+	}
+	
+	@:noCompletion @:to public inline function castToPoint():Point {
+        return new Point(this.x, this.y);
+    }
+	
+	@:noCompletion @:from static public inline function castFromPoint(p:Point):Vector2D {
+        return new Vector2D(p.x, p.y);
+    }
+	
+	#end
 	
 	public inline function mag():Float {
 		return Math.sqrt(x * x + y * y);
 	}
 	
-	public inline function set(x:Float, y:Float):Vector2D {
+	public inline function setTo(x:Float, y:Float):Vector2D {
 		this.x = x;
 		this.y = y;
 		return this;
@@ -294,5 +329,11 @@ abstract Vector2D(Vector2DFields) from Vector2DFields to Vector2DFields
 	
 	public inline function toString():String {
 		return 'Vector2D($x,$y)';
+	}
+	
+	public inline function zero():Vector2D 
+	{
+		x = y = 0;
+		return this;
 	}
 }

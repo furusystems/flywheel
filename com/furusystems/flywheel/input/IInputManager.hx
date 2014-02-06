@@ -8,7 +8,7 @@ import flash.display.InteractiveObject;
 
 interface IInputManager 
 {
-	function update(game:Core):Void;
+	function update(?game:Core):Void;
 	function release(source:InteractiveObject):Void;
 	function bind(source:InteractiveObject):Void;
 	function reset():Void;

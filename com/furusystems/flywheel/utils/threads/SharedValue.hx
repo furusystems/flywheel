@@ -4,7 +4,7 @@ import cpp.vm.Mutex;
 /**
  * Thread safe genric value wrapper
  */
-class SharedValue<T> {
+@:generic @:remove class SharedValue<T> {
 	var mValue:T;
 	var mMutex:Mutex;
 	public function new(defaultValue:T) {

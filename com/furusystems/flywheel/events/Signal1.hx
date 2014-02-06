@@ -5,6 +5,7 @@ import com.furusystems.flywheel.events.Signal.ListenerTypes;
  * ...
  * @author Andreas Rønning
  */
+#if fwgenerics @:generic @:remove #end
 class Signal1<T>
 {
 	var _listeners:Array<Listener1<T>> ;
@@ -59,6 +60,7 @@ class Signal1<T>
 		if (oneshot) removeAll();
 	}
 }
+#if fwgenerics @:generic @:remove #end 
 private class Listener1<T> {
 	public var func:T->Void;
 	public var type:ListenerTypes;

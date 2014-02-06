@@ -19,7 +19,7 @@ class Input
 		touch = new TouchManager();
 		mouse = new MouseManager();
 	}
-	public inline function update(game:Core):Void {
+	public inline function update(?game:Core):Void {
 		keyboard.update(game);
 		touch.update(game);
 		mouse.update(game);
