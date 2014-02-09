@@ -6,7 +6,7 @@ import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException; 
 import java.util.Hashtable;
-import org.haxe.nme.GameActivity;
+import org.haxe.lime.GameActivity;
 
 import android.content.Context;
 import android.util.Log;

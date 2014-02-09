@@ -1,6 +1,6 @@
 package com.furusystems.flywheel;
 
-import org.haxe.nme.GameActivity;
+import org.haxe.lime.GameActivity;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;

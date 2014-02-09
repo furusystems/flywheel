@@ -2,7 +2,6 @@ package com.furusystems.flywheel;
 import com.furusystems.flywheel.fsm.IState;
 import com.furusystems.flywheel.input.Input;
 import com.furusystems.flywheel.media.sound.GameAudio;
-import com.furusystems.flywheel.media.video.android.AndroidVideo;
 import com.furusystems.flywheel.metrics.Time;
 import flash.display.Stage;
 import flash.errors.Error;
@@ -35,7 +34,6 @@ class Core
 		renderer = null;
 		input = new Input();
 		input.bind(stage);
-		AndroidVideo.initialize();
 		stage.addEventListener(Event.DEACTIVATE, onDeactivated);
 	}
 	
