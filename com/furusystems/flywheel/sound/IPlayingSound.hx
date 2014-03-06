@@ -1,4 +1,4 @@
-package com.furusystems.flywheel.media.sound;
+package com.furusystems.flywheel.sound;
 import com.furusystems.flywheel.Core;
 import com.furusystems.flywheel.utils.data.Property;
 

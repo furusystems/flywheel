@@ -1,7 +1,7 @@
-package com.furusystems.flywheel.media.sound.android;
+package com.furusystems.flywheel.sound.android;
 import com.furusystems.flywheel.Core;
-import com.furusystems.flywheel.media.sound.IPlayingSound;
-import com.furusystems.flywheel.media.sound.ISoundCue;
+import com.furusystems.flywheel.sound.IPlayingSound;
+import com.furusystems.flywheel.sound.ISoundCue;
 import com.furusystems.flywheel.utils.data.Property;
 
 /**
@@ -49,7 +49,7 @@ class AndroidPlayingSound implements IPlayingSound
 		playbackIndex = AndroidAudio.currentPool.play(cue.index, leftVol, rightVol, 0, loop, rate);
 	}
 	
-	/* INTERFACE com.furusystems.flywheel.media.sound.IPlayingSound */
+	/* INTERFACE com.furusystems.flywheel.sound.IPlayingSound */
 	
 	public function dispose():Void {
 		#if debug

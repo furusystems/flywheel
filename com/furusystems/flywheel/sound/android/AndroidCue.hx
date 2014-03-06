@@ -1,5 +1,5 @@
-package com.furusystems.flywheel.media.sound.android;
-import com.furusystems.flywheel.media.sound.ISoundCue;
+package com.furusystems.flywheel.sound.android;
+import com.furusystems.flywheel.sound.ISoundCue;
 
 /**
  * ...
@@ -21,7 +21,7 @@ class AndroidCue implements ISoundCue
 		index = AndroidAudio.currentPool.load(path);
 	}
 	
-	/* INTERFACE com.furusystems.flywheel.media.sound.ISoundCue */
+	/* INTERFACE com.furusystems.flywheel.sound.ISoundCue */
 	
 	public function release():Void 
 	{

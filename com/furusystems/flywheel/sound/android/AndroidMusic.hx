@@ -1,5 +1,5 @@
-package com.furusystems.flywheel.media.sound.android;
-import com.furusystems.flywheel.media.sound.IMusic;
+package com.furusystems.flywheel.sound.android;
+import com.furusystems.flywheel.sound.IMusic;
 import openfl.utils.JNI;
 
 /**
@@ -29,7 +29,7 @@ class AndroidMusic implements IMusic
 	
 	
 	
-	/* INTERFACE com.furusystems.flywheel.media.sound.IMusic */
+	/* INTERFACE com.furusystems.flywheel.sound.IMusic */
 	
 	public function play(path:String, volume:Float, loop:Bool = true, offset:Float = 0):Void 
 	{
