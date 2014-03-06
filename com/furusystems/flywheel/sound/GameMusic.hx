@@ -1,13 +1,13 @@
-package com.furusystems.flywheel.media.sound;
+package com.furusystems.flywheel.sound;
 import com.furusystems.flywheel.Core;
 import com.furusystems.flywheel.events.Signal1;
-import com.furusystems.flywheel.media.sound.GameAudio;
-import com.furusystems.flywheel.media.sound.IMusic;
+import com.furusystems.flywheel.sound.GameAudio;
+import com.furusystems.flywheel.sound.IMusic;
 
 #if (android && soundmanager)
-import com.furusystems.flywheel.media.sound.android.AndroidMusic;
+import com.furusystems.flywheel.sound.android.AndroidMusic;
 #else
-import com.furusystems.flywheel.media.sound.ofl.Music;
+import com.furusystems.flywheel.sound.ofl.Music;
 #end
 
 /**

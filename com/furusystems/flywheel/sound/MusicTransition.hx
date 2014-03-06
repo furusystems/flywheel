@@ -1,4 +1,4 @@
-package com.furusystems.flywheel.media.sound;
+package com.furusystems.flywheel.sound;
 
 /**
  * ...

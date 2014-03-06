@@ -1,10 +1,8 @@
-package com.furusystems.flywheel.media.sound.lime;
-import com.furusystems.flywheel.media.sound.IMusic;
+package com.furusystems.flywheel.sound.ofl;
+import com.furusystems.flywheel.sound.IMusic;
 import flash.net.URLRequest;
 #if openfl
 import openfl.Assets;
-#elseif lime
-import lime.utils.Assets;
 #end
 import flash.media.Sound;
 import flash.media.SoundChannel;
@@ -16,7 +14,7 @@ import flash.media.SoundTransform;
  * @author Andreas Rønning
  */
 
-class LimeMusic implements IMusic
+class Music implements IMusic
 {
 	public var channel:SoundChannel;
 	public var isPlaying(get_isPlaying, null):Bool;
@@ -41,7 +39,7 @@ class LimeMusic implements IMusic
 		return _path;
 	}
 	
-	/* INTERFACE com.furusystems.flywheel.media.sound.IMusic */
+	/* INTERFACE com.furusystems.flywheel.sound.IMusic */
 	
 	public function play(path:String, volume:Float, loop:Bool = true, offset:Float = 0):Void 
 	{

@@ -1,12 +1,12 @@
-package com.furusystems.flywheel.media.sound;
+package com.furusystems.flywheel.sound;
 #if (android && soundmanager)
 import com.furusystems.flywheel.Core;
-import com.furusystems.flywheel.media.sound.android.AndroidPlayingSound;
+import com.furusystems.flywheel.sound.android.AndroidPlayingSound;
 #else
-import com.furusystems.flywheel.media.sound.ofl.PlayingSound;
+import com.furusystems.flywheel.sound.ofl.PlayingSound;
 #end
-import com.furusystems.flywheel.media.sound.IPlayingSound;
-import com.furusystems.flywheel.media.sound.ISoundCue;
+import com.furusystems.flywheel.sound.IPlayingSound;
+import com.furusystems.flywheel.sound.ISoundCue;
 
 /**
  * ...

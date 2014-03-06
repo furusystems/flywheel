@@ -1,5 +1,5 @@
-package com.furusystems.flywheel.media.sound.ofl;
-import com.furusystems.flywheel.media.sound.ISoundCue;
+package com.furusystems.flywheel.sound.ofl;
+import com.furusystems.flywheel.sound.ISoundCue;
 import flash.events.Event;
 import flash.net.URLRequest;
 #if openfl

@@ -1,7 +1,7 @@
-package com.furusystems.flywheel.media.sound;
+package com.furusystems.flywheel.sound;
 import com.furusystems.flywheel.Core;
 #if (android && soundmanager)
-import com.furusystems.flywheel.media.sound.android.AndroidAudio;
+import com.furusystems.flywheel.sound.android.AndroidAudio;
 #end
 
 

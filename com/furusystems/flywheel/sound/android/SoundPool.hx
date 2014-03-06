@@ -1,4 +1,4 @@
-package com.furusystems.flywheel.media.sound.android;
+package com.furusystems.flywheel.sound.android;
 import openfl.utils.JNI;
 
 /**

@@ -1,18 +1,18 @@
-package com.furusystems.flywheel.media.sound;
+package com.furusystems.flywheel.sound;
 import com.furusystems.flywheel.Core;
-import com.furusystems.flywheel.media.sound.FXChannel;
-import com.furusystems.flywheel.media.sound.GameAudio;
-import com.furusystems.flywheel.media.sound.ISoundCue;
+import com.furusystems.flywheel.sound.FXChannel;
+import com.furusystems.flywheel.sound.GameAudio;
+import com.furusystems.flywheel.sound.ISoundCue;
 import flash.errors.Error;
 #if openfl
 import openfl.Assets;
 #end
 
 #if (android && soundmanager)
-import com.furusystems.flywheel.media.sound.android.AndroidAudio;
-import com.furusystems.flywheel.media.sound.android.AndroidCue;
+import com.furusystems.flywheel.sound.android.AndroidAudio;
+import com.furusystems.flywheel.sound.android.AndroidCue;
 #else
-import com.furusystems.flywheel.media.sound.ofl.Cue;
+import com.furusystems.flywheel.sound.ofl.Cue;
 #end
 
 /**

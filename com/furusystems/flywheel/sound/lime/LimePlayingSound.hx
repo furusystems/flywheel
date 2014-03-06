@@ -1,7 +1,7 @@
-package com.furusystems.flywheel.media.sound.lime;
+package com.furusystems.flywheel.sound.lime;
 import com.furusystems.flywheel.Core;
-import com.furusystems.flywheel.media.sound.IPlayingSound;
-import com.furusystems.flywheel.media.sound.ISoundCue;
+import com.furusystems.flywheel.sound.IPlayingSound;
+import com.furusystems.flywheel.sound.ISoundCue;
 import com.furusystems.flywheel.utils.data.Property;
 #if openfl
 import openfl.Assets;
