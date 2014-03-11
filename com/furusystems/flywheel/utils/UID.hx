@@ -16,4 +16,8 @@ class UID
 		pool = Std.int(Math.max(i, pool));
 	}
 	
+	public static inline function reset():Void {
+		pool = 0;
+	}
+	
 }
