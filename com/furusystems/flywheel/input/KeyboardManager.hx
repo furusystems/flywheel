@@ -11,12 +11,12 @@ import flash.events.KeyboardEvent;
 class KeyboardManager implements IInputManager
 {
 	public var keyDict:Map<Int,Bool>;
-	public var onKeyPress:Signal1<Int>;
-	public var onKeyRelease:Signal1<Int>;
+	public var onKeyPress:Signal1<UInt>;
+	public var onKeyRelease:Signal1<UInt>;
 	public function new() 
 	{
-		onKeyPress = new Signal1<Int>();
-		onKeyRelease = new Signal1<Int>();
+		onKeyPress = new Signal1<UInt>();
+		onKeyRelease = new Signal1<UInt>();
 	}
 	
 	private function onKeyUp(e:KeyboardEvent):Void 
