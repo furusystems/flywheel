@@ -173,6 +173,12 @@ abstract Vector2D(Vector2DFields) from Vector2DFields to Vector2DFields
 		return pt;
 	}
 	
+	public static inline function distanceManhattan(a:Vector2D, b:Vector2D):Float {
+		var dx = Math.abs(a.x - b.x);
+		var dy = Math.abs(a.y - b.y);
+		return dx + dy;
+	}
+	
 	public static inline function distance(a:Vector2D, b:Vector2D):Float {
 		return Math.sqrt(distanceSqr(a, b));
 	}
