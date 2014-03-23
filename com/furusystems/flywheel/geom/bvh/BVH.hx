@@ -1,6 +1,7 @@
 package com.furusystems.flywheel.geom.bvh;
 import com.furusystems.flywheel.geom.Vector2D;
 import com.furusystems.flywheel.geom.AABB;
+import com.furusystems.flywheel.utils.UID;
 import de.polygonal.ds.DLL;
 import de.polygonal.ds.SLL;
 
@@ -8,9 +9,11 @@ import de.polygonal.ds.SLL;
  * ...
  * @author Andreas Rønning
  */
- 
+#if fwgenerics
+@:generic
+#end
 class BVH<T:AABB> {
-	public var children:Array<BVH<T>>;
+	public var children:DLL<BVH<T>>;
 	public var holder:T;
 	public var parent:BVH<T>;
 	public var bounds:AABB;
@@ -18,20 +21,22 @@ class BVH<T:AABB> {
 	var depth:Int;
 	var threshold:Float;
 	var uid:Int = 0;
-	static var uidPool:Int = 0;
+	var testVec:Vector2D;
 	public function new(?holder:T, ?parent:BVH<T>, threshold:Float = 256) {
-		uid = uidPool++;
+		uid = UID.next();
+	
+		testVec = new Vector2D();
 		this.threshold = threshold;
 		this.parent = parent;
 		this.holder = holder;
 		if(holder!=null) holder.aabbUserData = this;
-		children = new Array<BVH<T>>();
+		children = new DLL<BVH<T>>();
 		bounds = new AABB();
 		if (parent != null) depth = parent.depth + 1;
 	}
 	
 	inline function get_hasChildren():Bool {
-		return children.length > 0;
+		return children.size() > 0;
 	}
 	
 	public function size():Int {
@@ -46,8 +51,6 @@ class BVH<T:AABB> {
 	public function toString():String {
 		return "{BVH " + hasChildren + " : " + holder + " : " + uid+"}";
 	}
-	
-	static var testVec:Vector2D = new Vector2D();
 	public function queryPt(x:Float, y:Float, scale:Float = 1, ?out:SLL<BVH<T>>):SLL<BVH<T>> 
 	{
 		if (out == null) out = new SLL<BVH<T>>();
@@ -87,7 +90,7 @@ class BVH<T:AABB> {
 		if (holder != null) { 
 			bounds.redefine(holder.position.x, holder.position.y, holder.size.x, holder.size.y);
 		}else if(hasChildren){
-			bounds.copyFrom(children[0].bounds);
+			bounds.copyFrom(children.head.val.bounds);
 		}else {
 			bounds.zero();
 		}
@@ -111,19 +114,19 @@ class BVH<T:AABB> {
 		}
 		if (holder != null) {
 			var v = new BVH<T>(holder, this);
-			children.push(v);
+			children.append(v);
 			v.calcBounds();
 			holder = null;
 		}
 		var v = new BVH<T>(n, this);
-		children.push(v);
+		children.append(v);
 		v.calcBounds();
 		
 		return v;
 	}
 	
-	public function clear():Void {
-		children = new Array<BVH<T>>();
+	public inline function clear():Void {
+		children = new DLL<BVH<T>>();
 		holder = null;
 	}
 	
