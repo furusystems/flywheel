@@ -11,6 +11,8 @@ class AABB
 	public var halfWidth:Float;
 	public var halfHeight:Float;
 	
+	public var aabbUserData:Dynamic;
+	
 	public var sizeSq(get, never):Float;
 	inline function get_sizeSq():Float {
 		return width + height;
