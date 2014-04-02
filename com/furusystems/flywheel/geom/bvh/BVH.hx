@@ -104,7 +104,6 @@ class BVH<T:AABB> {
 	
 	public function add(n:T):BVH<T> {
 		if (contains(n)) {
-			trace("Already exists");
 			return null;
 		}
 		for (c in children) {
@@ -141,7 +140,7 @@ class BVH<T:AABB> {
 	}
 	
 	
-	function remove(n:BVH<T>):Void {
+	inline function remove(n:BVH<T>):Void {
 		children.remove(n);
 		if (!hasChildren) {
 			if (parent != null) {
