@@ -145,9 +145,9 @@ class BVH<T:AABB> {
 		if (!hasChildren) {
 			if (parent != null) {
 				parent.remove(this);
-				return;
+			}else {
+				calcBounds();
 			}
 		}
-		calcBounds();
 	}
 }
