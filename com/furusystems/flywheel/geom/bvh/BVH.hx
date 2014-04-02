@@ -140,14 +140,14 @@ class BVH<T:AABB> {
 	}
 	
 	
-	inline function remove(n:BVH<T>):Void {
+	function remove(n:BVH<T>):Void {
 		children.remove(n);
 		if (!hasChildren) {
 			if (parent != null) {
 				parent.remove(this);
-			}else {
-				calcBounds();
+				return;
 			}
 		}
+		calcBounds();
 	}
 }
