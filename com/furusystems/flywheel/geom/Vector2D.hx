@@ -220,8 +220,10 @@ abstract Vector2D(Vector2DFields) from Vector2DFields to Vector2DFields
 	}
 	
 	public inline function rotate(angleRad:Float):Vector2D {
-		var sin:Float = Math.sin(angleRad);
-		var cos:Float = Math.cos(angleRad);
+		return rotateSinCos(Math.sin(angleRad), Math.cos(angleRad));
+	}
+	
+	public inline function rotateSinCos(sin:Float,cos:Float):Vector2D {
 		var px:Float = x * cos - y * sin; 
 		var py:Float = x * sin + y * cos;
 		return setTo(px, py);
