@@ -1,12 +1,10 @@
 package com.furusystems.flywheel;
 import com.furusystems.flywheel.fsm.IState;
-import com.furusystems.flywheel.input.Input;
-import com.furusystems.flywheel.sound.GameAudio;
+import com.furusystems.games.rendering.lime.Graphics;
+import lime.Lime;
+//import com.furusystems.flywheel.input.Input;
+//import com.furusystems.flywheel.sound.GameAudio;
 import com.furusystems.flywheel.metrics.Time;
-import flash.display.Stage;
-import flash.errors.Error;
-import flash.events.Event;
-import flash.Lib;
 
 /**
  * A flywheel 
@@ -17,67 +15,67 @@ class Core
 
 	var _currentState:IState;
 	var _paused:Bool;
-	public var input:Input;
+	//public var input:Input;
 	public var renderer:Dynamic;
 	public var time:Time;
-	public var stage:Stage;
-	public var audio:GameAudio;
-	public function new(stage:Stage, timeStep:Int = -1) 
+	public var limeInstance:Lime;
+	//public var stage:Stage;
+	//public var audio:GameAudio;
+	public function new(timeStep:Int = -1) 
 	{
-		this.stage = stage;
 		time = new Time();
 		time.timeStep = timeStep;
 		
 		_currentState = null;
 		_paused = true;
-		audio = new GameAudio();
+		//audio = new GameAudio();
 		renderer = null;
-		input = new Input();
-		input.bind(stage);
-		stage.addEventListener(Event.DEACTIVATE, onDeactivated);
+		//input = new Input();
+		//input.bind(stage);
 	}
 	
-	private function onDeactivated(e:Event):Void 
-	{
-		setPaused(true);
-		stage.removeEventListener(Event.DEACTIVATE, onDeactivated);
-		stage.addEventListener(Event.ACTIVATE, onActivated);
+	function ready (lime:Lime):Void {
+		this.limeInstance = lime;
+		limeInstance.window.on_resize(onWindowResize);
+		onWindowResize(lime);
+		prepare();
 	}
-	
-	private function onActivated(e:Event):Void 
-	{
-		setPaused(false);
-		stage.addEventListener(Event.DEACTIVATE, onDeactivated);
-		stage.removeEventListener(Event.ACTIVATE, onActivated);
-	}
-	
 	
 	public function setPaused(?newValue:Bool):Bool {
 		if (newValue == null) _paused = !_paused;
 		else _paused = newValue;
-		audio.setPaused(_paused);
+		//audio.setPaused(_paused);
 		return _paused;
+	}
+	public function prepare():Void {
+		
 	}
 	
 	public function getPaused():Bool {
 		return _paused;
 	}
 	
+	function onWindowResize(lime:Lime) {
+		Graphics.reinit();
+		Graphics.setViewport2D(lime.config.width, lime.config.height);
+	}
+	
 	public function start():Void {
 		_paused = false;
-		if (_currentState == null) throw new Error("Cannot start without valid state");
-		stage.addEventListener(Event.ENTER_FRAME, update);
+		if (_currentState == null) throw "Cannot start without valid state";
+		//stage.addEventListener(Event.ENTER_FRAME, update);
 	}
 	public function stop():Void {
 		_paused = true;
-		stage.removeEventListener(Event.ENTER_FRAME, update);
+		//stage.removeEventListener(Event.ENTER_FRAME, update);
 	}
 	
 	
-	public function update(e:Event):Void {
-		input.update(this);
+	public function render():Void {
+		//input.update(this);
 		time.update();
-		audio.update(this.time.deltaS);
+		Graphics.time = time.clockS;
+		//audio.update(this.time.deltaS);
 		if (_paused) return;
 		
 		_currentState.update();
@@ -106,7 +104,7 @@ class Core
 	public function dispose():Void {
 		stop();
 		state = null;
-		input.release();
+		//input.release();
 	}
 	
 	public var state(get_state, set_state):IState;
