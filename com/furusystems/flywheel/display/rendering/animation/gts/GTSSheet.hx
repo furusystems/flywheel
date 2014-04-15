@@ -2,21 +2,13 @@ package com.furusystems.flywheel.display.rendering.animation.gts;
 import com.furusystems.flywheel.utils.data.SizedHash;
 import com.furusystems.flywheel.display.rendering.animation.ISpriteSequence;
 import com.furusystems.flywheel.display.rendering.animation.ISpriteSheet;
-import com.furusystems.flywheel.display.rendering.utils.PNGDecoder;
-import com.furusystems.system.BitmapManager;
-import flash.geom.Point;
-import format.png.Reader;
-import format.png.Tools;
+import com.furusystems.games.rendering.lime.materials.PNGTexture;
+import com.furusystems.games.rendering.lime.tiles.LimeTileSheet;
 import haxe.io.Bytes;
 import haxe.io.BytesInput;
 import haxe.Json;
-import flash.display.Bitmap;
-import flash.display.BitmapData;
-import flash.display.Loader;
-import openfl.Assets;
-import openfl.display.Tilesheet;
-import flash.errors.Error;
-import flash.utils.ByteArray;
+import lime.utils.Assets;
+import lime.utils.ByteArray;
 #if threading
 import cpp.vm.Mutex;
 #end
@@ -29,49 +21,37 @@ import cpp.vm.Mutex;
 
 class GTSSheet implements ISpriteSheet
 {
-	public var texture:BitmapData;
-	public var textureset:SizedHash<BitmapData>;
-	
+	public var texture:PNGTexture;
 	public var sequences:SizedHash<ISpriteSequence>; //I keep a stack of sequences used with this spritesheet for possible future convenience
-	
-	public var tilesheet:Tilesheet;
-	
+	public var tilesheet:LimeTileSheet;
 	private var frameIndexBase:Int;
 	
 	public var _nativeResolutionX:Int;
 	public var _nativeResolutionY:Int;
 	public var parsedDescriptor:Dynamic;
-	public var protected:Bool;
 	public var path:String;
 	
 	public  var halfRes:Bool;
-	public function new(assetPath:String, bytes:ByteArray, protected:Bool = false, halfRes:Bool = false):Void {
-		this.halfRes = halfRes;
-		this.protected = protected;
+	public function new(assetPath:String):Void {
 		this.path = assetPath;
-		#if threading
-		var m:Mutex = new Mutex();
-		m.acquire();
-		#end
 		
 		sequences = new SizedHash<ISpriteSequence>();
-		textureset = new SizedHash<BitmapData>();
-		
-		
 		
 		trace("Reading GTS: " + assetPath);
+		var bytes:ByteArray = Assets.getBytes(assetPath);
 		
 		bytes.uncompress();
 		bytes.position = 0;
 		var version:String = bytes.readUTF();
 		trace("\tGTS version: " + version);
 		if (version != "2.0") {
-			throw new Error("Outdated GTS format");
+			throw "Outdated GTS format";
 		}
 		var json:String = bytes.readUTF();
 		parsedDescriptor = Json.parse(json);
 		
 		var imgCount:Int = bytes.readShort();
+		trace("imagecount: " + imgCount);
 		
 		//find the texture with the resolution we want
 		_nativeResolutionX = _nativeResolutionY = halfRes?Std.int(parsedDescriptor.resolution * 0.5):Std.int(parsedDescriptor.resolution);
@@ -81,10 +61,10 @@ class GTSSheet implements ISpriteSheet
 			var dims:Int = bytes.readShort();
 			var filesize:Int = bytes.readUnsignedInt();
 			if(dims==_nativeResolutionX){
-				var imgBytes:ByteArray = new ByteArray();
+				var imgBytes = new ByteArray();
 				bytes.readBytes(imgBytes, 0, filesize);
 				imgBytes.position = 0;
-				texture = addTexture(imgBytes);
+				texture = PNGTexture.fromBytes(imgBytes);
 				imgBytes.clear();
 				txFound = true;
 				break;
@@ -92,23 +72,12 @@ class GTSSheet implements ISpriteSheet
 				bytes.position += filesize;
 			}
 		}
-		if (!txFound) {
-			throw new Error("No texture of resolution " + _nativeResolutionX + " found for GTS: " + assetPath);
-		}
-
-		
 		
 		for (i in 0...parsedDescriptor.sequences.length) {
 			addSequence(GTSSequence.fromObject(parsedDescriptor.sequences[i], halfRes));
 		}
-		var bmd:BitmapData = getNativeRes();
-		tilesheet = createTileSheet(bmd);
 		
-		#if (dumpbits && !flash)
-		for (t in textureset) {
-			t.dumpBits();
-		}
-		#end
+		tilesheet = createTileSheet(texture);
 		
 		bytes.clear();
 		
@@ -121,49 +90,16 @@ class GTSSheet implements ISpriteSheet
 		parsedDescriptor = null;
 		sequences = null;
 		texture.dispose();
-		for (t in textureset) {
-			t.dispose();
-		}
 	}
 	
-	public function createTileSheet(tex:BitmapData):Tilesheet 
+	public function createTileSheet(tex:PNGTexture):LimeTileSheet
 	{
-		var out:Tilesheet = new Tilesheet(tex);
+		var out = new LimeTileSheet();
 		frameIndexBase = 0;
 		for (s in sequences) {
-			applySequenceToSheet(out, s);
+			applySequenceToSheet(tex, out, s);
 		}
-		#if dumpbits
-		tex.dumpBits();
-		#end
 		return out;
-	}
-	
-	public function getNativeRes():BitmapData 
-	{
-		if (textureset.size == 1) {
-			for (t in textureset) {
-				return t;
-			}
-		}else{
-			var name:String = "texture_" + _nativeResolutionX;
-			return textureset.get(name);
-		}
-		return null;
-	}
-	
-	private function addTexture(bytearray:ByteArray):BitmapData 
-	{
-		#if cpp
-		var loader:Loader = new Loader();
-		loader.loadBytes(bytearray);
-		var bmd:BitmapData = cast(loader.content, Bitmap).bitmapData;
-		#else
-		var bmd:BitmapData = PNGDecoder.decodeImage(bytearray);
-		#end
-		
-		textureset.set("texture_" + bmd.width, bmd);
-		return BitmapManager.register("texture_" + bmd.width, bmd);
 	}
 	
 	/**
@@ -178,12 +114,14 @@ class GTSSheet implements ISpriteSheet
 		return s;
 	}
 	
-	private function applySequenceToSheet(tilesheet:Tilesheet, s:ISpriteSequence):Void {
+	private function applySequenceToSheet(tex:PNGTexture, tilesheet:LimeTileSheet, s:ISpriteSequence):Void {
 		var ss:GTSSequence = cast s;
+		trace("Adding sequence: " + ss.name);
 		for (f in ss.frames) {
-			tilesheet.addTileRect(f, f.center);
-			f.tileSheetIndex = frameIndexBase;
-			frameIndexBase++;
+			var t = tilesheet.addTile(tex.width, tex.height, f.x, f.y, f.width, f.height);
+			//trace("Added tile: " + t.index);
+			f.tileSheetIndex = t.index;
+			//frameIndexBase++;
 		}
 		ss.refreshInfo();
 	}
@@ -193,7 +131,7 @@ class GTSSheet implements ISpriteSheet
 		if (sequences.exists(name)) {
 			return sequences.get(name);
 		}
-		throw new Error("No sequence by name: " + name);
+		throw "No sequence by name: " + name;
 	}
 	
 }

@@ -2,15 +2,13 @@ package com.furusystems.flywheel.input;
 import com.furusystems.flywheel.Core;
 import com.furusystems.flywheel.events.Signal1;
 import com.furusystems.flywheel.geom.Vector2D;
-import flash.display.InteractiveObject;
-import flash.events.MouseEvent;
-import flash.geom.Point;
+import lime.InputHandler.MouseEvent;
 
 /**
  * ...
  * @author Andreas Rønning
  */
-class MouseManager implements IInputManager
+class MouseManager
 {
 	var tempPosition:Vector2D;
 	public var clickStartPosition:Vector2D;
@@ -53,122 +51,39 @@ class MouseManager implements IInputManager
 		onDoubleClick = new Signal1<MouseEvent>();
 	}
 	
-	function mouseMoveHandler(e:MouseEvent):Void 
+	public function mouseMoveHandler(e:MouseEvent):Void 
 	{
 		updateMousePos(e);
 		onMouseMove.dispatch(e);
 	}
 	
 	inline function updateMousePos(e:MouseEvent):Void {
-		positionDelta.x = e.stageX - position.x;
-		positionDelta.y = e.stageY - position.y;
-		position.x = e.stageX;
-		position.y = e.stageY;
+		positionDelta.x = e.x - position.x;
+		positionDelta.y = e.y - position.y;
+		position.x = e.x;
+		position.y = e.y;
 	}
 	
-	function clickHandler(e:MouseEvent):Void 
+	public function clickHandler(e:MouseEvent):Void 
 	{
 		updateMousePos(e);
-		switch(e.type) {
-			case MouseEvent.CLICK:
-				leftMouse = false;
-				onClick.dispatch(e);
-			#if (desktop || air3)
-			case MouseEvent.RIGHT_CLICK:
-				rightMouse = false;
-				onRightClick.dispatch(e);
-			case MouseEvent.MIDDLE_CLICK:
-				middleMouse = false;
-				onMiddleClick.dispatch(e);
-			#end
-		}
 	}
 	
-	function mouseUpHandler(e:MouseEvent):Void 
+	public function mouseUpHandler(e:MouseEvent):Void 
 	{
 		updateMousePos(e);
-		switch(e.type) {
-			case MouseEvent.MOUSE_UP:
-				leftMouse = false;
-				onMouseUp.dispatch(e);
-			#if (desktop || air3)
-			case MouseEvent.RIGHT_MOUSE_UP:
-				rightMouse = false;
-				onRightMouseUp.dispatch(e);
-			case MouseEvent.MIDDLE_MOUSE_UP:
-				middleMouse = false;
-				onMiddleMouseUp.dispatch(e);
-			#end
-		}
 	}
 	
-	function mouseDownHandler(e:MouseEvent):Void 
+	public function mouseDownHandler(e:MouseEvent):Void 
 	{
 		updateMousePos(e);
-		clickStartPosition.copyFrom(position);
-		switch(e.type) {
-			case MouseEvent.MOUSE_DOWN:
-				leftMouse = true;
-				onMouseDown.dispatch(e);
-			#if (desktop || air3)
-			case MouseEvent.RIGHT_MOUSE_DOWN:
-				rightMouse = true;
-				onRightMouseDown.dispatch(e);
-			case MouseEvent.MIDDLE_MOUSE_DOWN:
-				middleMouse = true;
-				onMiddleMouseDown.dispatch(e);
-			#end
-		}
 	}
 	
-	/* INTERFACE com.furusystems.flywheel.input.IInputManager */
 	public function update(?game:Core):Void 
 	{
 	}
 	
-	public function bind(source:InteractiveObject):Void {
-		reset();
-		source.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
-		source.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
-		source.addEventListener(MouseEvent.CLICK, clickHandler);
-		source.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-		source.addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
-		source.addEventListener(MouseEvent.DOUBLE_CLICK, doubleClickHandler);
-		#if (desktop || air3)
-		source.addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, mouseDownHandler);
-		source.addEventListener(MouseEvent.RIGHT_MOUSE_UP, mouseUpHandler);
-		source.addEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, mouseDownHandler);
-		source.addEventListener(MouseEvent.MIDDLE_MOUSE_UP, mouseUpHandler);
-		source.addEventListener(MouseEvent.RIGHT_CLICK, clickHandler);
-		source.addEventListener(MouseEvent.MIDDLE_CLICK, clickHandler);
-		#end
-	}
-	
-	private function doubleClickHandler(e:MouseEvent):Void 
-	{
-		updateMousePos(e);
-		onDoubleClick.dispatch(e);
-	}
-	public function release(source:InteractiveObject):Void {
-		reset();
-		source.removeEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
-		source.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
-		source.removeEventListener(MouseEvent.CLICK, clickHandler);
-		source.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-		source.removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
-		source.removeEventListener(MouseEvent.DOUBLE_CLICK, doubleClickHandler);
-
-		#if (desktop || air3)
-		source.removeEventListener(MouseEvent.RIGHT_MOUSE_DOWN, mouseDownHandler);
-		source.removeEventListener(MouseEvent.RIGHT_MOUSE_UP, mouseUpHandler);
-		source.removeEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, mouseDownHandler);
-		source.removeEventListener(MouseEvent.MIDDLE_MOUSE_UP, mouseUpHandler);
-		source.removeEventListener(MouseEvent.RIGHT_CLICK, clickHandler);
-		source.removeEventListener(MouseEvent.MIDDLE_CLICK, clickHandler);
-		#end
-	}
-	
-	private function mouseWheelHandler(e:MouseEvent):Void 
+	public function mouseWheelHandler(e:MouseEvent):Void 
 	{
 		onMouseWheel.dispatch(e);
 	}

@@ -7,7 +7,7 @@ import com.furusystems.flywheel.Core;
  */
 interface IState
 {
-	var game:Core;
+	var core:Core;
 	function enter():Void;
 	function update():Void;
 	function render():Void;

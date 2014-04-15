@@ -1,9 +1,10 @@
 package com.furusystems.flywheel;
 import com.furusystems.flywheel.fsm.IState;
+import com.furusystems.flywheel.input.Input;
 import com.furusystems.games.rendering.lime.Graphics;
+import lime.InputHandler.MouseEvent;
+import lime.InputHandler.TouchEvent;
 import lime.Lime;
-//import com.furusystems.flywheel.input.Input;
-//import com.furusystems.flywheel.sound.GameAudio;
 import com.furusystems.flywheel.metrics.Time;
 
 /**
@@ -12,15 +13,19 @@ import com.furusystems.flywheel.metrics.Time;
  */
 class Core
 {
-
 	var _currentState:IState;
 	var _paused:Bool;
-	//public var input:Input;
+	public var input:Input;
 	public var renderer:Dynamic;
 	public var time:Time;
-	public var limeInstance:Lime;
+	var limeInstance:Lime;
 	//public var stage:Stage;
 	//public var audio:GameAudio;
+	
+	public var config(get, never):LimeConfig;
+	inline function get_config():LimeConfig {
+		return limeInstance.config;
+	}
 	public function new(timeStep:Int = -1) 
 	{
 		time = new Time();
@@ -30,8 +35,7 @@ class Core
 		_paused = true;
 		//audio = new GameAudio();
 		renderer = null;
-		//input = new Input();
-		//input.bind(stage);
+		input = new Input();
 	}
 	
 	function ready (lime:Lime):Void {
@@ -63,39 +67,57 @@ class Core
 	public function start():Void {
 		_paused = false;
 		if (_currentState == null) throw "Cannot start without valid state";
-		//stage.addEventListener(Event.ENTER_FRAME, update);
 	}
 	public function stop():Void {
 		_paused = true;
-		//stage.removeEventListener(Event.ENTER_FRAME, update);
+	}
+	
+	function ontouchbegin( e:TouchEvent ) { 
+		
+		input.touch.touchBeginHandler(e);
+	}
+	function ontouchmove( e:TouchEvent ) {
+		input.touch.touchMoveHandler(e);
+	}
+	function ontouchend( e:TouchEvent ) {
+		input.touch.touchEndHandler(e);
+	}
+	
+	function onmousedown(e:MouseEvent) {
+		input.mouse.mouseDownHandler(e);
+	}
+	function onmouseup(e:MouseEvent) {
+		input.mouse.mouseUpHandler(e);
+	}
+	function onmousemove(e:MouseEvent) {
+		input.mouse.mouseMoveHandler(e);
 	}
 	
 	
 	public function render():Void {
-		//input.update(this);
-		time.update();
-		Graphics.time = time.clockS;
+		input.update(this);
 		//audio.update(this.time.deltaS);
 		if (_paused) return;
-		
+		time.update();
+		Graphics.time = time.clockS;
 		_currentState.update();
 		_currentState.render();
 	}
 	
-	@:noCompletionprivate function get_state():IState {
+	public function getState():IState {
 		return _currentState;
 	}
 	
-	@:noCompletion private function set_state(value:IState):IState {
+	public function setState(value:IState):IState {
 		if (value == _currentState) return _currentState;
 		if (_currentState != null) {
 			_currentState.exit();
-			_currentState.game = null;
+			_currentState.core = null;
 		}
 		_currentState = value;
 		if (_currentState != null) {
 			time.stateCurrentTimeMS = 0;
-			_currentState.game = this;
+			_currentState.core = this;
 			_currentState.enter();
 		}
 		return _currentState;
@@ -103,10 +125,7 @@ class Core
 	
 	public function dispose():Void {
 		stop();
-		state = null;
-		//input.release();
+		setState(null);
 	}
-	
-	public var state(get_state, set_state):IState;
 	
 }

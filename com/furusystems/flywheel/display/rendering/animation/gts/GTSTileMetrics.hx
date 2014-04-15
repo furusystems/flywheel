@@ -1,7 +1,6 @@
 package com.furusystems.flywheel.display.rendering.animation.gts;
+import com.furusystems.flywheel.geom.Rectangle;
 import com.furusystems.flywheel.geom.Vector2D;
-import flash.geom.Point;
-import flash.geom.Rectangle;
 
 /**
  * ...

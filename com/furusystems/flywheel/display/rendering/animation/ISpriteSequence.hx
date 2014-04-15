@@ -1,5 +1,5 @@
 package com.furusystems.flywheel.display.rendering.animation;
-import flash.geom.Rectangle;
+import com.furusystems.flywheel.geom.Rectangle;
 
 /**
  * ...

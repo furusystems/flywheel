@@ -2,8 +2,7 @@ package com.furusystems.flywheel.display.rendering.animation.gts;
 import com.furusystems.flywheel.display.rendering.animation.ISpriteSequence;
 import com.furusystems.flywheel.display.rendering.animation.ISpriteSheet;
 import com.furusystems.flywheel.display.rendering.animation.LoopStyle;
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import com.furusystems.flywheel.geom.Rectangle;
 
 
 /**
