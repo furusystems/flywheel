@@ -18,25 +18,24 @@ class Music implements IMusic
 	private var _lastVolume:Float;
 	private var _lastLoop:Bool;
 	var owner:GameMusic;
-	var currentMusicHandle:Sound;
+	var musicName:String;
 		
 	public function new(owner:GameMusic) 
 	{
+		musicName = 'music';
 		this.owner = owner;
 	}
 	
-	private function get_isPlaying():Bool
+	inline function get_isPlaying():Bool
 	{
-		if (currentMusicHandle == null) return false;
-		return currentMusicHandle.playing;
+		if (musicName == null) return false;
+		return owner.audio.playing(musicName);
 	}
 	
-	private function get_path():String 
+	inline function get_path():String 
 	{
 		return _path;
 	}
-	
-	/* INTERFACE com.furusystems.flywheel.sound.IMusic */
 	
 	public function play(path:String, volume:Float, loop:Bool = true, offset:Float = 0):Void 
 	{
@@ -44,37 +43,22 @@ class Music implements IMusic
 			stop();
 		}
 		_lastLoop = loop;
-		currentMusicHandle = owner.audio.limeAudioHandler.create("music", path, true);
-		if (currentMusicHandle == null) {
-			trace("Couldnt load sound from path: " + path);
-			return;
-		}
-		
-		currentMusicHandle.play(loop?-1:1, offset);
-		currentMusicHandle.volume = volume;
+		owner.audio.create(musicName, path, true);
+		//if (_lastLoop) owner.audio.loop(musicName);
+		owner.audio.play(musicName, _lastLoop?9999:1, offset);
+		owner.audio.volume(musicName, volume);
 		_path = path;
 	}
 	
 	function play2(path:String, startTime:Float, volume:Float, loop:Bool = true):Void
 	{
-		
 		if (isPlaying) {
 			stop();
 		}
 		_lastLoop = loop;
-		
-		currentMusicHandle = owner.audio.limeAudioHandler.create("music", path, true);
-		
-		if (currentMusicHandle == null) {
-			#if debug
-			trace("Couldnt load sound from path: " + path);
-			#end
-			return;
-		}
-		
-		trace("play");
-		currentMusicHandle.play(loop?-1:1, startTime);
-		currentMusicHandle.volume = volume;
+		owner.audio.create(musicName, path, true);
+		owner.audio.play(musicName, _lastLoop?9999:1, startTime);
+		owner.audio.volume(musicName, volume);
 		_path = path;
 	}
 	
@@ -82,16 +66,14 @@ class Music implements IMusic
 	{
 		if (isPlaying)
 		{ 
-			trace("Stop");
-			currentMusicHandle.stop();
-			isPlaying = false;
+			owner.audio.stop(musicName);
 		}
 	}
 	
 	public function setVolume(musicVolume:Float):Void 
 	{
 		if (isPlaying) {
-			currentMusicHandle.volume = musicVolume;
+			owner.audio.volume(musicName, musicVolume);
 		}
 	}
 	
@@ -99,15 +81,10 @@ class Music implements IMusic
 	public function setPaused(b:Bool):Void 
 	{
 		trace("pause music: " + b);
-		if (currentMusicHandle == null)
-		{
-			trace("music channel is null");
-			return;
-		}
 		if (b) {
-			_lastPlayTime = currentMusicHandle.position;
-			_lastVolume = currentMusicHandle.volume;
-			currentMusicHandle.stop();
+			_lastPlayTime = owner.audio.position(musicName);
+			_lastVolume = owner.audio.volume(musicName);
+			owner.audio.stop(musicName);
 		}else {
 			trace("resuming music at: " + _lastPlayTime, _lastLoop);
 			play2(_path, _lastPlayTime, _lastVolume, _lastLoop);

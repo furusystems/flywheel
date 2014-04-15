@@ -65,7 +65,7 @@ import com.furusystems.flywheel.sound.lime.Music;
 		m.setPaused(p);
 	}
 	
-	public function playMusic(streamPath:String, volume:Float = -1, offset:Float = 0, looping:Bool = false, ?transition:MusicTransition, duration:Float = 2, grace:Float = 0.5):Void
+	public function playMusic(streamPath:String, volume:Float = -1, offset:Float = 0, looping:Bool = true, ?transition:MusicTransition, duration:Float = 2, grace:Float = 0.5):Void
 	{
 		if (streamPath == currentMusic || streamPath == nextMusic) return;
 		if (!isEnabled()) return;
@@ -116,12 +116,12 @@ import com.furusystems.flywheel.sound.lime.Music;
 	
 	function cutTo(streamPath:String, volume:Float) 
 	{
-		//trace("Cut to: " + streamPath+", "+volume);
+		trace("Cut to: " + streamPath+", "+volume);
 		currentTransition = null;
 		if(streamPath!=null){
 			musicVolume = volume;
 			currentMusic = streamPath;
-			//trace("Cut to "+nextPlayOffset);
+			trace("Cut to "+nextPlayOffset+", "+loopNext);
 			m.play(streamPath, volume, loopNext, nextPlayOffset);
 		}else {
 			m.stop();

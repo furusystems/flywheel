@@ -17,7 +17,6 @@ class Core
 	var _currentState:IState;
 	var _paused:Bool;
 	public var input:Input;
-	public var renderer:Dynamic;
 	public var time:Time;
 	var limeInstance:Lime;
 	public var audio:GameAudio;
@@ -33,7 +32,6 @@ class Core
 		
 		_currentState = null;
 		_paused = true;
-		renderer = null;
 		input = new Input();
 	}
 	

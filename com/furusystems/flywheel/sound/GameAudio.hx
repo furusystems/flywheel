@@ -1,6 +1,7 @@
 package com.furusystems.flywheel.sound;
 import com.furusystems.flywheel.Core;
 import lime.AudioHandler;
+import lime.helpers.AudioHelper.Sound;
 import lime.Lime;
 
 
@@ -11,7 +12,7 @@ import lime.Lime;
 
 class GameAudio 
 {
-	public var limeAudioHandler:AudioHandler;
+	var limeAudioHandler:AudioHandler;
 	public var fx:GameFX;
 	public var music:GameMusic;
 	
@@ -21,6 +22,32 @@ class GameAudio
 		fx = new GameFX(this);
 		music = new GameMusic(this);
 	}
+	
+	public inline function create(name:String, path:String, isMusic:Bool = false):Sound {
+		return limeAudioHandler.create(name, path, isMusic);
+	}
+	public inline function stop(name:String) {
+		limeAudioHandler.stop(name);
+	}
+	public inline function volume(name:String, ?vol:Float):Float {
+		return limeAudioHandler.volume(name, vol);
+	}
+	public inline function playing(name:String):Bool {
+		return limeAudioHandler.playing(name);
+	}
+	public inline function play(name:String, count:Int, offset:Float = 0.0):Void {
+		return limeAudioHandler.play(name, count, offset);
+	}
+	public inline function position(name:String, ?offset:Float):Float {
+		return limeAudioHandler.position(name, offset);
+	}
+	public inline function loop(name:String){
+		return limeAudioHandler.loop(name);
+	}
+	public inline function sound(name:String):Sound {
+		return limeAudioHandler.sound(name);
+	}
+	
 	public function update(deltaS:Float):Void
 	{
 		fx.update(deltaS);
