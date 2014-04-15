@@ -3,24 +3,13 @@ import com.furusystems.flywheel.Core;
 import com.furusystems.flywheel.events.Signal1;
 import com.furusystems.flywheel.sound.GameAudio;
 import com.furusystems.flywheel.sound.IMusic;
-
-#if (android && soundmanager)
-import com.furusystems.flywheel.sound.android.AndroidMusic;
-#else
-import com.furusystems.flywheel.sound.ofl.Music;
-#end
+import com.furusystems.flywheel.sound.lime.Music;
 
 /**
  * ...
  * @author Andreas Rønning
  */
-#if ios
-@:build( com.furusystems.flywheel.preprocessing.Audio.buildMusicPaths("//Users/johndavies/Documents/PaperPals/branches/openfl/assets/audio/music") ) class GameMusic 
-#elseif openfl
 @:build( com.furusystems.flywheel.preprocessing.Audio.buildMusicPaths("./assets/audio/music") ) class GameMusic 
-#else
-class GameMusic 
-#end
 {
 	public var currentMusic:String;
 	public var nextMusic:String;
@@ -40,7 +29,7 @@ class GameMusic
 	var transitionTargetVolume:Float;
 	var transitionResultVolume:Float;
 	
-	var audio:GameAudio;
+	public var audio:GameAudio;
 	var targetMusicVolume:Float;
 	var musicVolume:Float;
 	var paused:Bool;
@@ -54,12 +43,8 @@ class GameMusic
 	
 	public function new(audio:GameAudio) 
 	{
-		#if (android && soundmanager)
-		m = new AndroidMusic();
-		#else
-		m = new Music();
-		#end
 		this.audio = audio;
+		m = new Music(this);
 		onTransitionComplete = new Signal1<GameMusic>();
 		targetMusicVolume = musicVolume = masterVolume = masterMasterVolume = 1;
 		currentMusic = "";
@@ -82,7 +67,6 @@ class GameMusic
 	
 	public function playMusic(streamPath:String, volume:Float = -1, offset:Float = 0, looping:Bool = false, ?transition:MusicTransition, duration:Float = 2, grace:Float = 0.5):Void
 	{
-		#if !music return #end
 		if (streamPath == currentMusic || streamPath == nextMusic) return;
 		if (!isEnabled()) return;
 		if (transition == null) transition = MusicTransition.cut;
@@ -132,7 +116,6 @@ class GameMusic
 	
 	function cutTo(streamPath:String, volume:Float) 
 	{
-		#if !music return; #end
 		//trace("Cut to: " + streamPath+", "+volume);
 		currentTransition = null;
 		if(streamPath!=null){

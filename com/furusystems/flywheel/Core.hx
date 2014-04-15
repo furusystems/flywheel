@@ -1,6 +1,7 @@
 package com.furusystems.flywheel;
 import com.furusystems.flywheel.fsm.IState;
 import com.furusystems.flywheel.input.Input;
+import com.furusystems.flywheel.sound.GameAudio;
 import com.furusystems.games.rendering.lime.Graphics;
 import lime.InputHandler.MouseEvent;
 import lime.InputHandler.TouchEvent;
@@ -19,8 +20,7 @@ class Core
 	public var renderer:Dynamic;
 	public var time:Time;
 	var limeInstance:Lime;
-	//public var stage:Stage;
-	//public var audio:GameAudio;
+	public var audio:GameAudio;
 	
 	public var config(get, never):LimeConfig;
 	inline function get_config():LimeConfig {
@@ -33,13 +33,13 @@ class Core
 		
 		_currentState = null;
 		_paused = true;
-		//audio = new GameAudio();
 		renderer = null;
 		input = new Input();
 	}
 	
 	function ready (lime:Lime):Void {
 		this.limeInstance = lime;
+		audio = new GameAudio(limeInstance);
 		limeInstance.window.on_resize(onWindowResize);
 		onWindowResize(lime);
 		prepare();
@@ -48,7 +48,7 @@ class Core
 	public function setPaused(?newValue:Bool):Bool {
 		if (newValue == null) _paused = !_paused;
 		else _paused = newValue;
-		//audio.setPaused(_paused);
+		audio.setPaused(_paused);
 		return _paused;
 	}
 	public function prepare():Void {
@@ -95,11 +95,11 @@ class Core
 	
 	
 	public function render():Void {
-		input.update(this);
-		//audio.update(this.time.deltaS);
-		if (_paused) return;
 		time.update();
 		Graphics.time = time.clockS;
+		input.update(this);
+		audio.update(time.deltaS);
+		if (_paused) return;
 		_currentState.update();
 		_currentState.render();
 	}

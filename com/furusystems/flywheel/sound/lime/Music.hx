@@ -1,14 +1,7 @@
 package com.furusystems.flywheel.sound.lime;
 import com.furusystems.flywheel.sound.IMusic;
-import flash.net.URLRequest;
-#if openfl
-import openfl.Assets;
-#elseif lime
+import lime.helpers.AudioHelper.Sound;
 import lime.utils.Assets;
-#end
-import flash.media.Sound;
-import flash.media.SoundChannel;
-import flash.media.SoundTransform;
 
 
 /**
@@ -16,24 +9,26 @@ import flash.media.SoundTransform;
  * @author Andreas Rønning
  */
 
-class LimeMusic implements IMusic
+class Music implements IMusic
 {
-	public var channel:SoundChannel;
 	public var isPlaying(get_isPlaying, null):Bool;
 	public var path(get_path, null):String;
 	private var _path:String;
 	private var _lastPlayTime:Float;
 	private var _lastVolume:Float;
 	private var _lastLoop:Bool;
+	var owner:GameMusic;
+	var currentMusicHandle:Sound;
 		
-	public function new() 
+	public function new(owner:GameMusic) 
 	{
-		channel = null;
+		this.owner = owner;
 	}
 	
 	private function get_isPlaying():Bool
 	{
-		return (channel != null);
+		if (currentMusicHandle == null) return false;
+		return currentMusicHandle.playing;
 	}
 	
 	private function get_path():String 
@@ -45,52 +40,41 @@ class LimeMusic implements IMusic
 	
 	public function play(path:String, volume:Float, loop:Bool = true, offset:Float = 0):Void 
 	{
-		#if !music return #end
 		if (isPlaying) {
 			stop();
 		}
 		_lastLoop = loop;
-		#if openfl
-		var s:Sound = Assets.getSound(path, false);
-		#else
-		var s:Sound = new Sound(new URLRequest(path));
-		#end
-		if (s == null) {
+		currentMusicHandle = owner.audio.limeAudioHandler.create("music", path, true);
+		if (currentMusicHandle == null) {
 			trace("Couldnt load sound from path: " + path);
 			return;
 		}
-		trace("Play music of length: "+s.length);
 		
-		channel = s.play(offset, loop ? 9999 : 0, new SoundTransform(volume));
-		isPlaying = true;
+		currentMusicHandle.play(loop?-1:1, offset);
+		currentMusicHandle.volume = volume;
 		_path = path;
 	}
 	
 	function play2(path:String, startTime:Float, volume:Float, loop:Bool = true):Void
 	{
-		#if !music return #end
+		
 		if (isPlaying) {
 			stop();
 		}
 		_lastLoop = loop;
 		
-		#if debug
-		trace("play music: " + path);
-		#end
-		#if openfl
-		var s:Sound = Assets.getSound(path, false);
-		#else
-		var s:Sound = new Sound(new URLRequest(path));
-		#end
-		if (s == null) {
+		currentMusicHandle = owner.audio.limeAudioHandler.create("music", path, true);
+		
+		if (currentMusicHandle == null) {
 			#if debug
 			trace("Couldnt load sound from path: " + path);
 			#end
 			return;
 		}
 		
-		channel = s.play(startTime, loop ? 9999 : 0, new SoundTransform(volume));
-		isPlaying = true;
+		trace("play");
+		currentMusicHandle.play(loop?-1:1, startTime);
+		currentMusicHandle.volume = volume;
 		_path = path;
 	}
 	
@@ -99,8 +83,7 @@ class LimeMusic implements IMusic
 		if (isPlaying)
 		{ 
 			trace("Stop");
-			channel.stop();
-			channel = null;
+			currentMusicHandle.stop();
 			isPlaying = false;
 		}
 	}
@@ -108,9 +91,7 @@ class LimeMusic implements IMusic
 	public function setVolume(musicVolume:Float):Void 
 	{
 		if (isPlaying) {
-			var st:SoundTransform = channel.soundTransform;
-			st.volume = musicVolume;
-			channel.soundTransform = st;
+			currentMusicHandle.volume = musicVolume;
 		}
 	}
 	
@@ -118,16 +99,15 @@ class LimeMusic implements IMusic
 	public function setPaused(b:Bool):Void 
 	{
 		trace("pause music: " + b);
-		if (channel == null)
+		if (currentMusicHandle == null)
 		{
 			trace("music channel is null");
 			return;
 		}
 		if (b) {
-			_lastPlayTime = channel.position;
-			_lastVolume = channel.soundTransform.volume;
-			channel.stop();
-			isPlaying = false;
+			_lastPlayTime = currentMusicHandle.position;
+			_lastVolume = currentMusicHandle.volume;
+			currentMusicHandle.stop();
 		}else {
 			trace("resuming music at: " + _lastPlayTime, _lastLoop);
 			play2(_path, _lastPlayTime, _lastVolume, _lastLoop);

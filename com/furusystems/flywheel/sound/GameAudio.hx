@@ -1,8 +1,7 @@
 package com.furusystems.flywheel.sound;
 import com.furusystems.flywheel.Core;
-#if (android && soundmanager)
-import com.furusystems.flywheel.sound.android.AndroidAudio;
-#end
+import lime.AudioHandler;
+import lime.Lime;
 
 
 /**
@@ -12,23 +11,13 @@ import com.furusystems.flywheel.sound.android.AndroidAudio;
 
 class GameAudio 
 {
+	public var limeAudioHandler:AudioHandler;
 	public var fx:GameFX;
 	public var music:GameMusic;
 	
-	public function new() 
+	public function new(limeInstance:Lime) 
 	{
-		#if (android && soundmanager)
-			if (AndroidAudio.initialize()) {
-				#if debug
-				trace("Android audio initialized");
-				#end
-			}else {
-				#if debug
-				trace("Android audio could not initialize");
-				#end
-			}
-		#end
-		
+		limeAudioHandler = limeInstance.audio;
 		fx = new GameFX(this);
 		music = new GameMusic(this);
 	}
