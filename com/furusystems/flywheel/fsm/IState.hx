@@ -9,8 +9,9 @@ interface IState
 {
 	var core:Core;
 	function enter():Void;
+	function preUpdate():Void;
 	function update():Void;
-	function render():Void;
+	function postUpdate():Void;
 	function exit():Void;
 	
 }

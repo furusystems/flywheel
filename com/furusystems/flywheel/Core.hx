@@ -98,8 +98,9 @@ class Core
 		input.update(this);
 		audio.update(time.deltaS);
 		if (_paused) return;
+		_currentState.preUpdate();
 		_currentState.update();
-		_currentState.render();
+		_currentState.postUpdate();
 	}
 	
 	public function getState():IState {

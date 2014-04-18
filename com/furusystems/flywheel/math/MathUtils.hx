@@ -1,6 +1,5 @@
 package com.furusystems.flywheel.math;
 import com.furusystems.flywheel.geom.Vector2D;
-import flash.geom.Point;
 
 /**
  * ...
@@ -96,8 +95,8 @@ class MathUtils
 	public static inline function vectorSubtract(a:Vector2D, b:Vector2D):Vector2D {
 		return new Vector2D(b.x - a.x, b.y - a.y);
 	}
-	public static inline function vectorAdd(a:Point, b:Point):Point {
-		return new Point(a.x + b.x, a.y + b.y);
+	public static inline function vectorAdd(a:Vector2D, b:Vector2D):Vector2D {
+		return new Vector2D(a.x + b.x, a.y + b.y);
 	}
 	
 	public static inline function rangesOverlap(amin:Float, amax:Float, bmin:Float, bmax:Float):Bool {
