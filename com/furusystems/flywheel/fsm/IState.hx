@@ -8,7 +8,7 @@ import com.furusystems.flywheel.Core;
 interface IState
 {
 	var core:Core;
-	function enter():Void;
+	function enter(?info:Dynamic):Void;
 	function preUpdate():Void;
 	function update():Void;
 	function postUpdate():Void;

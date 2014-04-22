@@ -118,7 +118,7 @@ class GTSSheet implements ISpriteSheet
 		var ss:GTSSequence = cast s;
 		trace("Adding sequence: " + ss.name);
 		for (f in ss.frames) {
-			var t = tilesheet.addTile(tex.width, tex.height, f.x, f.y, f.width, f.height);
+			var t = tilesheet.addTile(tex.width, tex.height, f.x, f.y, f.width, f.height, f.center.x, f.center.y);
 			//trace("Added tile: " + t.index);
 			f.tileSheetIndex = t.index;
 			//frameIndexBase++;
