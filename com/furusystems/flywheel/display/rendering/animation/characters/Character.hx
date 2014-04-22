@@ -8,10 +8,7 @@ import com.furusystems.flywheel.display.rendering.animation.gts.GTSSheet;
 import com.furusystems.flywheel.display.rendering.animation.LoopStyle;
 import com.furusystems.flywheel.display.rendering.animation.TransitionStyle;
 import com.furusystems.flywheel.geom.Matrix33;
-import flash.display.Graphics;
-import flash.Vector;
 import haxe.xml.Fast;
-import openfl.Assets;
 /**
  * ...
  * @author Andreas Rønning

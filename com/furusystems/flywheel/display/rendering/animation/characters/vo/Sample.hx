@@ -1,5 +1,5 @@
 package com.furusystems.flywheel.display.rendering.animation.characters.vo;
-import flash.utils.ByteArray;
+import lime.utils.ByteArray;
 
 /**
  * ...

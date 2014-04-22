@@ -2,9 +2,7 @@ package com.furusystems.flywheel.display.rendering.animation.gts;
 import com.furusystems.games.GameBase2D;
 import com.furusystems.flywheel.display.rendering.animation.characters.AnimPackage;
 import com.furusystems.flywheel.display.rendering.animation.characters.Character;
-import openfl.Assets;
-import openfl.gl.GL;
-import openfl.gl.GLTexture;
+import lime.utils.Assets;
 
 /**
  * ...

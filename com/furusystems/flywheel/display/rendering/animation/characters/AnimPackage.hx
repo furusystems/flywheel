@@ -1,6 +1,6 @@
 package com.furusystems.flywheel.display.rendering.animation.characters;
 import haxe.Json;
-import flash.utils.ByteArray;
+import lime.utils.ByteArray;
 
 /**
  * ...
