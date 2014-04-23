@@ -27,5 +27,8 @@ class TouchPoint
 		tempY = startY;
 		deltaX = deltaY = 0;
 	}
+	public function clone():TouchPoint {
+		return new TouchPoint(id, x, y);
+	}
 	
 }
