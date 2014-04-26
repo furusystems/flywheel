@@ -11,14 +11,16 @@ class TouchManager
 {
 
 	var points:Array<TouchPoint>;
+	public var inputMgr:Input;
 	public var activePoints:Array<TouchPoint>;
 	
 	public var onTouchBegin:Signal1<TouchPoint>;
 	public var onTouchMove:Signal1<TouchPoint>;
 	public var onTouchEnd:Signal1<TouchPoint>;
 	
-	public function new() 
+	public function new(inputMgr:Input) 
 	{
+		this.inputMgr = inputMgr;
 		onTouchBegin = new Signal1<TouchPoint>();
 		onTouchMove = new Signal1<TouchPoint>();
 		onTouchEnd = new Signal1<TouchPoint>();
@@ -27,6 +29,13 @@ class TouchManager
 	
 	public function touchMoveHandler(e:TouchEvent):Void 
 	{
+		var boundsRect = inputMgr.bounds;
+		e.x = Math.max(boundsRect.x, Math.min(e.x, boundsRect.width+boundsRect.x));
+		e.y = Math.max(boundsRect.y, Math.min(e.y, boundsRect.height+boundsRect.y));
+		e.x -= inputMgr.xOffset;
+		e.y -= inputMgr.yOffset;
+		e.x *= inputMgr.xScale;
+		e.y *= inputMgr.yScale;
 		var p:TouchPoint = points[e.ID];
 		p.tempX = e.x;
 		p.tempY = e.y;
@@ -35,6 +44,13 @@ class TouchManager
 	
 	public function touchEndHandler(e:TouchEvent):Void 
 	{
+		var boundsRect = inputMgr.bounds;
+		e.x = Math.max(boundsRect.x, Math.min(e.x, boundsRect.width+boundsRect.x));
+		e.y = Math.max(boundsRect.y, Math.min(e.y, boundsRect.height+boundsRect.y));
+		e.x -= inputMgr.xOffset;
+		e.y -= inputMgr.yOffset;
+		e.x *= inputMgr.xScale;
+		e.y *= inputMgr.yScale;
 		var pt:TouchPoint = points[e.ID];
 		pt.x = pt.tempX = e.x;
 		pt.y = pt.tempY = e.y;
@@ -45,6 +61,13 @@ class TouchManager
 	
 	public function touchBeginHandler(e:TouchEvent):Void 
 	{
+		var boundsRect = inputMgr.bounds;
+		e.x = Math.max(boundsRect.x, Math.min(e.x, boundsRect.width+boundsRect.x));
+		e.y = Math.max(boundsRect.y, Math.min(e.y, boundsRect.height+boundsRect.y));
+		e.x -= inputMgr.xOffset;
+		e.y -= inputMgr.yOffset;
+		e.x *= inputMgr.xScale;
+		e.y *= inputMgr.yScale;
 		var pt:TouchPoint = new TouchPoint(e.ID, e.x, e.y);
 		points[e.ID] = pt;
 		activePoints.push(pt);

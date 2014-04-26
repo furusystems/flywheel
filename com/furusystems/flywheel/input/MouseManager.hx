@@ -11,6 +11,7 @@ import lime.InputHandler.MouseEvent;
 class MouseManager
 {
 	var tempPosition:Vector2D;
+	public var inputMgr:Input;
 	public var clickStartPosition:Vector2D;
 	public var position:Vector2D;
 	public var positionDelta:Vector2D;
@@ -31,8 +32,9 @@ class MouseManager
 	public var onMiddleClick:Signal1<MouseEvent>;
 	public var onDoubleClick:Signal1<MouseEvent>;
 	
-	public function new() 
+	public function new(inputMgr:Input) 
 	{
+		this.inputMgr = inputMgr;
 		clickStartPosition = new Vector2D();
 		position = new Vector2D();
 		tempPosition = new Vector2D();
@@ -58,6 +60,13 @@ class MouseManager
 	}
 	
 	inline function updateMousePos(e:MouseEvent):Void {
+		var boundsRect = inputMgr.bounds;
+		e.x = Math.max(boundsRect.x, Math.min(e.x, boundsRect.width+boundsRect.x));
+		e.y = Math.max(boundsRect.y, Math.min(e.y, boundsRect.height+boundsRect.y));
+		e.x -= inputMgr.xOffset;
+		e.y -= inputMgr.yOffset;
+		e.x *= inputMgr.xScale;
+		e.y *= inputMgr.yScale;
 		positionDelta.x = e.x - position.x;
 		positionDelta.y = e.y - position.y;
 		position.x = e.x;
