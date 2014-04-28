@@ -21,7 +21,7 @@ class Core
 	var _paused:Bool;
 	var limeInstance:Lime;
 	
-	var viewportRect:Rectangle;
+	public var viewportRect:Rectangle;
 	public var input:Input;
 	public var time:Time;
 	public var audio:GameAudio;
@@ -56,7 +56,7 @@ class Core
 	
 	function ready (lime:Lime):Void {
 		this.limeInstance = lime;
-		//GL.enable(GL.SCISSOR_TEST);
+		GL.enable(GL.SCISSOR_TEST);
 		audio = new GameAudio(limeInstance);
 		limeInstance.window.on_resize(onWindowResize);
 		
@@ -111,9 +111,10 @@ class Core
 		input.yOffset = viewportRect.y;
 	}
 	
-	inline function updateViewport() 
+	public inline function updateViewport(offsetX:Float = 0, offsetY:Float = 0) 
 	{
-		GL.viewport(Std.int(viewportRect.x),Std.int(viewportRect.y),Std.int(viewportRect.width),Std.int(viewportRect.height));
+		GL.viewport(Std.int(viewportRect.x+offsetX),Std.int(viewportRect.y+offsetY),Std.int(viewportRect.width),Std.int(viewportRect.height));
+		GL.scissor(Std.int(viewportRect.x+offsetX),Std.int(viewportRect.y+offsetY),Std.int(viewportRect.width),Std.int(viewportRect.height));
 	}
 	
 	public function start():Void {
@@ -147,7 +148,6 @@ class Core
 	
 	
 	public function render():Void {
-		updateViewport();
 		time.update();
 		Graphics.time = time.clockS;
 		input.update(this);
