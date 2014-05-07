@@ -3,7 +3,7 @@ import com.furusystems.flywheel.fsm.IState;
 import com.furusystems.flywheel.geom.Rectangle;
 import com.furusystems.flywheel.input.Input;
 import com.furusystems.flywheel.sound.GameAudio;
-import com.furusystems.games.rendering.lime.Graphics;
+import croissant.renderer.lime.Graphics;
 import lime.gl.GL;
 import lime.InputHandler.MouseEvent;
 import lime.InputHandler.TouchEvent;
