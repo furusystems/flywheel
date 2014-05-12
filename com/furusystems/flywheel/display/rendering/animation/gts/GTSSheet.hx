@@ -3,6 +3,7 @@ import com.furusystems.flywheel.utils.data.SizedHash;
 import com.furusystems.flywheel.display.rendering.animation.ISpriteSequence;
 import com.furusystems.flywheel.display.rendering.animation.ISpriteSheet;
 import croissant.renderer.lime.materials.PNGTexture;
+import croissant.renderer.lime.resources.TextureHandle;
 import croissant.renderer.lime.tiles.LimeTileSheet;
 import haxe.io.Bytes;
 import haxe.io.BytesInput;
@@ -21,7 +22,7 @@ import cpp.vm.Mutex;
 
 class GTSSheet implements ISpriteSheet
 {
-	public var texture:PNGTexture;
+	public var texture:TextureHandle;
 	public var sequences:SizedHash<ISpriteSequence>; //I keep a stack of sequences used with this spritesheet for possible future convenience
 	public var tilesheet:LimeTileSheet;
 	private var frameIndexBase:Int;
@@ -31,7 +32,7 @@ class GTSSheet implements ISpriteSheet
 	public var parsedDescriptor:Dynamic;
 	public var path:String;
 	
-	public  var halfRes:Bool;
+	public var halfRes:Bool;
 	public function new(assetPath:String):Void {
 		this.path = assetPath;
 		
@@ -64,7 +65,8 @@ class GTSSheet implements ISpriteSheet
 				var imgBytes = new ByteArray();
 				bytes.readBytes(imgBytes, 0, filesize);
 				imgBytes.position = 0;
-				texture = PNGTexture.fromBytes(imgBytes);
+				texture = new TextureHandle(imgBytes);
+				texture.acquire();
 				imgBytes.clear();
 				txFound = true;
 				break;
@@ -77,7 +79,7 @@ class GTSSheet implements ISpriteSheet
 			addSequence(GTSSequence.fromObject(parsedDescriptor.sequences[i], halfRes));
 		}
 		
-		tilesheet = createTileSheet(texture);
+		tilesheet = createTileSheet(texture.tex);
 		
 		bytes.clear();
 		
@@ -89,7 +91,7 @@ class GTSSheet implements ISpriteSheet
 	public function dispose():Void {
 		parsedDescriptor = null;
 		sequences = null;
-		texture.dispose();
+		texture.release();
 	}
 	
 	public function createTileSheet(tex:PNGTexture):LimeTileSheet

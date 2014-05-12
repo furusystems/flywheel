@@ -1,6 +1,7 @@
 package com.furusystems.flywheel.display.rendering.animation;
 import com.furusystems.flywheel.utils.data.SizedHash;
 import croissant.renderer.lime.materials.PNGTexture;
+import croissant.renderer.lime.resources.TextureHandle;
 import croissant.renderer.lime.tiles.LimeTileSheet;
 
 /**
@@ -11,7 +12,7 @@ import croissant.renderer.lime.tiles.LimeTileSheet;
 interface ISpriteSheet 
 {
 
-	public var texture:PNGTexture;
+	public var texture:TextureHandle;
 	public var sequences:SizedHash<ISpriteSequence>; 
 	public var tilesheet:LimeTileSheet;
 	
