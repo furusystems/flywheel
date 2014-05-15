@@ -14,7 +14,7 @@ class TouchManager implements IInputManager
 {
 
 	var points:Map<Int, TouchPoint>;
-	public var activePoints:List<TouchPoint>;
+	public var activePoints:Array<TouchPoint>;
 	
 	public var onTouchBegin:Signal1<TouchPoint>;
 	public var onTouchMove:Signal1<TouchPoint>;
@@ -49,7 +49,7 @@ class TouchManager implements IInputManager
 	{
 		var pt:TouchPoint = new TouchPoint(e.touchPointID, e.stageX, e.stageY);
 		points.set(e.touchPointID, pt);
-		activePoints.add(pt);
+		activePoints.push(pt);
 		onTouchBegin.dispatch(pt);
 	}
 	
@@ -94,7 +94,7 @@ class TouchManager implements IInputManager
 	
 	public function reset():Void {
 		points = new Map<Int, TouchPoint>();
-		activePoints = new List<TouchPoint>();
+		activePoints = new Array<TouchPoint>();
 		onTouchBegin.removeAll();
 		onTouchMove.removeAll();
 		onTouchEnd.removeAll();
