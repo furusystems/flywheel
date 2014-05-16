@@ -1,10 +1,10 @@
 package com.furusystems.flywheel.display.rendering.animation.gts;
+import com.furusystems.flywheel.display.rendering.lime.materials.PNGTexture;
+import com.furusystems.flywheel.display.rendering.lime.resources.TextureHandle;
+import com.furusystems.flywheel.display.rendering.lime.tiles.LimeTileSheet;
 import com.furusystems.flywheel.utils.data.SizedHash;
 import com.furusystems.flywheel.display.rendering.animation.ISpriteSequence;
 import com.furusystems.flywheel.display.rendering.animation.ISpriteSheet;
-import croissant.renderer.lime.materials.PNGTexture;
-import croissant.renderer.lime.resources.TextureHandle;
-import croissant.renderer.lime.tiles.LimeTileSheet;
 import haxe.io.Bytes;
 import haxe.io.BytesInput;
 import haxe.Json;

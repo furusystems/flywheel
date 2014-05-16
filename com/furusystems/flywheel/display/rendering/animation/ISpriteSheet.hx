@@ -1,8 +1,7 @@
 package com.furusystems.flywheel.display.rendering.animation;
 import com.furusystems.flywheel.utils.data.SizedHash;
-import croissant.renderer.lime.materials.PNGTexture;
-import croissant.renderer.lime.resources.TextureHandle;
-import croissant.renderer.lime.tiles.LimeTileSheet;
+import com.furusystems.flywheel.display.rendering.lime.resources.TextureHandle;
+import com.furusystems.flywheel.display.rendering.lime.tiles.LimeTileSheet;
 
 /**
  * ...
