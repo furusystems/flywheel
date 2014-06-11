@@ -1,9 +1,9 @@
 package com.furusystems.flywheel.display.rendering.lime;
-import com.furusystems.flywheel.display.rendering.lime.resources.ShaderHandle;
 import com.furusystems.flywheel.display.rendering.lime.resources.TextureHandle;
 import com.furusystems.flywheel.display.rendering.lime.tiles.LimeTileSheet;
 import com.furusystems.flywheel.display.rendering.lime.tiles.TileFlags;
 import com.furusystems.flywheel.geom.Vector2D;
+import croissant.renderer.ShaderBase;
 import haxe.EnumFlags.EnumFlags;
 import lime.gl.GL;
 import lime.gl.GLBuffer;
@@ -50,7 +50,7 @@ class Graphics
 	static var ibo:GLBuffer;
 	static var initialized:Bool = false;
 	static var currentTexture:TextureHandle;
-	static var currentShader:ShaderHandle;
+	static var currentShader:ShaderBase;
 	
 	static var currentLineStyle:GraphicsLineStyle;
 	static var currentFillStyle:GraphicsFillStyle;
@@ -70,8 +70,8 @@ class Graphics
 	public static var screenWidth:Float = 0;
 	public static var screenHeight:Float = 0;
 	
-	static inline function initialize(force:Bool = false):Void {
-		GL.uniform1f(timeUniform, time);
+	static function initialize(force:Bool = false):Void {
+		//GL.uniform1f(timeUniform, time);
 		if (!initialized || force) {
 			vbo = GL.createBuffer();
 			GL.bindBuffer(GL.ARRAY_BUFFER, vbo);
@@ -105,8 +105,13 @@ class Graphics
 		setShader(null);
 	}
 	
-	public static inline function setShader(shader:ShaderHandle):Void {
+	public static function setShader(shader:ShaderBase):Void {
 		if (currentShader == shader) return;
+		if (currentShader != null) currentShader.deactivate();
+		currentShader = shader;
+		if (currentShader == null) return;
+		currentShader.activate();
+		/*
 		clearShader();
 		currentShader = shader;
 		if (currentShader != null) {
@@ -129,6 +134,7 @@ class Graphics
 			GL.disableVertexAttribArray(vertexAttribute);
 			GL.disableVertexAttribArray(texCoordAttribute);
 		}
+		*/
 	}
 	static inline function clearShader():Void {
 		GL.useProgram(null);
@@ -172,6 +178,9 @@ class Graphics
 	public static function setProjectionMatrix(mat:Matrix3D):Void {
 		projectionMatrix = mat;
 		updateUniforms();
+	}
+	public static inline function getProjectionMatrix():Matrix3D {
+		return projectionMatrix;
 	}
 	
 	public static function setLineStyle(width:Float, color:Vector3D):Void {
@@ -367,29 +376,29 @@ class Graphics
 	
 	public static function drawRect(x:Float, y:Float, width:Float, height:Float, uvBoundsX:Float = 1, uvBoundsY:Float = 1, uvOffsetX:Float = 0, uvOffsetY:Float = 0) {
 		initialize();
-		
 		buildRect(x, y, width, height, uvBoundsX, uvBoundsY, uvOffsetX, uvOffsetY);
 		
 		GL.bindBuffer (GL.ARRAY_BUFFER, vbo);
 		GL.bufferSubData(GL.ARRAY_BUFFER, 0, new Float32Array(vertexF32Array.buffer, 0, 16));
-		GL.vertexAttribPointer (vertexAttribute, 2, GL.FLOAT, false, 16, 0);
-		GL.vertexAttribPointer (texCoordAttribute, 2, GL.FLOAT, false, 16, 8);
+		//GL.vertexAttribPointer (vertexAttribute, 2, GL.FLOAT, false, 16, 0);
+		//GL.vertexAttribPointer (texCoordAttribute, 2, GL.FLOAT, false, 16, 8);
 		
 		GL.drawArrays (GL.TRIANGLE_FAN, 0, 4) ;
 		
-		if (currentLineStyle != null) {
-			GL.lineWidth(currentLineStyle.width);
-			var c = currentLineStyle.color;
-			GL.uniform4f(fillColorUniform, c.x, c.y, c.z, c.w);
-			GL.uniform1f(textureWeightUniform, 0);
-			GL.drawArrays(GL.LINE_LOOP, 0, 4);
-			GL.uniform1f(textureWeightUniform, prevTextureWeight);
-			if (currentFillStyle != null) {
-				var c = currentFillStyle.color;
-				GL.uniform4f(fillColorUniform, c.x, c.y, c.z, c.w);
-			}
-		}
+		//if (currentLineStyle != null) {
+			//GL.lineWidth(currentLineStyle.width);
+			//var c = currentLineStyle.color;
+			//GL.uniform4f(fillColorUniform, c.x, c.y, c.z, c.w);
+			//GL.uniform1f(textureWeightUniform, 0);
+			//GL.drawArrays(GL.LINE_LOOP, 0, 4);
+			//GL.uniform1f(textureWeightUniform, prevTextureWeight);
+			//if (currentFillStyle != null) {
+				//var c = currentFillStyle.color;
+				//GL.uniform4f(fillColorUniform, c.x, c.y, c.z, c.w);
+			//}
+		//}
 		
+		//return;
 		GL.bindBuffer(GL.ARRAY_BUFFER, null);
 	}
 	

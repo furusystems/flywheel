@@ -2,8 +2,8 @@ package com.furusystems.flywheel.display.rendering.lime.font;
 import com.furusystems.bmfont.CharacterDef;
 import com.furusystems.bmfont.FontDef;
 import com.furusystems.bmfont.Reader;
-import com.furusystems.games.rendering.lime.tiles.LimeTileSheet;
-import com.furusystems.games.rendering.lime.materials.PNGTexture;
+import com.furusystems.flywheel.display.rendering.lime.materials.PNGTexture;
+import com.furusystems.flywheel.display.rendering.lime.tiles.LimeTileSheet;
 import haxe.io.BytesInput;
 import lime.utils.Assets;
 
