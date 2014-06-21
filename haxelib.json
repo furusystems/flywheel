@@ -8,6 +8,7 @@
   "releasenote": "",
   "contributors": [""],
   "dependencies": {
-	"polygonal-ds":""
+	"polygonal-ds":"",
+	"shaderblox":""
   }
 }

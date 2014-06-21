@@ -3,7 +3,6 @@ import com.furusystems.flywheel.display.rendering.lime.resources.TextureHandle;
 import com.furusystems.flywheel.display.rendering.lime.tiles.LimeTileSheet;
 import com.furusystems.flywheel.display.rendering.lime.tiles.TileFlags;
 import com.furusystems.flywheel.geom.Vector2D;
-import croissant.renderer.ShaderBase;
 import haxe.EnumFlags.EnumFlags;
 import lime.gl.GL;
 import lime.gl.GLBuffer;
@@ -11,6 +10,7 @@ import lime.utils.ByteArray;
 import lime.utils.Float32Array;
 import lime.utils.Matrix3D;
 import lime.utils.Vector3D;
+import shaderblox.ShaderBase;
 
 /**
  * ...
