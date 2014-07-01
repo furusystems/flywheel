@@ -1,9 +1,9 @@
 package com.furusystems.flywheel;
-import com.furusystems.flywheel.display.rendering.lime.Graphics;
 import com.furusystems.flywheel.fsm.IState;
 import com.furusystems.flywheel.geom.Rectangle;
 import com.furusystems.flywheel.input.Input;
 import com.furusystems.flywheel.sound.GameAudio;
+import croissant.renderer.Graphics;
 import lime.gl.GL;
 import lime.InputHandler.MouseEvent;
 import lime.InputHandler.TouchEvent;
