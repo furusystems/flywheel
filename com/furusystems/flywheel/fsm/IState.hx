@@ -1,13 +1,12 @@
 package com.furusystems.flywheel.fsm;
-import com.furusystems.flywheel.Core;
 
 /**
  * ...
  * @author Andreas Rønning
  */
-interface IState
+interface IState<T>
 {
-	var game:Core;
+	var game:T;
 	function enter():Void;
 	function update():Void;
 	function render():Void;

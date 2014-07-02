@@ -1,5 +1,4 @@
 package com.furusystems.flywheel.metrics;
-import flash.Lib;
 import haxe.Timer;
 
 /**
