@@ -1,21 +1,30 @@
 package com.furusystems.flywheel.utils.data;
+import lime.utils.Vector3D;
 
 /**
  * ...
  * @author Andreas Rønning
  */
-class Color4
+abstract Color4(Vector3D) from Vector3D to Vector3D
 {
-	public var r:Float = 0;
-	public var g:Float = 0;
-	public var b:Float = 0;
-	public var a:Float = 0;
-	public function new(r:Float = 0,g:Float = 0,b:Float = 0,a:Float = 0) 
+	public var r(get, set):Float;
+	public var g(get, set):Float;
+	public var b(get, set):Float;
+	public var a(get, set):Float;
+	
+	inline function get_r():Float { return this.x; };
+	inline function get_g():Float { return this.y; };
+	inline function get_b():Float { return this.z; };
+	inline function get_a():Float { return this.w; };
+	
+	inline function set_r(v:Float):Float { return this.x=v; };
+	inline function set_g(v:Float):Float { return this.y=v; };
+	inline function set_b(v:Float):Float { return this.z=v; };
+	inline function set_a(v:Float):Float { return this.w=v; };
+	
+	public inline function new(r:Float = 0,g:Float = 0,b:Float = 0,a:Float = 0) 
 	{
-		this.r = r;
-		this.g = g;
-		this.b = b;
-		this.a = a;
+		this = new Vector3D(r, g, b, a);
 	}
 	public inline function setFromHex(color:Int):Color4 {
 		a = (color >> 24) / 255;

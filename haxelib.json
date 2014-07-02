@@ -9,6 +9,7 @@
   "contributors": [""],
   "dependencies": {
 	"polygonal-ds":"",
-	"fsignal":""
+	"fsignal":"",
+	"shaderblox":""
   }
 }

@@ -6,10 +6,11 @@ package com.furusystems.flywheel.fsm;
  */
 interface IState<T>
 {
-	var game:T;
-	function enter():Void;
+	var core:T;
+	function enter(?info:Dynamic):Void;
+	function preUpdate():Void;
 	function update():Void;
-	function render():Void;
+	function postUpdate():Void;
 	function exit():Void;
 	
 }

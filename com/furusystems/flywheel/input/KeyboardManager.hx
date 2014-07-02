@@ -8,7 +8,7 @@ import flash.events.KeyboardEvent;
  * ...
  * @author Andreas Rønning
  */
-class KeyboardManager implements IInputManager
+class KeyboardManager
 {
 	public var keyDict:Map<Int,Bool>;
 	public var onKeyPress:Signal1<UInt>;

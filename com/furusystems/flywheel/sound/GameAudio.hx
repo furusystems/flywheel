@@ -1,8 +1,8 @@
 package com.furusystems.flywheel.sound;
 import com.furusystems.flywheel.Core;
-#if (android && soundmanager)
-import com.furusystems.flywheel.sound.android.AndroidAudio;
-#end
+import lime.AudioHandler;
+import lime.helpers.AudioHelper.Sound;
+import lime.Lime;
 
 
 /**
@@ -12,26 +12,42 @@ import com.furusystems.flywheel.sound.android.AndroidAudio;
 
 class GameAudio 
 {
+	var limeAudioHandler:AudioHandler;
 	public var fx:GameFX;
 	public var music:GameMusic;
 	
-	public function new() 
+	public function new(limeInstance:Lime) 
 	{
-		#if (android && soundmanager)
-			if (AndroidAudio.initialize()) {
-				#if debug
-				trace("Android audio initialized");
-				#end
-			}else {
-				#if debug
-				trace("Android audio could not initialize");
-				#end
-			}
-		#end
-		
+		limeAudioHandler = limeInstance.audio;
 		fx = new GameFX(this);
 		music = new GameMusic(this);
 	}
+	
+	public inline function create(name:String, path:String, isMusic:Bool = false):Sound {
+		return limeAudioHandler.create(name, path, isMusic);
+	}
+	public inline function stop(name:String) {
+		limeAudioHandler.stop(name);
+	}
+	public inline function volume(name:String, ?vol:Float):Float {
+		return limeAudioHandler.volume(name, vol);
+	}
+	public inline function playing(name:String):Bool {
+		return limeAudioHandler.playing(name);
+	}
+	public inline function play(name:String, count:Int, offset:Float = 0.0):Void {
+		return limeAudioHandler.play(name, count, offset);
+	}
+	public inline function position(name:String, ?offset:Float):Float {
+		return limeAudioHandler.position(name, offset);
+	}
+	public inline function loop(name:String){
+		return limeAudioHandler.loop(name);
+	}
+	public inline function sound(name:String):Sound {
+		return limeAudioHandler.sound(name);
+	}
+	
 	public function update(deltaS:Float):Void
 	{
 		fx.update(deltaS);

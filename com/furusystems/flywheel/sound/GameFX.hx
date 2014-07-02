@@ -3,29 +3,13 @@ import com.furusystems.flywheel.Core;
 import com.furusystems.flywheel.sound.FXChannel;
 import com.furusystems.flywheel.sound.GameAudio;
 import com.furusystems.flywheel.sound.ISoundCue;
-import flash.errors.Error;
-#if openfl
-import openfl.Assets;
-#end
-
-#if (android && soundmanager)
-import com.furusystems.flywheel.sound.android.AndroidAudio;
-import com.furusystems.flywheel.sound.android.AndroidCue;
-#else
-import com.furusystems.flywheel.sound.ofl.Cue;
-#end
+import com.furusystems.flywheel.sound.lime.Cue;
 
 /**
  * ...
  * @author Andreas Rønning
  */
-#if ios
-@:build( com.furusystems.flywheel.preprocessing.Audio.buildSoundPaths("//Users/johndavies/Documents/PaperPals/branches/openfl/assets/audio/fx") ) class GameFX
-#elseif openfl
 @:build( com.furusystems.flywheel.preprocessing.Audio.buildSoundPaths("./assets/audio/fx") ) class GameFX 
-#else
-class GameFX
-#end
 {
 	public var audio:GameAudio;
 	public var muted:Bool;
@@ -52,7 +36,7 @@ class GameFX
 	public function createChannel(name:String, polyphony:Int, priority:Int = 0):FXChannel {
 		polyphony = Std.int(Math.min(availablePolyphony, polyphony));
 		if (polyphony < 1) {
-			throw new Error("Ran out of available polyphony");
+			throw ("Ran out of available polyphony");
 		}
 		var chan:FXChannel = new FXChannel(name, this, polyphony, priority);
 		channels.set(name, chan);
@@ -91,19 +75,10 @@ class GameFX
 	}
 	public function load(path:String):Void {
 		if (soundPool.exists(path) || !isEnabled()) return;
-		var newCue:ISoundCue;
-		#if (android && soundmanager)
-			newCue = new AndroidCue(path);
-		#else
-			newCue = new Cue(path);
-		#end
+		var newCue:ISoundCue = new Cue(path);
 		var p:String = { var s = path.split("/"); s.pop().split(".").shift(); };
 		trace("sfxname: " + p.toUpperCase());
-		#if openfl
 		newCue.duration = Reflect.field(CueDurations, p.toUpperCase());
-		#else
-		newCue.duration = 0;
-		#end
 		soundPool.set(path, newCue);
 		#if debug
 		trace("SFX ADDED: '" + path + "' - " + soundPool.exists(path) + " : " + newCue.duration);
@@ -138,24 +113,8 @@ class GameFX
 		}
 	}
 	public inline function isReady():Bool {
-		#if (android && soundmanager)
-			return AndroidAudio.isPoolReady();
-		#elseif openfl
-			return true; //Dunno how sound loading on iphone works
-		#else
-			return allCuesLoaded();
-		#end
+		return true; //Dunno how sound loading on iphone works
 	}
-	
-	#if !openfl
-	function allCuesLoaded():Bool 
-	{
-		for (k in soundPool.keys()) {
-			if (!cast(soundPool.get(k), Cue).loaded) return false;
-		}
-		return true;
-	}
-	#end
 	
 	public function setVolumeForAll(target:Float):Void {
 		for (c in channels) {

@@ -1,12 +1,5 @@
 package com.furusystems.flywheel.sound;
-#if (android && soundmanager)
-import com.furusystems.flywheel.Core;
-import com.furusystems.flywheel.sound.android.AndroidPlayingSound;
-#else
-import com.furusystems.flywheel.sound.ofl.PlayingSound;
-#end
-import com.furusystems.flywheel.sound.IPlayingSound;
-import com.furusystems.flywheel.sound.ISoundCue;
+import com.furusystems.flywheel.sound.lime.PlayingSound;
 
 /**
  * ...
@@ -62,11 +55,7 @@ class FXChannel
 			} else {
 				if (consolidatePolyphony(priority)) {
 					var cue:ISoundCue = sp.get(path);
-					#if (android && soundmanager)
-					var s = new AndroidPlayingSound(cue, vol * mgr.masterVolume * mgr.masterMasterVolume, pan, loop, priority, rate);
-					#else
 					var s = new PlayingSound(cue, vol * mgr.masterVolume * mgr.masterMasterVolume, pan, loop);
-					#end
 					playingSounds.add(s);
 					return s;
 				}else {

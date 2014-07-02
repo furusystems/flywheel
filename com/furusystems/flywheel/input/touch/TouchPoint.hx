@@ -1,14 +1,15 @@
 package com.furusystems.flywheel.input.touch;
-import flash.geom.Point;
 
 /**
  * ...
  * @author Andreas Rønning
  */
 
-class TouchPoint extends Point
+class TouchPoint
 {
 	public var id:Int;
+	public var x:Float;
+	public var y:Float;
 	public var tempX:Float;
 	public var tempY:Float;
 	public var deltaX:Float;
@@ -18,12 +19,16 @@ class TouchPoint extends Point
 	public function new(id:Int,startX:Float,startY:Float) 
 	{
 		this.id = id;
-		super(startX, startY);
+		this.x = startX;
+		this.y = startY;
 		this.startX = startX;
 		this.startY = startY;
 		tempX = startX;
 		tempY = startY;
 		deltaX = deltaY = 0;
+	}
+	public function clone():TouchPoint {
+		return new TouchPoint(id, x, y);
 	}
 	
 }
