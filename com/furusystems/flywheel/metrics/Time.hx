@@ -34,29 +34,11 @@ class Time
 		deltaMS = scaledDeltaMS = 0;
 	}
 	
-	public function update():Void {
-		if (timeStep == -1) {
-			updateRunning();
-		}else {
-			updateFixed(timeStep);
-		}
+	public function step(advance:Float = 0):Void {
+		update(Std.int(advance * 1000));
 	}
 	
-	inline function timerMS():Int {
-		return Std.int(Timer.stamp() * 1000);
-	}
-	
-	inline function updateRunning():Void {
-		deltaMS = timerMS() - lastUpdateTimeMS;
-		clockMS += deltaMS;
-		stateCurrentTimeMS += deltaMS;
-		clockS = clockMS * 0.001;
-		deltaS = deltaMS * 0.001;
-		scaledDeltaMS = Std.int(deltaMS * timeScale);
-		scaledDeltaS = deltaS * timeScale;
-		lastUpdateTimeMS = timerMS();
-	}
-	inline function updateFixed(stepMS:Int = 33):Void {
+	inline function update(stepMS:Int = 33):Void {
 		deltaMS = stepMS;
 		clockMS += deltaMS;
 		stateCurrentTimeMS += deltaMS;

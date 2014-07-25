@@ -1,5 +1,9 @@
 package com.furusystems.flywheel.utils.data;
+#if falconer
+import falconer.utils.Vector3D;
+#elseif lime
 import lime.utils.Vector3D;
+#end
 
 /**
  * ...

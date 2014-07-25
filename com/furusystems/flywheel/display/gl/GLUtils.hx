@@ -1,5 +1,5 @@
 package com.furusystems.flywheel.display.gl;
-import com.furusystems.flywheel.utils.math.MathUtils;
+import com.furusystems.flywheel.math.MathUtils;
 import flash.geom.Matrix3D;
 import flash.geom.Vector3D;
 import flash.Vector;
