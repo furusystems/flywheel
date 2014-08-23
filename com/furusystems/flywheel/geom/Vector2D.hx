@@ -43,6 +43,10 @@ abstract Vector2D(Vector2DFields) from Vector2DFields to Vector2DFields
 	inline function set_y(f:Float):Float {
 		return this.y = f;
 	}
+	
+	public inline function isZero():Bool {
+		return this.x == this.y && this.y == 0.0;
+	}
 	 
 	
 	//COMPARISONS
