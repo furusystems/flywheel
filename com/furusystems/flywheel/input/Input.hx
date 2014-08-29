@@ -1,6 +1,6 @@
 package com.furusystems.flywheel.input;
-import com.furusystems.flywheel.Core;
 import com.furusystems.flywheel.geom.Rectangle;
+import flash.display.InteractiveObject;
 
 /**
  * ...
@@ -8,7 +8,7 @@ import com.furusystems.flywheel.geom.Rectangle;
  */
 class Input
 {
-	//public var keyboard:KeyboardManager;
+	public var keyboard:KeyboardManager;
 	public var touch:TouchManager;
 	public var mouse:MouseManager;
 	public var xOffset:Float = 0;
@@ -18,15 +18,25 @@ class Input
 	public var bounds:Null<Rectangle>;
 	public function new() 
 	{
-		//keyboard = new KeyboardManager();
+		keyboard = new KeyboardManager();
 		touch = new TouchManager(this);
 		mouse = new MouseManager(this);
 	}
-	public inline function update(core:Core) {
+	#if flash
+	public function bind(i:InteractiveObject) {
+		keyboard.bind(i);
+		mouse.bind(i);
+	}
+	public function release(i:InteractiveObject) {
+		keyboard.release(i);
+		mouse.release(i);
+	}
+	#end
+	public inline function update() {
 		#if mobile
-		touch.update(core);
+		touch.update();
 		#else
-		mouse.update(core);
+		mouse.update();
 		#end
 	}
 }

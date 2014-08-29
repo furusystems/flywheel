@@ -3,13 +3,14 @@ import com.furusystems.flywheel.fsm.IState;
 import com.furusystems.flywheel.geom.Rectangle;
 import com.furusystems.flywheel.input.Input;
 import com.furusystems.flywheel.sound.GameAudio;
-import croissant.renderer.Graphics;
+import com.furusystems.flywheel.metrics.Time;
+#if lime
 import lime.gl.GL;
 import lime.InputHandler.MouseEvent;
 import lime.InputHandler.TouchEvent;
 import lime.Lime;
-import com.furusystems.flywheel.metrics.Time;
 import lime.utils.Matrix3D;
+#end
 
 /**
  * A flywheel 
@@ -19,7 +20,9 @@ class Core
 {
 	var _currentState:IState;
 	var _paused:Bool;
+	#if lime
 	var limeInstance:Lime;
+	#end
 	
 	public var viewportRect:Rectangle;
 	public var input:Input;
@@ -30,10 +33,12 @@ class Core
 	public var gameWidth:Int;
 	public var gameHeight:Int;
 	
+	#if lime
 	public var config(get, never):LimeConfig;
 	inline function get_config():LimeConfig {
 		return limeInstance.config;
 	}
+	#end
 	public function new(timeStep:Int = -1, width:Int, height:Int) 
 	{
 		viewportRect = new Rectangle();

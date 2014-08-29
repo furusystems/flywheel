@@ -1,8 +1,7 @@
 package com.furusystems.flywheel.input;
-import com.furusystems.flywheel.Core;
-import com.furusystems.flywheel.events.Signal1;
 import flash.display.InteractiveObject;
 import flash.events.KeyboardEvent;
+import fsignal.Signal1;
 
 /**
  * ...
@@ -46,7 +45,7 @@ class KeyboardManager
 	
 	/* INTERFACE com.furusystems.flywheel.input.IInputManager */
 	
-	public function update(?game:Core):Void 
+	public function update():Void 
 	{
 		
 	}
