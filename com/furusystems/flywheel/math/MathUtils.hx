@@ -155,4 +155,16 @@ class MathUtils
 		return rad * (180 / Math.PI);
 	}
 	
+	public static inline function tri(a, x):Float {
+		x = x / (2.0*Math.PI);
+		x = x % 1.0;
+		if( x<0.0 ) x = 1.0+x;
+		if(x<a) x=x/a; else x=1.0-(x-a)/(1.0-a);
+		return -1.0+2.0*x;
+	}
+	
+	public static inline function shape(input:Float, drive:Float):Float {
+		return WaveShaper.shape(input, drive);
+	}
+	
 }
