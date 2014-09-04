@@ -17,7 +17,8 @@ class BVH<T:AABB> {
 	public var holder:T;
 	public var parent:BVH<T>;
 	public var bounds:AABB;
-	public var hasChildren(get,never):Bool;
+	public var hasChildren(get, never):Bool;
+	public var calcAuto:Bool = true;
 	var depth:Int;
 	var threshold:Float;
 	var uid:Int = 0;
@@ -114,12 +115,12 @@ class BVH<T:AABB> {
 		if (holder != null) {
 			var v = new BVH<T>(holder, this);
 			children.append(v);
-			v.calcBounds();
+			if(v.calcAuto) v.calcBounds();
 			holder = null;
 		}
 		var v = new BVH<T>(n, this);
 		children.append(v);
-		v.calcBounds();
+		if(v.calcAuto) v.calcBounds();
 		
 		return v;
 	}
@@ -148,6 +149,6 @@ class BVH<T:AABB> {
 				return;
 			}
 		}
-		calcBounds();
+		if(calcAuto) calcBounds();
 	}
 }

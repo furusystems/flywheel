@@ -2,8 +2,10 @@ package com.furusystems.flywheel.input;
 import com.furusystems.flywheel.input.touch.TouchPoint;
 #if flash
 import flash.events.TouchEvent;
-#elseif lime
+#elseif (lime&&!openfl)
 import lime.InputHandler.TouchEvent;
+#elseif openfl
+import openfl.events.TouchEvent;
 #end
 import fsignal.Signal1;
 /**
@@ -33,15 +35,15 @@ class TouchManager
 	public function touchMoveHandler(e:TouchEvent):Void 
 	{
 		var boundsRect = inputMgr.bounds;
-		var x:Float = #if flash e.stageX; #elseif lime e.x;  #end
-		var y:Float = #if flash e.stageY; #elseif lime e.y;  #end
+		var x:Float = #if (flash||openfl) e.stageX; #elseif lime e.x;  #end
+		var y:Float = #if (flash||openfl) e.stageY; #elseif lime e.y;  #end
 		x = Math.max(boundsRect.x, Math.min(x, boundsRect.width+boundsRect.x));
 		y = Math.max(boundsRect.y, Math.min(y, boundsRect.height+boundsRect.y));
 		x -= inputMgr.xOffset;
 		y -= inputMgr.yOffset;
 		x *= inputMgr.xScale;
 		y *= inputMgr.yScale;
-		var p:TouchPoint = points[#if flash e.touchPointID #elseif lime e.ID #end];
+		var p:TouchPoint = points[#if (flash||openfl) e.touchPointID #elseif lime e.ID #end];
 		p.tempX = x;
 		p.tempY = y;
 		onTouchMove.dispatch(p);
@@ -50,15 +52,15 @@ class TouchManager
 	public function touchEndHandler(e:TouchEvent):Void 
 	{
 		var boundsRect = inputMgr.bounds;
-		var x:Float = #if flash e.stageX; #elseif lime e.x;  #end
-		var y:Float = #if flash e.stageY; #elseif lime e.y;  #end
+		var x:Float = #if (flash||openfl) e.stageX; #elseif lime e.x;  #end
+		var y:Float = #if (flash||openfl) e.stageY; #elseif lime e.y;  #end
 		x = Math.max(boundsRect.x, Math.min(x, boundsRect.width+boundsRect.x));
 		y = Math.max(boundsRect.y, Math.min(y, boundsRect.height+boundsRect.y));
 		x -= inputMgr.xOffset;
 		y -= inputMgr.yOffset;
 		x *= inputMgr.xScale;
 		y *= inputMgr.yScale;
-		var pt:TouchPoint = points[#if flash e.touchPointID #elseif lime e.ID #end];
+		var pt:TouchPoint = points[#if (flash||openfl) e.touchPointID #elseif lime e.ID #end];
 		pt.x = pt.tempX = x;
 		pt.y = pt.tempY = y;
 		activePoints.remove(pt);
@@ -69,15 +71,15 @@ class TouchManager
 	public function touchBeginHandler(e:TouchEvent):Void 
 	{
 		var boundsRect = inputMgr.bounds;
-		var x:Float = #if flash e.stageX; #elseif lime e.x;  #end
-		var y:Float = #if flash e.stageY; #elseif lime e.y;  #end
+		var x:Float = #if (flash||openfl) e.stageX; #elseif lime e.x;  #end
+		var y:Float = #if (flash||openfl) e.stageY; #elseif lime e.y;  #end
 		x = Math.max(boundsRect.x, Math.min(x, boundsRect.width+boundsRect.x));
 		y = Math.max(boundsRect.y, Math.min(y, boundsRect.height+boundsRect.y));
 		x -= inputMgr.xOffset;
 		y -= inputMgr.yOffset;
 		x *= inputMgr.xScale;
 		y *= inputMgr.yScale;
-		var id = #if flash e.touchPointID #elseif lime e.ID #end;
+		var id = #if (flash||openfl) e.touchPointID #elseif lime e.ID #end;
 		var pt:TouchPoint = new TouchPoint(id, x, y);
 		points[id] = pt;
 		activePoints.push(pt);

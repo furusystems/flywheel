@@ -1,9 +1,9 @@
 package com.furusystems.flywheel.sound;
 import com.furusystems.flywheel.Core;
-import com.furusystems.flywheel.events.Signal1;
 import com.furusystems.flywheel.sound.GameAudio;
 import com.furusystems.flywheel.sound.IMusic;
 import com.furusystems.flywheel.sound.lime.Music;
+import fsignal.Signal1;
 
 /**
  * ...

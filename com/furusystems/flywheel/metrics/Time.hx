@@ -38,7 +38,7 @@ class Time
 		update(Std.int(advance * 1000));
 	}
 	
-	inline function update(stepMS:Int = 33):Void {
+	public inline function update(stepMS:Int = 33):Void {
 		deltaMS = stepMS;
 		clockMS += deltaMS;
 		stateCurrentTimeMS += deltaMS;

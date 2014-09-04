@@ -1,6 +1,8 @@
 package com.furusystems.flywheel.sound.lime;
 import com.furusystems.flywheel.sound.ISoundCue;
+#if (lime&&!openfl)
 import lime.utils.Assets;
+#end
 
 /**
  * ...
@@ -17,7 +19,9 @@ class Cue implements ISoundCue
 	public function new(path:String) 
 	{
 		this.path = path;
-		//sound = Assets.getSound(path);
+		#if sound
+		sound = Assets.getSound(path);
+		#end
 	}
 	
 	public function release():Void 

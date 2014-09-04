@@ -4,12 +4,15 @@ import com.furusystems.flywheel.geom.Rectangle;
 import com.furusystems.flywheel.input.Input;
 import com.furusystems.flywheel.sound.GameAudio;
 import com.furusystems.flywheel.metrics.Time;
-#if lime
+#if (lime && !openfl)
 import lime.gl.GL;
 import lime.InputHandler.MouseEvent;
 import lime.InputHandler.TouchEvent;
 import lime.Lime;
 import lime.utils.Matrix3D;
+#elseif openfl
+import openfl.events.MouseEvent;
+import openfl.events.TouchEvent;
 #end
 
 /**
@@ -20,7 +23,7 @@ class Core
 {
 	var _currentState:IState;
 	var _paused:Bool;
-	#if lime
+	#if (lime&&!openfl)
 	var limeInstance:Lime;
 	#end
 	
@@ -33,25 +36,11 @@ class Core
 	public var gameWidth:Int;
 	public var gameHeight:Int;
 	
-	#if lime
+	#if (lime&&!openfl)
 	public var config(get, never):LimeConfig;
 	inline function get_config():LimeConfig {
 		return limeInstance.config;
 	}
-	#end
-	public function new(timeStep:Int = -1, width:Int, height:Int) 
-	{
-		viewportRect = new Rectangle();
-		time = new Time();
-		time.timeStep = timeStep;
-		gameWidth = width;
-		gameHeight = height;
-		input = new Input();
-		
-		_currentState = null;
-		_paused = true;
-	}
-	
 	public function setSize(width:Int, height:Int) 
 	{
 		this.gameWidth = width;
@@ -69,6 +58,21 @@ class Core
 		
 		prepare();
 	}
+	#end
+	public function new(timeStep:Int = -1, width:Int, height:Int) 
+	{
+		viewportRect = new Rectangle();
+		time = new Time();
+		time.timeStep = timeStep;
+		gameWidth = width;
+		gameHeight = height;
+		input = new Input();
+		
+		_currentState = null;
+		_paused = true;
+	}
+	
+	
 	
 	public function setPaused(?newValue:Bool):Bool {
 		if (newValue == null) _paused = !_paused;
@@ -84,6 +88,7 @@ class Core
 		return _paused;
 	}
 	
+	#if (lime&&!openfl)
 	function onWindowResize(lime:Lime) {
 		Graphics.reinit();
 		
@@ -121,6 +126,7 @@ class Core
 		GL.viewport(Std.int(viewportRect.x+offsetX),Std.int(viewportRect.y+offsetY),Std.int(viewportRect.width),Std.int(viewportRect.height));
 		GL.scissor(Std.int(viewportRect.x+offsetX),Std.int(viewportRect.y+offsetY),Std.int(viewportRect.width),Std.int(viewportRect.height));
 	}
+	#end
 	
 	public function start():Void {
 		_paused = false;
@@ -154,8 +160,10 @@ class Core
 	
 	public function render():Void {
 		time.update();
+		#if !openfl&&lime
 		Graphics.time = time.clockS;
-		input.update(this);
+		#end
+		input.update();
 		audio.update(time.deltaS);
 		if (_paused) return;
 		_currentState.preUpdate();

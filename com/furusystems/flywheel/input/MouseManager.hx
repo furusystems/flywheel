@@ -3,6 +3,8 @@ import com.furusystems.flywheel.geom.Vector2D;
 #if flash
 import flash.display.InteractiveObject;
 import flash.events.MouseEvent;
+#elseif openfl
+import openfl.events.MouseEvent;
 #end
 import fsignal.Signal1;
 
@@ -63,8 +65,8 @@ class MouseManager
 	
 	function updateMousePos(e:MouseEvent):Void {
 		var boundsRect = inputMgr.bounds;
-		var x:Float = #if flash e.stageX; #elseif lime e.x;  #end
-		var y:Float = #if flash e.stageY; #elseif lime e.y;  #end
+		var x:Float = #if (flash||openfl) e.stageX; #elseif lime e.x;  #end
+		var y:Float = #if (flash||openfl) e.stageY; #elseif lime e.y;  #end
 		if(boundsRect!=null){
 			x = Math.max(boundsRect.x, Math.min(x, boundsRect.width+boundsRect.x));
 			y = Math.max(boundsRect.y, Math.min(y, boundsRect.height + boundsRect.y));
