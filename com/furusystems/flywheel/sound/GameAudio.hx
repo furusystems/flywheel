@@ -1,8 +1,10 @@
 package com.furusystems.flywheel.sound;
 import com.furusystems.flywheel.Core;
+#if native
 import lime.AudioHandler;
 import lime.helpers.AudioHelper.Sound;
 import lime.Lime;
+#end
 
 
 /**
@@ -12,11 +14,13 @@ import lime.Lime;
 
 class GameAudio 
 {
+	#if lime
 	var limeAudioHandler:AudioHandler;
+	#end
 	public var fx:GameFX;
 	public var music:GameMusic;
 	
-	public function new(limeInstance:Lime) 
+	public function new(#if lime limeInstance:Lime #end) 
 	{
 		limeAudioHandler = limeInstance.audio;
 		fx = new GameFX(this);

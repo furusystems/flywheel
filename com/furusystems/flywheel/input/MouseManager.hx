@@ -1,8 +1,10 @@
 package com.furusystems.flywheel.input;
-import com.furusystems.flywheel.Core;
-import com.furusystems.flywheel.events.Signal1;
 import com.furusystems.flywheel.geom.Vector2D;
-import lime.InputHandler.MouseEvent;
+#if flash
+import flash.display.InteractiveObject;
+import flash.events.MouseEvent;
+#end
+import fsignal.Signal1;
 
 /**
  * ...
@@ -59,36 +61,86 @@ class MouseManager
 		onMouseMove.dispatch(e);
 	}
 	
-	inline function updateMousePos(e:MouseEvent):Void {
+	function updateMousePos(e:MouseEvent):Void {
 		var boundsRect = inputMgr.bounds;
-		e.x = Math.max(boundsRect.x, Math.min(e.x, boundsRect.width+boundsRect.x));
-		e.y = Math.max(boundsRect.y, Math.min(e.y, boundsRect.height+boundsRect.y));
-		e.x -= inputMgr.xOffset;
-		e.y -= inputMgr.yOffset;
-		e.x *= inputMgr.xScale;
-		e.y *= inputMgr.yScale;
-		positionDelta.x = e.x - position.x;
-		positionDelta.y = e.y - position.y;
-		position.x = e.x;
-		position.y = e.y;
+		var x:Float = #if flash e.stageX; #elseif lime e.x;  #end
+		var y:Float = #if flash e.stageY; #elseif lime e.y;  #end
+		if(boundsRect!=null){
+			x = Math.max(boundsRect.x, Math.min(x, boundsRect.width+boundsRect.x));
+			y = Math.max(boundsRect.y, Math.min(y, boundsRect.height + boundsRect.y));
+		}
+		x -= inputMgr.xOffset;
+		y -= inputMgr.yOffset;
+		x *= inputMgr.xScale;
+		y *= inputMgr.yScale;
+		positionDelta.x = x - position.x;
+		positionDelta.y = y - position.y;
+		position.x = x;
+		position.y = y;
 	}
 	
 	public function clickHandler(e:MouseEvent):Void 
 	{
 		updateMousePos(e);
+		#if flash
+		switch(e.type) {
+			case MouseEvent.CLICK:
+				leftMouse = false;
+				onClick.dispatch(e);
+			#if (desktop || air3)
+			case MouseEvent.RIGHT_CLICK:
+				rightMouse = false;
+				onRightClick.dispatch(e);
+			case MouseEvent.MIDDLE_CLICK:
+				middleMouse = false;
+				onMiddleClick.dispatch(e);
+			#end
+		}
+		#end
 	}
 	
 	public function mouseUpHandler(e:MouseEvent):Void 
 	{
 		updateMousePos(e);
+		#if flash
+		switch(e.type) {
+			case MouseEvent.MOUSE_UP:
+				leftMouse = false;
+				onMouseUp.dispatch(e);
+			#if (desktop || air3)
+			case MouseEvent.RIGHT_MOUSE_UP:
+				rightMouse = false;
+				onRightMouseUp.dispatch(e);
+			case MouseEvent.MIDDLE_MOUSE_UP:
+				middleMouse = false;
+				onMiddleMouseUp.dispatch(e);
+			#end
+		}
+		#end
 	}
 	
 	public function mouseDownHandler(e:MouseEvent):Void 
 	{
 		updateMousePos(e);
+		#if flash
+		clickStartPosition.copyFrom(position);
+		switch(e.type) {
+			case MouseEvent.MOUSE_DOWN:
+				leftMouse = true;
+				onMouseDown.dispatch(e);
+			#if (desktop || air3)
+			case MouseEvent.RIGHT_MOUSE_DOWN:
+				rightMouse = true;
+				onRightMouseDown.dispatch(e);
+			case MouseEvent.MIDDLE_MOUSE_DOWN:
+				middleMouse = true;
+				onMiddleMouseDown.dispatch(e);
+			#end
+		}
+		#end
 	}
 	
-	public function update(?game:Core):Void 
+	public function update():Void 
 	{
 	}
 	
@@ -96,6 +148,50 @@ class MouseManager
 	{
 		onMouseWheel.dispatch(e);
 	}
+	
+	#if flash
+	public function bind(source:InteractiveObject):Void {
+		reset();
+		source.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+		source.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+		source.addEventListener(MouseEvent.CLICK, clickHandler);
+		source.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		source.addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
+		source.addEventListener(MouseEvent.DOUBLE_CLICK, doubleClickHandler);
+		#if (desktop || air3)
+		source.addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, mouseDownHandler);
+		source.addEventListener(MouseEvent.RIGHT_MOUSE_UP, mouseUpHandler);
+		source.addEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, mouseDownHandler);
+		source.addEventListener(MouseEvent.MIDDLE_MOUSE_UP, mouseUpHandler);
+		source.addEventListener(MouseEvent.RIGHT_CLICK, clickHandler);
+		source.addEventListener(MouseEvent.MIDDLE_CLICK, clickHandler);
+		#end
+	}
+	
+	private function doubleClickHandler(e:MouseEvent):Void 
+	{
+		updateMousePos(e);
+		onDoubleClick.dispatch(e);
+	}
+	public function release(source:InteractiveObject):Void {
+		reset();
+		source.removeEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+		source.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+		source.removeEventListener(MouseEvent.CLICK, clickHandler);
+		source.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		source.removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
+		source.removeEventListener(MouseEvent.DOUBLE_CLICK, doubleClickHandler);
+
+		#if (desktop || air3)
+		source.removeEventListener(MouseEvent.RIGHT_MOUSE_DOWN, mouseDownHandler);
+		source.removeEventListener(MouseEvent.RIGHT_MOUSE_UP, mouseUpHandler);
+		source.removeEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, mouseDownHandler);
+		source.removeEventListener(MouseEvent.MIDDLE_MOUSE_UP, mouseUpHandler);
+		source.removeEventListener(MouseEvent.RIGHT_CLICK, clickHandler);
+		source.removeEventListener(MouseEvent.MIDDLE_CLICK, clickHandler);
+		#end
+	}
+	#end
 	
 	public function reset():Void {
 		positionDelta.setTo(0, 0);
