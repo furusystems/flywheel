@@ -85,18 +85,15 @@ class MouseManager
 	{
 		updateMousePos(e);
 		#if flash
-		switch(e.type) {
-			case MouseEvent.CLICK:
+		if(e.type == MouseEvent.CLICK){
 				leftMouse = false;
 				onClick.dispatch(e);
-			#if (desktop || air3)
-			case MouseEvent.RIGHT_CLICK:
+		}else if(e.type == MouseEvent.RIGHT_CLICK){
 				rightMouse = false;
 				onRightClick.dispatch(e);
-			case MouseEvent.MIDDLE_CLICK:
+		}else if(e.type == MouseEvent.MIDDLE_CLICK){
 				middleMouse = false;
 				onMiddleClick.dispatch(e);
-			#end
 		}
 		#end
 	}
@@ -105,18 +102,16 @@ class MouseManager
 	{
 		updateMousePos(e);
 		#if flash
-		switch(e.type) {
-			case MouseEvent.MOUSE_UP:
-				leftMouse = false;
-				onMouseUp.dispatch(e);
-			#if (desktop || air3)
-			case MouseEvent.RIGHT_MOUSE_UP:
-				rightMouse = false;
-				onRightMouseUp.dispatch(e);
-			case MouseEvent.MIDDLE_MOUSE_UP:
-				middleMouse = false;
-				onMiddleMouseUp.dispatch(e);
-			#end
+		if(e.type == MouseEvent.MOUSE_UP){
+			leftMouse = false;
+			onMouseUp.dispatch(e);
+		}else if(e.type == MouseEvent.RIGHT_MOUSE_UP){
+			rightMouse = false;
+			onRightMouseUp.dispatch(e);
+
+		}else if(e.type == MouseEvent.MIDDLE_MOUSE_UP){
+			middleMouse = false;
+			onMiddleMouseUp.dispatch(e);
 		}
 		#end
 	}
@@ -126,18 +121,15 @@ class MouseManager
 		updateMousePos(e);
 		#if flash
 		clickStartPosition.copyFrom(position);
-		switch(e.type) {
-			case MouseEvent.MOUSE_DOWN:
-				leftMouse = true;
-				onMouseDown.dispatch(e);
-			#if (desktop || air3)
-			case MouseEvent.RIGHT_MOUSE_DOWN:
-				rightMouse = true;
-				onRightMouseDown.dispatch(e);
-			case MouseEvent.MIDDLE_MOUSE_DOWN:
-				middleMouse = true;
-				onMiddleMouseDown.dispatch(e);
-			#end
+		if(e.type == MouseEvent.MOUSE_DOWN){
+			leftMouse = true;
+			onMouseDown.dispatch(e);
+		}else if(e.type == MouseEvent.RIGHT_MOUSE_DOWN){
+			rightMouse = true;
+			onRightMouseDown.dispatch(e);
+		}else if(e.type == MouseEvent.MIDDLE_MOUSE_DOWN){
+			middleMouse = true;
+			onMiddleMouseDown.dispatch(e);
 		}
 		#end
 	}

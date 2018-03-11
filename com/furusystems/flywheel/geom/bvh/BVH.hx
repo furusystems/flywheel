@@ -1,9 +1,8 @@
 package com.furusystems.flywheel.geom.bvh;
 import com.furusystems.flywheel.geom.Vector2D;
+using com.furusystems.flywheel.geom.Vector2D;
 import com.furusystems.flywheel.geom.AABB;
 import com.furusystems.flywheel.utils.UID;
-import de.polygonal.ds.DLL;
-import de.polygonal.ds.SLL;
 
 /**
  * ...
@@ -13,7 +12,7 @@ import de.polygonal.ds.SLL;
 @:generic
 #end
 class BVH<T:AABB> {
-	public var children:DLL<BVH<T>>;
+	public var children:List<BVH<T>>;
 	public var holder:T;
 	public var parent:BVH<T>;
 	public var bounds:AABB;
@@ -31,13 +30,13 @@ class BVH<T:AABB> {
 		this.parent = parent;
 		this.holder = holder;
 		if(holder!=null) holder.aabbUserData = this;
-		children = new DLL<BVH<T>>();
+		children = new List<BVH<T>>();
 		bounds = new AABB();
 		if (parent != null) depth = parent.depth + 1;
 	}
 	
 	inline function get_hasChildren():Bool {
-		return children.size() > 0;
+		return children.length > 0;
 	}
 	
 	public function size():Int {
@@ -52,23 +51,23 @@ class BVH<T:AABB> {
 	public function toString():String {
 		return "{BVH " + hasChildren + " : " + holder + " : " + uid+"}";
 	}
-	public function queryPt(x:Float, y:Float, scale:Float = 1, ?out:SLL<BVH<T>>):SLL<BVH<T>> 
+	public function queryPt(x:Float, y:Float, scale:Float = 1, ?out:List<BVH<T>>):List<BVH<T>> 
 	{
-		if (out == null) out = new SLL<BVH<T>>();
+		if (out == null) out = new List<BVH<T>>();
 		testVec.setTo(x, y);
 		if (bounds.containsVector2D(testVec)) {
-			if (holder != null) out.append(this);
+			if (holder != null) out.add(this);
 			for (c in children) {
 				c.queryPt(x, y, scale, out);
 			}
 		}
 		return out;
 	}
-	public function queryBox(box:AABB, scale:Float = 1, ?out:SLL<BVH<T>>):SLL<BVH<T>> {
-		if (out == null) out = new SLL<BVH<T>>();
+	public function queryBox(box:AABB, scale:Float = 1, ?out:List<BVH<T>>):List<BVH<T>> {
+		if (out == null) out = new List<BVH<T>>();
 		if (bounds.intersects(box)) {
 			if (holder != null) {
-				out.append(this);
+				out.add(this);
 			}else{
 				for (c in children) {
 					c.queryBox(box, scale, out);
@@ -91,7 +90,7 @@ class BVH<T:AABB> {
 		if (holder != null) { 
 			bounds.redefine(holder.position.x, holder.position.y, holder.size.x, holder.size.y);
 		}else if(hasChildren){
-			bounds.copyFrom(children.head.val.bounds);
+			bounds.copyFrom(children.first().bounds);
 		}else {
 			bounds.zero();
 		}
@@ -114,19 +113,19 @@ class BVH<T:AABB> {
 		}
 		if (holder != null) {
 			var v = new BVH<T>(holder, this);
-			children.append(v);
+			children.add(v);
 			if(v.calcAuto) v.calcBounds();
 			holder = null;
 		}
 		var v = new BVH<T>(n, this);
-		children.append(v);
+		children.add(v);
 		if(v.calcAuto) v.calcBounds();
 		
 		return v;
 	}
 	
 	public inline function clear():Void {
-		children = new DLL<BVH<T>>();
+		children = new List<BVH<T>>();
 		holder = null;
 	}
 	
